@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="web安全，csrf">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="CSRF简单介绍">
+<meta name="keywords" content="web安全，csrf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跨站点请求伪造">
+<meta property="og:url" content="http://yoursite.com/2019/10/13/跨站点请求伪造/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="CSRF简单介绍">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/.com//1556803271812.png">
+<meta property="og:image" content="http://yoursite.com/.com//1556803624119.png">
+<meta property="og:image" content="http://yoursite.com/.com//1556804246583.png">
+<meta property="og:updated_time" content="2019-10-13T05:47:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="跨站点请求伪造">
+<meta name="twitter:description" content="CSRF简单介绍">
+<meta name="twitter:image" content="http://yoursite.com/.com//1556803271812.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/13/跨站点请求伪造/">
+
+
+
+
+
+  <title>跨站点请求伪造 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/跨站点请求伪造/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">跨站点请求伪造</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-13T13:47:07+08:00">
+                2019-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/13/跨站点请求伪造/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/13/跨站点请求伪造/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/10/13/跨站点请求伪造/" class="leancloud_visitors" data-flag-title="跨站点请求伪造">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  CSRF简单介绍
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a>CSRF</h1><blockquote>
+<p>跨站点请求伪造（CSRF，Cross Site Request Forgery),是指利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或者访问包含攻击代码的页面，在受害人不知情的情况下以受害者的身份向（身份认证信息所对应的）服务器发送请求，从而完成非法操作（如转账、改密等）。CSRF与XSS最大的区别就在于，CSRF并没有盗取cookie而是直接利用。</p>
+</blockquote>
+<h2 id="1-CSRF攻击方式"><a href="#1-CSRF攻击方式" class="headerlink" title="1 CSRF攻击方式"></a>1 CSRF攻击方式</h2><ol>
+<li><p>攻击者在自己的域中构造一个界面</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--http://www.a.com/csrf.html--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"http://blog.sohu.com/message/entry.do?m=delete&amp;id=12345"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>攻击者诱导用户访问<code>a.com</code>，用户访问了页面之后，图片标签向服务器发送了get请求导致文章被删除</p>
+</li>
+</ol>
+<h3 id="1-1-浏览器的Cookie策略"><a href="#1-1-浏览器的Cookie策略" class="headerlink" title="1.1 浏览器的Cookie策略"></a>1.1 浏览器的Cookie策略</h3><p>浏览器支持的Cookie分为两种：</p>
+<ul>
+<li>Session Cookie：临时Cookie，保存在浏览器进程的内存空间中，浏览器关闭Session Cookie失效</li>
+<li>Third-part Cookie：本地Cookie，保存在本地，浏览器从一个域的界面加载另外一个域的资源，一些浏览器会阻止Third-party Cookie的发送</li>
+</ul>
+<h3 id="1-2-P3P头的副作用"><a href="#1-2-P3P头的副作用" class="headerlink" title="1.2 P3P头的副作用"></a>1.2 P3P头的副作用</h3><p>​    如果网站返回给浏览器的HTTP头包含有P3P头，那么将允许浏览器发送第三方Cookie。攻击如下:</p>
+<ul>
+<li><p>在<code>http://www.a.com/test.php</code>中，是一个对a.com域设置Cookie的界面，内容如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    header(<span class="string">"Set-Cookie: test=axis; domain=a.com; path=/"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>http://www.b.com/test.php</code>中，包含有一个对a的iframe，内容如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">width</span>=<span class="string">300</span> <span class="attr">height</span>=<span class="string">300</span> <span class="attr">src</span>=<span class="string">"http"</span>//<span class="attr">www.a.com</span>/<span class="attr">test.php</span>"&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当请求b的时候，它的iframe会告诉浏览器去跨域请求<code>a.com</code>，<code>a.com/test.php</code>会尝试设置Cookie，所以浏览器会收到一个Cookie</p>
+</li>
+<li><p>如果成功的话，再次请求B的时候，浏览器会发送刚才设置的Cookie。原来由于跨域限制，在a上Set-Cookie是不会成功的，所以无法发送Cookie，但是由于P3P头允许跨域访问，导致cookie设置会成功。</p>
+</li>
+</ul>
+<h3 id="1-3-GET-amp-POST"><a href="#1-3-GET-amp-POST" class="headerlink" title="1.3 GET&amp;POST"></a>1.3 GET&amp;POST</h3><p>在CSRF刚开始流行的时候，认为CSRF请求只能由GET方法发出，原因是，大多数CSRF发起攻击时都是使用<code>&lt;img&gt;</code>,<code>&lt;iframe&gt;</code>,<code>&lt;script&gt;</code>等只能发起一次GET请求的标签。</p>
+<p>但是可以通过JavaScript来自动提交一个表单的方式构造一个POST请求实现CSRF</p>
+<h2 id="2-CSRF防御"><a href="#2-CSRF防御" class="headerlink" title="2 CSRF防御"></a>2 CSRF防御</h2><h3 id="2-1-验证码"><a href="#2-1-验证码" class="headerlink" title="2.1 验证码"></a>2.1 验证码</h3><p>CSRF的攻击之所以能够成功，很大程度上是因为在用户不知道的情况下构造了网络请求。而验证码则强制要求用户必须与应用进行交互才完成最终请求，但由于用户体验，不可能在每个连接上都加上验证码系统，所以不是很实用，只能作为一个辅助手段。</p>
+<h3 id="2-2-Referer-Check"><a href="#2-2-Referer-Check" class="headerlink" title="2.2 Referer Check"></a>2.2 Referer Check</h3><p>检查请求是否来自于合法的”源”。在用户进行操作的时候，Referer的值必然是当前操作所在的页面，如果不是，则很大概率是CSRF攻击。<strong>Referer Check的缺陷在于，服务器并不是在任何时候都能取到Referer，用户处于隐私保护，有时候会限制Referer的发送，从HTTPS跳转到HTTP浏览器也不会发送Referer</strong></p>
+<h3 id="2-3-Anti-CSRF-token"><a href="#2-3-Anti-CSRF-token" class="headerlink" title="2.3 Anti CSRF token"></a>2.3 Anti CSRF token</h3><p><strong>现在的一致做法</strong>能够很好的防御CSRF攻击。</p>
+<h4 id="2-3-1-CSRF的本质"><a href="#2-3-1-CSRF的本质" class="headerlink" title="2.3.1 CSRF的本质"></a>2.3.1 CSRF的本质</h4><p>CSRF之所以能够成功，<strong>本质原因是重要操作的所有参数都是可以被攻击者猜到的</strong></p>
+<p>攻击者只有预测到url的所有参数和参数值，才能成功的构造一个伪造的请求。如果将参数加密，或者使用一些随机数，从而让攻击者无法猜到参数值，就可以实现防御，eg:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//一个删除操作的url是如下:</span><br><span class="line">http://host/path/delete?username=abc&amp;item=123</span><br><span class="line"></span><br><span class="line">//如果将username改为hash值</span><br><span class="line">http://host/path/delete?username=md5(salt+abc)&amp;item=123</span><br></pre></td></tr></table></figure>
+
+<p>如果攻击者不知道salt，是无法构造出这个URL的，因此就无法发起CSRF攻击了，而服务器可以从Session或者Cookie中获取到username的值，然后结合salt对请求进行验证，正常请求会被认为是合法的</p>
+<p><strong>问题：加密或者混淆之后的URL难读，对用户不友好；由于salt随机，用户没法收藏salt</strong></p>
+<p>解决方法，使用一个Anti token：保持原来的参数不变，新增加一个Token,这个Token是随机，不可预测的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://host/path/delete?username=abc&amp;item=123&amp;token=&#123;random(seed)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个token足够随机，且只被用户和服务器共同持有，其他人不能知晓的。Token可以放在用户的Session中，或者放在浏览器的Cookie中</p>
+<ul>
+<li>token需要同时放在表单和用户的Session(或者Cookie)中,提交请求时，服务器验证表单中的Token与用户Session中的Token是否一致即可</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tips:</span><br><span class="line">Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；</span><br><span class="line">Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-2-Token使用原则"><a href="#2-3-2-Token使用原则" class="headerlink" title="2.3.2 Token使用原则"></a>2.3.2 Token使用原则</h3><ol>
+<li>Token设计时根据不可预测性原则设计的，所以Token的生成一定要有足够的随机</li>
+<li>Token的目的不是为了防止重复提交，所以允许一个Token持续一个生命周期</li>
+<li>Token保存在Cookie中会有一个一个问题是，当用户打开多个相同页面操作的时候，某个页面消耗了Token其他页面的表单再次提交会出现Token错误，所以需要考虑生成多个有效的Token</li>
+<li>TOken使用的时候要注意保密性</li>
+</ol>
+<h2 id="3-DVWA-实战"><a href="#3-DVWA-实战" class="headerlink" title="3 DVWA 实战"></a>3 DVWA 实战</h2><p><img src="/.com//1556803271812.png" alt="1556803271812"></p>
+<p>分析：CSRF是通过利用受害者的Cookie，向服务器伪造请求，属于直接利用Cookie的过程。这个界面展示了受害者在修改密码时可能遭受的CSRF攻击，如下：</p>
+<h3 id="3-1-低安全级别"><a href="#3-1-低安全级别" class="headerlink" title="3.1 低安全级别"></a>3.1 低安全级别</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">                </span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'Change'</span>])) &#123;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Turn requests into variables</span></span><br><span class="line">        $pass_new = $_GET[<span class="string">'password_new'</span>];</span><br><span class="line">        $pass_conf = $_GET[<span class="string">'password_conf'</span>];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (($pass_new == $pass_conf))&#123;</span><br><span class="line">            $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">            $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">            $insert=<span class="string">"UPDATE `users` SET password = '$pass_new' WHERE user = 'admin';"</span>;</span><br><span class="line">            $result=mysql_query($insert) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'&lt;pre&gt;'</span> . mysql_error() . <span class="string">'&lt;/pre&gt;'</span> );</span><br><span class="line">                        </span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;pre&gt; Password Changed &lt;/pre&gt;"</span>;        </span><br><span class="line">            mysql_close();</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">else</span>&#123;        </span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;pre&gt; Passwords did not match. &lt;/pre&gt;"</span>;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>服务器在收到修改密码的请求后，会检查<code>$pass_new == $pass_conf</code>，并没有任何csrf防御措施</p>
+<p><strong>利用：</strong></p>
+<p><strong>1. 构造链接</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.169.4/dvwa/vulnerabilities/csrf/?password_new=password&amp;password_conf=passwor&amp;Change=Change#</span><br></pre></td></tr></table></figure>
+
+<p>当受害者点击链接之后，就会修改密码</p>
+<p><img src="/.com//1556803624119.png" alt="1556803624119"></p>
+<p><strong>2.构造短链接诱导用户点击</strong></p>
+<p>利用工具，将上面构造的链接转换为短链接</p>
+<p><strong>3.构造攻击界面</strong></p>
+<p>钓鱼网站上诱导受害者点击，在点击的时候偷偷的完成攻击<code>csrf.html</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"http://192.168.169.4/dvwa/vulnerabilities/csrf/?password_new=password&amp;password_conf=passwor&amp;Change=Change#"</span> <span class="attr">border</span>=<span class="string">"0"</span> <span class="attr">style</span>=<span class="string">"display:none;"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/.com//1556804246583.png" alt="1556804246583"></p>
+<h3 id="3-2-中安全级别"><a href="#3-2-中安全级别" class="headerlink" title="3.2 中安全级别"></a>3.2 中安全级别</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">            </span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'Change'</span>])) &#123;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Checks the http referer header</span></span><br><span class="line">        <span class="keyword">if</span> ( eregi ( <span class="string">"127.0.0.1"</span>, $_SERVER[<span class="string">'HTTP_REFERER'</span>] ) )&#123;</span><br><span class="line">    </span><br><span class="line">            <span class="comment">// Turn requests into variables</span></span><br><span class="line">            $pass_new = $_GET[<span class="string">'password_new'</span>];</span><br><span class="line">            $pass_conf = $_GET[<span class="string">'password_conf'</span>];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> ($pass_new == $pass_conf)&#123;</span><br><span class="line">                $pass_new = mysql_real_escape_string($pass_new);</span><br><span class="line">                $pass_new = md5($pass_new);</span><br><span class="line"></span><br><span class="line">                $insert=<span class="string">"UPDATE `users` SET password = '$pass_new' WHERE user = 'admin';"</span>;</span><br><span class="line">                $result=mysql_query($insert) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'&lt;pre&gt;'</span> . mysql_error() . <span class="string">'&lt;/pre&gt;'</span> );</span><br><span class="line">                        </span><br><span class="line">                <span class="keyword">echo</span> <span class="string">"&lt;pre&gt; Password Changed &lt;/pre&gt;"</span>;        </span><br><span class="line">                mysql_close();</span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">else</span>&#123;        </span><br><span class="line">                <span class="keyword">echo</span> <span class="string">"&lt;pre&gt; Passwords did not match. &lt;/pre&gt;"</span>;            </span><br><span class="line">            &#125;    </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，添加一个检查 Referer的选项，这里检查的是判断HTTP_REFERER是否有<code>127.0.0.1</code>主机ip地址</p>
+<p><strong>绕过：</strong></p>
+<p>构造攻击页面为127.0.0.1.html</p>
+<h3 id="3-3-高安全级别"><a href="#3-3-高安全级别" class="headerlink" title="3.3 高安全级别"></a>3.3 高安全级别</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_GET[ <span class="string">'Change'</span> ] ) ) &#123; </span><br><span class="line">    <span class="comment">// Check Anti-CSRF token </span></span><br><span class="line">    checkToken( $_REQUEST[ <span class="string">'user_token'</span> ], $_SESSION[ <span class="string">'session_token'</span> ], <span class="string">'index.php'</span> ); </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get input </span></span><br><span class="line">    $pass_new  = $_GET[ <span class="string">'password_new'</span> ]; </span><br><span class="line">    $pass_conf = $_GET[ <span class="string">'password_conf'</span> ]; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Do the passwords match? </span></span><br><span class="line">    <span class="keyword">if</span>( $pass_new == $pass_conf ) &#123; </span><br><span class="line">        <span class="comment">// They do! </span></span><br><span class="line">        $pass_new = mysql_real_escape_string( $pass_new ); </span><br><span class="line">        $pass_new = md5( $pass_new ); </span><br><span class="line"></span><br><span class="line">        <span class="comment">// Update the database </span></span><br><span class="line">        $insert = <span class="string">"UPDATE `users` SET password = '$pass_new' WHERE user = '"</span> . dvwaCurrentUser() . <span class="string">"';"</span>; </span><br><span class="line">        $result = mysql_query( $insert ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">'&lt;pre&gt;'</span> . mysql_error() . <span class="string">'&lt;/pre&gt;'</span> ); </span><br><span class="line"></span><br><span class="line">        <span class="comment">// Feedback for the user </span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;Password Changed.&lt;/pre&gt;"</span>; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> &#123; </span><br><span class="line">        <span class="comment">// Issue with passwords matching </span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;Passwords did not match.&lt;/pre&gt;"</span>; </span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    mysql_close(); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">// Generate Anti-CSRF token </span></span><br><span class="line">generateSessionToken(); </span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>漏洞利用：</strong></p>
+<p>利用XSS漏洞窃取到token，然后使用token伪造CSRF攻击</p>
+<h3 id="3-4-impossable"><a href="#3-4-impossable" class="headerlink" title="3.4 impossable"></a>3.4 impossable</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_GET[ <span class="string">'Change'</span> ] ) ) &#123; </span><br><span class="line">    <span class="comment">// Check Anti-CSRF token </span></span><br><span class="line">    checkToken( $_REQUEST[ <span class="string">'user_token'</span> ], $_SESSION[ <span class="string">'session_token'</span> ], <span class="string">'index.php'</span> ); </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get input </span></span><br><span class="line">    $pass_curr = $_GET[ <span class="string">'password_current'</span> ]; </span><br><span class="line">    $pass_new  = $_GET[ <span class="string">'password_new'</span> ]; </span><br><span class="line">    $pass_conf = $_GET[ <span class="string">'password_conf'</span> ]; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Sanitise current password input </span></span><br><span class="line">    $pass_curr = stripslashes( $pass_curr ); </span><br><span class="line">    $pass_curr = mysql_real_escape_string( $pass_curr ); </span><br><span class="line">    $pass_curr = md5( $pass_curr ); </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check that the current password is correct </span></span><br><span class="line">    $data = $db-&gt;prepare( <span class="string">'SELECT password FROM users WHERE user = (:user) AND password = (:password) LIMIT 1;'</span> ); </span><br><span class="line">    $data-&gt;bindParam( <span class="string">':user'</span>, dvwaCurrentUser(), PDO::PARAM_STR ); </span><br><span class="line">    $data-&gt;bindParam( <span class="string">':password'</span>, $pass_curr, PDO::PARAM_STR ); </span><br><span class="line">    $data-&gt;execute(); </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Do both new passwords match and does the current password match the user? </span></span><br><span class="line">    <span class="keyword">if</span>( ( $pass_new == $pass_conf ) &amp;&amp; ( $data-&gt;rowCount() == <span class="number">1</span> ) ) &#123; </span><br><span class="line">        <span class="comment">// It does! </span></span><br><span class="line">        $pass_new = stripslashes( $pass_new ); </span><br><span class="line">        $pass_new = mysql_real_escape_string( $pass_new ); </span><br><span class="line">        $pass_new = md5( $pass_new ); </span><br><span class="line"></span><br><span class="line">        <span class="comment">// Update database with new password </span></span><br><span class="line">        $data = $db-&gt;prepare( <span class="string">'UPDATE users SET password = (:password) WHERE user = (:user);'</span> ); </span><br><span class="line">        $data-&gt;bindParam( <span class="string">':password'</span>, $pass_new, PDO::PARAM_STR ); </span><br><span class="line">        $data-&gt;bindParam( <span class="string">':user'</span>, dvwaCurrentUser(), PDO::PARAM_STR ); </span><br><span class="line">        $data-&gt;execute(); </span><br><span class="line"></span><br><span class="line">        <span class="comment">// Feedback for the user </span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;Password Changed.&lt;/pre&gt;"</span>; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> &#123; </span><br><span class="line">        <span class="comment">// Issue with passwords matching </span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"&lt;pre&gt;Passwords did not match or current password incorrect.&lt;/pre&gt;"</span>; </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">// Generate Anti-CSRF token </span></span><br><span class="line">generateSessionToken(); </span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>要求用户输入原始密码，在不知道原始密码的情况下，无论如何是不能构造CSRF攻击的</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web安全/" rel="tag"># web安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/12/Ubuntu18-04安装爬坑指南/" rel="next" title="Ubuntu18.04安装爬坑指南">
+                <i class="fa fa-chevron-left"></i> Ubuntu18.04安装爬坑指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CSRF"><span class="nav-number">1.</span> <span class="nav-text">CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-CSRF攻击方式"><span class="nav-number">1.1.</span> <span class="nav-text">1 CSRF攻击方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-浏览器的Cookie策略"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 浏览器的Cookie策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-P3P头的副作用"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 P3P头的副作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-GET-amp-POST"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 GET&amp;POST</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-CSRF防御"><span class="nav-number">1.2.</span> <span class="nav-text">2 CSRF防御</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-验证码"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 验证码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Referer-Check"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 Referer Check</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Anti-CSRF-token"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 Anti CSRF token</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-CSRF的本质"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">2.3.1 CSRF的本质</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-Token使用原则"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.3.2 Token使用原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-DVWA-实战"><span class="nav-number">1.3.</span> <span class="nav-text">3 DVWA 实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-低安全级别"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 低安全级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-中安全级别"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 中安全级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-高安全级别"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 高安全级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-impossable"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 impossable</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2019/10/13/跨站点请求伪造/';
+          this.page.identifier = '2019/10/13/跨站点请求伪造/';
+          this.page.title = '跨站点请求伪造';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
