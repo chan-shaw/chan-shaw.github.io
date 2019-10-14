@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="排序,算法,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于常见的算法的一个总结，因为容易忘记,所以还是做个笔记">
+<meta name="keywords" content="排序,算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序算法总结">
+<meta property="og:url" content="http://yoursite.com/2019/10/14/排序算法总结/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="对于常见的算法的一个总结，因为容易忘记,所以还是做个笔记">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-14T11:20:05.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="排序算法总结">
+<meta name="twitter:description" content="对于常见的算法的一个总结，因为容易忘记,所以还是做个笔记">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/14/排序算法总结/">
+
+
+
+
+
+  <title>排序算法总结 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/排序算法总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">排序算法总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-14T19:19:03+08:00">
+                2019-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/14/排序算法总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/14/排序算法总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/10/14/排序算法总结/" class="leancloud_visitors" data-flag-title="排序算法总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对于常见的算法的一个总结，因为容易忘记,所以还是做个笔记
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x603B;&#x7ED3;"><a href="#&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x603B;&#x7ED3;" class="headerlink" title="&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x603B;&#x7ED3;"></a>&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x603B;&#x7ED3;</h1><blockquote>
+<p>&#x8BB0;&#x5F55;10&#x4E2A;&#x6BD4;&#x8F83;&#x5E38;&#x7528;&#x7684;&#x6392;&#x5E8F;&#xFF1A;</p>
+<ul>
+<li>[&#x5192;&#x6CE1;&#x6392;&#x5E8F;](## &#x5192;&#x6CE1;&#x6392;&#x5E8F;)</li>
+<li>[&#x9009;&#x62E9;&#x6392;&#x5E8F;](## &#x9009;&#x62E9;&#x6392;&#x5E8F;)</li>
+<li>[&#x63D2;&#x5165;&#x6392;&#x5E8F;](## &#x63D2;&#x5165;&#x6392;&#x5E8F;)</li>
+<li>[&#x5E0C;&#x5C14;&#x6392;&#x5E8F;](## &#x5E0C;&#x5C14;&#x6392;&#x5E8F;)</li>
+<li>[&#x5F52;&#x5E76;&#x6392;&#x5E8F;](## &#x5F52;&#x5E76;&#x6392;&#x5E8F;)</li>
+<li>[&#x5FEB;&#x901F;&#x6392;&#x5E8F;](## &#x5FEB;&#x901F;&#x6392;&#x5E8F;)</li>
+<li>[&#x5806;&#x6392;&#x5E8F;&#xFF08;&#x4F18;&#x5148;&#x961F;&#x5217;&#xFF09;](## &#x5806;&#x6392;&#x5E8F;)</li>
+<li>[&#x8BA1;&#x6570;&#x6392;&#x5E8F;](## &#x8BA1;&#x6570;&#x6392;&#x5E8F;)</li>
+<li>[&#x6876;&#x6392;&#x5E8F;](## &#x6876;&#x6392;&#x5E8F;)</li>
+<li>[&#x57FA;&#x6570;&#x6392;&#x5E8F;](## &#x57FA;&#x6570;&#x6392;&#x5E8F;)</li>
+<li>[&#x603B;&#x7ED3;](## &#x603B;&#x7ED3;)</li>
+</ul>
+</blockquote>
+<h2 id="&#x5192;&#x6CE1;&#x6392;&#x5E8F;"><a href="#&#x5192;&#x6CE1;&#x6392;&#x5E8F;" class="headerlink" title="&#x5192;&#x6CE1;&#x6392;&#x5E8F;"></a>&#x5192;&#x6CE1;&#x6392;&#x5E8F;</h2><p>&#x6700;&#x7B80;&#x5355;&#x7684;&#x6392;&#x5E8F;&#x4E4B;&#x4E00;&#xFF0C;&#x76F8;&#x90BB;&#x5143;&#x7D20;&#x4E24;&#x4E24;&#x6BD4;&#x8F83;&#xFF0C;&#x628A;&#x5C0F;&#x7684;&#x6570;&#x653E;&#x5230;&#x524D;&#x9762;&#xFF0C;&#x8FC7;&#x7A0B;&#x7C7B;&#x4F3C;&#x6C34;&#x6CE1;&#x4E0A;&#x5347;&#x7684;&#x8FC7;&#x7A0B;&#xFF0C;&#x7531;&#x6B64;&#x5F97;&#x540D;&#xFF0C;&#x6BCF;&#x6B21;&#x5192;&#x6CE1;&#x80FD;&#x627E;&#x5230;&#x4E00;&#x4E2A;&#x6700;&#x5C0F;&#x7684;&#x6570;&#xFF0C;&#x603B;&#x6BD4;&#x8F83;&#x6B21;&#x6570;&#x4E3A;$ \frac {n(n-1)}{2}$&#xFF0C;&#x603B;&#x4EA4;&#x6362;&#x6B21;&#x6570;&#x4E3A;$\frac{n(n-1)}{2}$&#x7B97;&#x6CD5;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$O(n^2)$&#xFF0C;&#x6BCF;&#x6B21;&#x6392;&#x597D;&#x5E8F;&#x4E4B;&#x540E;&#x7684;&#x503C;&#x4E0D;&#x4F1A;&#x53D8;&#xFF0C;&#x662F;&#x7A33;&#x5B9A;&#x6392;&#x5E8F;&#xFF0C;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bubble</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length;i++){</span><br><span class="line">            <span class="comment">//&#x4ECE;&#x540E;&#x5F80;&#x524D;&#x5192;&#x6CE1;</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = array.length-<span class="number">1</span>; j &gt; i;j--){</span><br><span class="line">                <span class="keyword">if</span> (array[j] &lt; array[j-<span class="number">1</span>]){</span><br><span class="line">                    array[j] = array[j] + array[j-<span class="number">1</span>];</span><br><span class="line">                    array[j-<span class="number">1</span>] = array[j] - array[j-<span class="number">1</span>];</span><br><span class="line">                    array[j] = array[j] - array[j-<span class="number">1</span>];</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="comment">/** tips:</span></span><br><span class="line"><span class="comment"> * &#x4E0D;&#x5F15;&#x5165;&#x8F85;&#x52A9;&#x53D8;&#x91CF;&#x4EA4;&#x6362;&#x4E24;&#x4E2A;&#x6570;</span></span><br><span class="line"><span class="comment"> * &#x65B9;&#x6CD5;&#x4E00;:</span></span><br><span class="line"><span class="comment"> * x = x + y;</span></span><br><span class="line"><span class="comment"> * y = x - y;</span></span><br><span class="line"><span class="comment"> * x = x - y;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &#x65B9;&#x6CD5;&#x4E8C;:</span></span><br><span class="line"><span class="comment"> * x ^= y;</span></span><br><span class="line"><span class="comment"> * y ^= x;</span></span><br><span class="line"><span class="comment"> * x ^= x;</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x9009;&#x62E9;&#x6392;&#x5E8F;"><a href="#&#x9009;&#x62E9;&#x6392;&#x5E8F;" class="headerlink" title="&#x9009;&#x62E9;&#x6392;&#x5E8F;"></a>&#x9009;&#x62E9;&#x6392;&#x5E8F;</h2><p>&#x601D;&#x60F3;&#x548C;&#x5192;&#x6CE1;&#x7C7B;&#x4F3C;&#xFF0C;&#x6BCF;&#x6B21;&#x904D;&#x5386;&#x540E;&#x90FD;&#x4F1A;&#x5C06;&#x6700;&#x5C0F;&#x7684;&#x5143;&#x7D20;&#x653E;&#x5230;&#x6700;&#x524D;&#x9762;&#xFF0C;&#x4F46;&#x662F;&#x8FC7;&#x7A0B;&#x548C;&#x5192;&#x6CE1;&#x6392;&#x5E8F;&#x4E0D;&#x5927;&#x4E00;&#x6837;&#xFF0C;&#x5192;&#x6CE1;&#x662F;&#x4E0E;&#x76F8;&#x90BB;&#x7684;&#x5143;&#x7D20;&#x8FDB;&#x884C;&#x4EA4;&#x6362;&#xFF0C;&#x800C;&#x9009;&#x62E9;&#x6BCF;&#x6B21;&#x90FD;&#x95F2;&#x786E;&#x5B9A;&#x6700;&#x5C0F;&#x503C;&#xFF0C;&#x7136;&#x540E;&#x518D;&#x8FDB;&#x884C;&#x4EA4;&#x6362;&#xFF0C;&#x603B;&#x6BD4;&#x8F83;&#x6B21;&#x6570;&#x4F9D;&#x7136;&#x662F;$\frac{n(n-1)}{2}$&#xFF0C;&#x4F46;&#x662F;&#x603B;&#x4EA4;&#x6362;&#x6B21;&#x6570;&#x4E3A;$n$&#xFF0C;&#x662F;&#x4E0D;&#x7A33;&#x5B9A;&#x6392;&#x5E8F;&#xFF0C;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">selectSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length - <span class="number">1</span>; i++){</span><br><span class="line">            <span class="comment">//&#x5C06;array[i]&#x548C;array[i+1...N]&#x4E2D;&#x6700;&#x4E0B;&#x7684;&#x503C;&#x8FDB;&#x884C;&#x4EA4;&#x6362;</span></span><br><span class="line">            <span class="keyword">int</span> minIndex = i; <span class="comment">//&#x6700;&#x4E0B;&#x5143;&#x7D20;&#x7684;&#x7D22;&#x5F15;</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; array.length; j++){</span><br><span class="line">                <span class="keyword">if</span> (array[j] &lt; array[minIndex]){</span><br><span class="line">                    minIndex = j;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (minIndex != i){</span><br><span class="line">                array[i] = array[i] + array[minIndex];</span><br><span class="line">                array[minIndex] = array[i] - array[minIndex];</span><br><span class="line">                array[i] = array[i] - array[minIndex];</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x63D2;&#x5165;&#x6392;&#x5E8F;"><a href="#&#x63D2;&#x5165;&#x6392;&#x5E8F;" class="headerlink" title="&#x63D2;&#x5165;&#x6392;&#x5E8F;"></a>&#x63D2;&#x5165;&#x6392;&#x5E8F;</h2><p>&#x7C7B;&#x4F3C;&#x4E8E;&#x6251;&#x514B;&#x724C;&#x6574;&#x7406;&#xFF0C;&#x5DE6;&#x8FB9;&#x90FD;&#x662F;&#x6709;&#x5E8F;&#x7684;&#xFF0C;&#x6BCF;&#x6B21;&#x4ECE;&#x65E0;&#x5E8F;&#x5806;&#x9009;&#x4E00;&#x4E2A;&#x63D2;&#x5165;&#x5230;&#x6709;&#x5E8F;&#x5806;&#xFF0C;&#x5F53;&#x6570;&#x7EC4;&#x539F;&#x6765;&#x5C31;&#x6709;&#x5E8F;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x662F;&#x6700;&#x597D;&#x60C5;&#x51B5;&#xFF0C;&#x53EA;&#x9700;&#x8981;$n-1$&#x6B21;&#x6BD4;&#x8F83;&#x548C;$0$&#x6B21;&#x4EA4;&#x6362;&#xFF0C;&#x6700;&#x574F;&#x60C5;&#x51B5;&#x662F;&#x6570;&#x7EC4;&#x9006;&#x5E8F;&#xFF0C;&#x603B;&#x5171;&#x9700;&#x8981;$\frac{n(n-1)}{2}$&#x6B21;&#x6BD4;&#x8F83;&#x548C;$\frac{n(n-1)}{2}$&#x6B21;&#x4EA4;&#x6362;&#xFF0C;&#x5E73;&#x5747;&#x60C5;&#x51B5;&#x53D6;&#x4E2D;&#x503C;&#xFF0C;&#x6392;&#x5E8F;&#x7A33;&#x5B9A;&#xFF0C;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InersrtSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length == <span class="number">0</span>){</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; array.length; i++){</span><br><span class="line">            <span class="keyword">int</span> key = array[i];</span><br><span class="line">            <span class="comment">//&#x5C06; key &#x63D2;&#x5165;a[0...i]&#x4E2D;</span></span><br><span class="line">            <span class="keyword">int</span> j = i - <span class="number">1</span>;</span><br><span class="line">            <span class="comment">//&#x8F83;&#x5927;&#x7684;&#x5143;&#x7D20;&#x53F3;&#x79FB;</span></span><br><span class="line">            <span class="keyword">while</span> (j &gt; <span class="number">0</span> &amp;&amp; array[j] &gt; key){</span><br><span class="line">                array[j+<span class="number">1</span>] = array[j];</span><br><span class="line">                j--;</span><br><span class="line">            }</span><br><span class="line">            array[j+<span class="number">1</span>] = key;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x5E0C;&#x5C14;&#x6392;&#x5E8F;"><a href="#&#x5E0C;&#x5C14;&#x6392;&#x5E8F;" class="headerlink" title="&#x5E0C;&#x5C14;&#x6392;&#x5E8F;"></a>&#x5E0C;&#x5C14;&#x6392;&#x5E8F;</h2><p>&#x4EA4;&#x6362;&#x4E0D;&#x76F8;&#x90BB;&#x7684;&#x5143;&#x7D20;&#x5BF9;&#x6570;&#x7EC4;&#x8FDB;&#x884C;&#x5C40;&#x90E8;&#x6392;&#x5E8F;&#xFF0C;&#x7136;&#x540E;&#x4F7F;&#x7528;&#x63D2;&#x5165;&#x6392;&#x5E8F;&#x5C06;&#x6709;&#x5E8F;&#x6570;&#x7EC4;&#x6392;&#x5E8F;&#xFF0C;&#x7B97;&#x6CD5;&#x590D;&#x6742;&#x5EA6;$O(n) &lt; O &lt; O(n^2)$&#xFF0C;&#x5E73;&#x5747;&#x7B97;&#x6CD5;&#x590D;&#x6742;&#x5EA6;&#x5927;&#x6982;&#x662F;$O(n^{1.3})$,&#x7B97;&#x6CD5;&#x4E0D;&#x7A33;&#x5B9A;,&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShellSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">shellSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length == <span class="number">0</span>){</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">int</span> h = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// &#x4F7F;&#x7528;&#x5E8F;&#x5217; 1/2(3^k -1)&#x4F5C;&#x4E3A;&#x6392;&#x5E8F;&#x95F4;&#x9694;</span></span><br><span class="line">        <span class="keyword">while</span> (h &lt; array.length / <span class="number">3</span>) h = <span class="number">3</span> * h + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (h &gt;= <span class="number">1</span>){</span><br><span class="line">            <span class="comment">//&#x5C06;&#x6570;&#x7EC4;&#x53D8;&#x4E3A; h &#x6709;&#x5E8F;</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = h; i &lt; array.length; i++){</span><br><span class="line">                <span class="comment">//&#x5C06; a[i] &#x63D2;&#x5165;&#x5230; a[i-h],a[i-2*h]...&#x4E2D;</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;=h; j -=h){</span><br><span class="line">                    <span class="keyword">if</span> (array[j] &lt; array[j-h]){</span><br><span class="line">                        array[j] = array[j] + array[j-h];</span><br><span class="line">                        array[j-h] = array[j] - array[j-h];</span><br><span class="line">                        array[j] = array[j] -array[j-h];</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            h = h/<span class="number">3</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x5F52;&#x5E76;&#x6392;&#x5E8F;"><a href="#&#x5F52;&#x5E76;&#x6392;&#x5E8F;" class="headerlink" title="&#x5F52;&#x5E76;&#x6392;&#x5E8F;"></a>&#x5F52;&#x5E76;&#x6392;&#x5E8F;</h2><p>&#x4E3B;&#x8981;&#x601D;&#x60F3;&#x662F;&#x5206;&#x6CBB;&#xFF0C;&#x5C06;&#x5143;&#x7D20;&#x5206;&#x89E3;&#x4E3A;&#x5404;&#x542B;&#x6709;n/2&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x5B50;&#x5E8F;&#x5217;&#xFF0C;&#x7528;&#x5408;&#x5E76;&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x5BF9;&#x4E24;&#x4E2A;&#x5B50;&#x5E8F;&#x5217;&#x9012;&#x5F52;&#x7684;&#x8FDB;&#x884C;&#x6392;&#x5E8F;&#xFF0C;&#x5408;&#x5E76;&#x4E24;&#x4E2A;&#x5DF2;&#x7ECF;&#x6392;&#x597D;&#x5E8F;&#x7684;&#x5B50;&#x5E8F;&#x5217;&#x5F97;&#x5230;&#x7ED3;&#x679C;&#x3002;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$O(nlogn)$&#xFF0C;&#x4E0D;&#x662F;&#x539F;&#x5730;&#x6392;&#x5E8F;&#xFF0C;&#x7A33;&#x5B9A;&#xFF0C;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        mSort(array,<span class="number">0</span>,array.length -<span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &#x5206;&#x6CBB;&#xFF0C;&#x4E00;&#x4E2A;&#x6570;&#x7EC4;&#x5206;&#x6210;&#x4E24;&#x4E2A;&#xFF0C;&#x5206;&#x522B;&#x6392;&#x597D;&#x5E8F;&#x4E4B;&#x540E;&#x5408;&#x5E76;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array &#x5F85;&#x6392;&#x5E8F;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> left  &#x6307;&#x5411;&#x6570;&#x7EC4;&#x6700;&#x5DE6;&#x8FB9;&#x8282;&#x70B9;&#x6307;&#x9488;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> right &#x6307;&#x5411;&#x6570;&#x7EC4;&#x6700;&#x53F3;&#x8FB9;&#x8282;&#x70B9;&#x6307;&#x9488;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mSort</span><span class="params">(<span class="keyword">int</span>[] array, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (left &gt;= right) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">int</span> mid = (left + right) /<span class="number">2</span>;</span><br><span class="line">        mSort(array, left, mid);</span><br><span class="line">        mSort(array, mid+<span class="number">1</span>, right);</span><br><span class="line">        merge(array, left, mid, right);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &#x5408;&#x5E76;&#x5B50;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array &#x5F85;&#x6392;&#x5E8F;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> left  &#x6307;&#x5411;&#x6570;&#x7EC4;&#x6700;&#x5DE6;&#x8FB9;&#x8282;&#x70B9;&#x6307;&#x9488;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> mid   &#x6307;&#x5411;&#x6570;&#x7EC4;&#x4E2D;&#x95F4;&#x4F4D;&#x7F6E;&#x8282;&#x70B9;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> right &#x6307;&#x5411;&#x6570;&#x7EC4;&#x6700;&#x53F3;&#x8FB9;&#x8282;&#x70B9;&#x6307;&#x9488;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] array,<span class="keyword">int</span> left,<span class="keyword">int</span> mid,<span class="keyword">int</span> right)</span></span>{</span><br><span class="line">        <span class="comment">//[left...mid] [mid...right]</span></span><br><span class="line">        <span class="keyword">int</span>[] temp = <span class="keyword">new</span> <span class="keyword">int</span>[right-left+<span class="number">1</span>]; <span class="comment">//&#x4E2D;&#x95F4;&#x6570;&#x7EC4;</span></span><br><span class="line">        <span class="keyword">int</span> i = left;</span><br><span class="line">        <span class="keyword">int</span> j = mid + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt;= mid &amp;&amp; j &lt;= right){</span><br><span class="line">            <span class="keyword">if</span> (array[i] &lt;= array[j]){</span><br><span class="line">                temp[k++] = array[i++];</span><br><span class="line">            }<span class="keyword">else</span> {</span><br><span class="line">                temp[k++] = array[j++];</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">while</span> (i &lt;= mid){</span><br><span class="line">            temp[k++] = array[i++];</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (j &lt;= right){</span><br><span class="line">            temp[k++] = array[j++];</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> m = <span class="number">0</span>;m &lt; temp.length;m++){</span><br><span class="line">            array[left + m] = temp[m];</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x5FEB;&#x901F;&#x6392;&#x5E8F;"><a href="#&#x5FEB;&#x901F;&#x6392;&#x5E8F;" class="headerlink" title="&#x5FEB;&#x901F;&#x6392;&#x5E8F;"></a>&#x5FEB;&#x901F;&#x6392;&#x5E8F;</h2><p>&#x548C;&#x5F52;&#x5E76;&#x6392;&#x5E8F;&#x4E00;&#x6837;&#xFF0C;&#x4E3B;&#x8981;&#x601D;&#x60F3;&#x662F;&#x5206;&#x6CBB;&#xFF0C;&#x53D6;&#x4E00;&#x4E2A;flag&#xFF1A;<code>array[p]</code>&#x5C06;&#x6570;&#x7EC4;&#x5206;&#x4E3A;&#x4E24;&#x90E8;&#x5206;&#x5DE6;&#x8FB9;&#x90FD;&#x5C0F;&#x4E8E;<code>array[p]</code>&#x53F3;&#x8FB9;&#x90FD;&#x5927;&#x4E8E;<code>array[p]</code>&#xFF0C;&#x7136;&#x540E;&#x9012;&#x5F52;&#x89E3;&#x51B3;&#x4E24;&#x4E2A;&#x5B50;&#x6570;&#x7EC4;&#xFF0C;&#x6700;&#x597D;&#x60C5;&#x51B5;&#x4E0B;&#x548C;&#x5E73;&#x5747;&#x60C5;&#x51B5;&#x4E0B;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$O(nlogn)$&#xFF0C;&#x6700;&#x574F;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$O(n^2)$&#xFF0C;&#x539F;&#x5730;&#x6392;&#x5E8F;&#xFF0C;&#x7B97;&#x6CD5;&#x4E0D;&#x7A33;&#x5B9A;&#x3002;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        qSort(array,<span class="number">0</span>,array.length-<span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">qSort</span><span class="params">(<span class="keyword">int</span>[] array, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span>{</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (left &lt; right){</span><br><span class="line">            <span class="keyword">int</span> pivotKeyIndex = pattition(array, left, right);</span><br><span class="line">            qSort(array, left, pivotKeyIndex - <span class="number">1</span>);</span><br><span class="line">            qSort(array,pivotKeyIndex + <span class="number">1</span>,right);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &#x8FC7;&#x7A0B;&#x4E2D;&#x6709;&#x4E09;&#x4E2A;&#x533A;&#x95F4;&#xFF0C;&#x4E00;&#x4E2A;&#x5C0F;&#x4E8E;&#x57FA;&#x51C6;&#x503C;&#xFF0C;&#x4E00;&#x4E2A;&#x5927;&#x4E8E;&#x57FA;&#x51C6;&#x503C;&#xFF0C;&#x4E00;&#x4E2A;&#x5F85;&#x6392;&#x533A;&#x95F4;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array &#x5F85;&#x6392;&#x5E8F;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> left  &#x6570;&#x7EC4;&#x8D77;&#x59CB;&#x8282;&#x70B9;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> right &#x6570;&#x7EC4;&#x7EC8;&#x6B62;&#x8282;&#x70B9;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> &#x57FA;&#x51C6;&#x503C;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x5DE6;&#x8FB9;&#x5C0F;&#x4E8E;&#x57FA;&#x51C6;&#x503C;&#xFF0C;&#x53F3;&#x8FB9;&#x5927;&#x4E8E;&#x57FA;&#x51C6;&#x503C;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">patition</span><span class="params">(<span class="keyword">int</span>[] array,<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span>{</span><br><span class="line">        <span class="keyword">int</span> pivotKey = array[right]; <span class="comment">//&#x57FA;&#x51C6;&#x503C;</span></span><br><span class="line">        <span class="keyword">int</span> sortLessLast = left -<span class="number">1</span>; <span class="comment">//&#x5C0F;&#x4E8E;&#x57FA;&#x51C6;&#x503C;&#x7684;&#x533A;&#x95F4;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x5143;&#x7D20;</span></span><br><span class="line">        <span class="keyword">int</span> unRestrictedIndex = left; <span class="comment">//&#x672A;&#x6392;&#x5E8F;&#x533A;&#x95F4;&#x7B2C;&#x4E00;&#x4E2A;&#x6570;</span></span><br><span class="line">        <span class="keyword">while</span> (unRestrictedIndex &lt;= right - <span class="number">1</span>){</span><br><span class="line">            <span class="comment">//&#x904D;&#x5386;&#x672A;&#x6392;&#x5E8F;&#x533A;&#x95F4;</span></span><br><span class="line">            <span class="keyword">if</span> (array[unRestrictedIndex] &lt;= pivotKey){</span><br><span class="line">                <span class="comment">//&#x5F85;&#x6392;&#x7684;&#x6570;&#x5C0F;&#x4E8E;&#x57FA;&#x51C6;&#x503C;</span></span><br><span class="line">                sortLessLast++; <span class="comment">//&#x73B0;&#x5728;&#x6307;&#x9488;&#x6307;&#x7684;&#x6570;&#x662F;&#x7B2C;&#x4E00;&#x4E2A;&#x5927;&#x4E8E;&#x57FA;&#x51C6;&#x503C;&#x7684;&#x6570;</span></span><br><span class="line">                swap(array,sortLessLast,unRestrictedIndex);</span><br><span class="line">            }</span><br><span class="line">            unRestrictedIndex++;</span><br><span class="line">        }</span><br><span class="line">        swap(array,sortLessLast+<span class="number">1</span>,right);</span><br><span class="line">        <span class="keyword">return</span> sortLessLast+<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> temp = arr[left];</span><br><span class="line">        arr[left] = arr[right];</span><br><span class="line">        arr[right] = temp;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x5806;&#x6392;&#x5E8F;"><a href="#&#x5806;&#x6392;&#x5E8F;" class="headerlink" title="&#x5806;&#x6392;&#x5E8F;"></a>&#x5806;&#x6392;&#x5E8F;</h2><p>&#x57FA;&#x672C;&#x601D;&#x60F3;&#x662F;&#x5229;&#x7528;&#x5806;&#x5B9E;&#x73B0;&#x9009;&#x62E9;&#x6392;&#x5E8F;&#xFF0C;&#x4E0D;&#x7528;&#x6BCF;&#x4E00;&#x6B21;&#x904D;&#x5386;&#x6574;&#x4E2A;&#x5F85;&#x6392;&#x6570;&#x7EC4;&#x7A7A;&#x95F4;&#xFF0C;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4ECE;$O(n^2)$&#x964D;&#x4E3A;$O(n^2)$&#xFF0C;&#x4E0D;&#x7A33;&#x5B9A;&#xFF0C;&#x539F;&#x5730;&#x6392;&#x5E8F;&#xFF0C;&#x601D;&#x60F3;&#x548C;&#x4EE3;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeapSort</span> </span>{</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &#x5806;&#x6392;&#x5E8F;&#x7684;&#x8FC7;&#x7A0B;&#xFF1A;</span></span><br><span class="line"><span class="comment">     * 1 &#x6570;&#x7EC4;&#x8F6C;&#x5316;&#x4E3A;&#x5927;&#x6839;&#x5806;&#x6216;&#x8005;&#x5C0F;&#x6839;&#x5806;&#xFF08;&#x4EE5;&#x5927;&#x6839;&#x5806;&#x4E3A;&#x4F8B;</span></span><br><span class="line"><span class="comment">     * 1.1 &#x81EA;&#x4F4E;&#x5411;&#x4E0A;&#x904D;&#x5386;&#xFF0C;&#x4ECE;&#x7B2C;&#x4E00;&#x4E2A;&#x975E;&#x53F6;&#x5B50;&#x8282;&#x70B9;&#x5F00;&#x59CB; lastNodeIndex = (lastLeafIndex - 1)/2 = (array.length - 2)/2</span></span><br><span class="line"><span class="comment">     * 1.2 &#x6BCF;&#x6B65;&#x904D;&#x5386;&#x7684;&#x8C03;&#x6574;&#x89C4;&#x5219;&#xFF1A;&#x5C06;&#x975E;&#x53F6;&#x8282;&#x70B9;&#x548C;&#x5B83;&#x7684;&#x5B50;&#x8282;&#x70B9;&#x4F5C;&#x6BD4;&#x8F83;&#xFF0C;&#x6700;&#x5927;&#x7684;&#x5728;&#x4E0A;&#x9762;</span></span><br><span class="line"><span class="comment">     * 1.3 &#x6BCF;&#x6B65;&#x904D;&#x5386;&#x6B21;&#x6570;&#xFF0C;&#x5982;&#x679C;&#x5B50;&#x8282;&#x70B9;&#x548C;&#x7236;&#x8282;&#x70B9;&#x53D1;&#x751F;&#x4E86;&#x4EA4;&#x6362;&#xFF0C;&#x90A3;&#x4E48;&#x5B50;&#x8282;&#x70B9;&#x8FD8;&#x8981;&#x5411;&#x4E0B;&#x9A8C;&#x8BC1;</span></span><br><span class="line"><span class="comment">     * 2 &#x8C03;&#x6574;&#x5806;&#xFF0C;&#x4F7F;&#x5176;&#x6709;&#x5E8F;</span></span><br><span class="line"><span class="comment">     *  &#x5C06;&#x6839;&#x8282;&#x70B9;&#x4E0E;&#x6570;&#x7EC4;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x6570;&#x7EC4;&#x4EA4;&#x6362;&#x4F4D;&#x7F6E;&#xFF0C;&#x5927;&#x6839;&#x5806;&#x904D;&#x5386;&#x957F;&#x5EA6;&#x51CF;&#x4E00;&#xFF0C;&#x8C03;&#x6574;&#x65B0;&#x5806;&#xFF0C;&#xFF08;&#x53EA;&#x9700;&#x8981;&#x8C03;&#x6574;&#x6700;&#x4E0A;&#x5C42;&#xFF0C;&#x4F7F;&#x5176;&#x6709;&#x5E8F;&#xFF0C;&#x76F4;&#x5230;&#x904D;&#x5386;&#x7684;&#x957F;&#x5EA6;&#x4E3A;0</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array array[0...length-1]</span></span><br><span class="line"><span class="comment">     *              &#x5BF9;&#x4E8E;&#x8282;&#x70B9;array[k]&#x6709;</span></span><br><span class="line"><span class="comment">     *              &#x5DE6;&#x5B69;&#x5B50;:array[2k+1]</span></span><br><span class="line"><span class="comment">     *              &#x53F3;&#x5B69;&#x5B50;:array[2k+2]</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">heapSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        <span class="keyword">int</span> lastLeafIndex = array.length -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> beginIndex = (lastLeafIndex-<span class="number">1</span>)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = beginIndex; i &gt;= <span class="number">0</span>; i--){</span><br><span class="line">            <span class="comment">//&#x5C06;&#x6570;&#x7EC4;&#x5806;&#x5316;</span></span><br><span class="line">            maxHeap(array,i,lastLeafIndex);</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">//&#x5BF9;&#x5806;&#x6570;&#x7EC4;&#x6392;&#x5E8F;</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = lastLeafIndex; i &gt; <span class="number">0</span>; i--){</span><br><span class="line">            swap(array,<span class="number">0</span>,i);</span><br><span class="line">            maxHeap(array,<span class="number">0</span>,i-<span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">   }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * &#x8C03;&#x6574;&#x8282;&#x70B9;&#x3002;&#x6784;&#x9020;&#x5927;&#x6839;&#x5806;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array             &#x88AB;&#x8C03;&#x6574;&#x7684;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> parentNodeIndex   &#x5F53;&#x524D;&#x8C03;&#x6574;&#x7684;&#x8282;&#x70B9;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> lastLeafIndex     &#x6700;&#x540E;&#x4E00;&#x4E2A;&#x53F6;&#x8282;&#x70B9;&#xFF0C;&#x4E3A;&#x4E86;&#x540E;&#x9762;&#x6392;&#x5E8F;&#x505A;&#x51C6;&#x5907;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">maxHeap</span><span class="params">(<span class="keyword">int</span>[] array,<span class="keyword">int</span> parentNodeIndex,<span class="keyword">int</span> lastLeafIndex)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (parentNodeIndex * <span class="number">2</span> &gt; array.length) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">int</span> leftChildIndex = parentNodeIndex * <span class="number">2</span> + <span class="number">1</span>;   <span class="comment">//&#x5DE6;&#x5B69;&#x5B50;</span></span><br><span class="line">        <span class="keyword">int</span> rightChildIndex = leftChildIndex + <span class="number">1</span>;   <span class="comment">//&#x53F3;&#x5B69;&#x5B50;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (leftChildIndex &gt; lastLeafIndex) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> maxIndex = leftChildIndex; <span class="comment">//&#x6700;&#x5927;&#x7684;&#x8282;&#x70B9;</span></span><br><span class="line">        <span class="keyword">if</span> (rightChildIndex &lt;= lastLeafIndex &amp;&amp; array[rightChildIndex] &gt; array[maxIndex]){</span><br><span class="line">            maxIndex = rightChildIndex;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (array[maxIndex] &gt; array[parentNodeIndex]){</span><br><span class="line">            <span class="comment">//&#x5982;&#x679C;&#x5B69;&#x5B50;&#x91CC;&#x9762;&#x6709;&#x6BD4;&#x7236;&#x4EB2;&#x5927;&#x7684;&#x8282;&#x70B9;&#xFF0C;&#x8C03;&#x6574;&#xFF0C;&#x6B64;&#x65F6; maxIndex&#x5B58;&#x7684;&#x662F;&#x6C89;&#x4E0B;&#x53BB;&#x7684;&#x6570;</span></span><br><span class="line">            swap(array, maxIndex, parentNodeIndex);</span><br><span class="line">            <span class="comment">//&#x7EE7;&#x7EED;&#x5224;&#x65AD;&#x6C89;&#x4E0B;&#x53BB;&#x4E4B;&#x540E;&#x7684;&#x8282;&#x70B9;&#x662F;&#x5426;&#x7B26;&#x5408;&#x5806;&#x7684;&#x7279;&#x6027;</span></span><br><span class="line">            maxHeap(array, maxIndex, lastLeafIndex);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] array, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span>{</span><br><span class="line">        <span class="keyword">int</span> temp = array[i];</span><br><span class="line">        array[i] = array[j];</span><br><span class="line">        array[j] = temp;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x8BA1;&#x6570;&#x6392;&#x5E8F;"><a href="#&#x8BA1;&#x6570;&#x6392;&#x5E8F;" class="headerlink" title="&#x8BA1;&#x6570;&#x6392;&#x5E8F;"></a>&#x8BA1;&#x6570;&#x6392;&#x5E8F;</h2><p>&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$o(n)$,&#x524D;&#x63D0;&#x6761;&#x4EF6;&#x4E3A;&#x6570;&#x636E;&#x8981;&#x662F;&#x5728;&#x4E00;&#x5B9A;&#x8303;&#x56F4;&#x5185;&#x7684;&#x6574;&#x6570;&#xFF0C;&#x9700;&#x8981;&#x7528;&#x5F88;&#x5927;&#x7684;&#x8F85;&#x52A9;&#x7A7A;&#x95F4;&#xFF0C;&#x57FA;&#x672C;&#x601D;&#x60F3;&#x662F;&#xFF0C;&#x5229;&#x7528;&#x5F85;&#x6392;&#x5E8F;&#x6570;&#x4F5C;&#x4E3A;&#x8BA1;&#x6570;&#x6570;&#x7EC4;&#x4E0B;&#x6807;&#xFF0C;&#x7EDF;&#x8BA1;&#x6BCF;&#x4E2A;&#x6570;&#x5B57;&#x7684;&#x4E2A;&#x6570;&#xFF0C;&#x7136;&#x540E;&#x4F9D;&#x6B21;&#x8F93;&#x51FA;&#xFF0C;&#x4EE3;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">countSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length ==<span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">int</span> max = max(array);</span><br><span class="line">        <span class="keyword">int</span>[] count = <span class="keyword">new</span> <span class="keyword">int</span>[max+<span class="number">1</span>];</span><br><span class="line">        Arrays.fill(count,<span class="number">0</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; max; i++){</span><br><span class="line">            count[array[i]]++;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; max; i++){</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; count[i]; j++){</span><br><span class="line">                array[k++] = i;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> max = Integer.MIN_VALUE;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> ele : arr) {</span><br><span class="line">            <span class="keyword">if</span>(ele &gt; max)</span><br><span class="line">            max = ele;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x6876;&#x6392;&#x5E8F;"><a href="#&#x6876;&#x6392;&#x5E8F;" class="headerlink" title="&#x6876;&#x6392;&#x5E8F;"></a>&#x6876;&#x6392;&#x5E8F;</h2><p>&#x5B9A;&#x5236;&#x901A;&#xFF0C;&#x57FA;&#x4E8E;&#x94F6;&#x86C7;&#x51FD;&#x6570;&#x5C06;&#x5E8F;&#x5217;&#x6620;&#x5C04;&#x5230;&#x6876;&#x4E2D;&#xFF0C;&#x5BF9;&#x6876;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x8FDB;&#x884C;&#x6392;&#x5E8F;&#xFF0C;&#x7136;&#x540E;&#x4F9D;&#x6B21;&#x679A;&#x4E3E;&#x8F93;&#x51FA;&#x6876;&#x4E2D;&#x5143;&#x7D20;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x9700;&#x8981;&#x6876;&#x6EE1;&#x8DB3;&#x4E00;&#x5B9A;&#x7684;&#x6761;&#x4EF6;&#xFF0C;&#x4FDD;&#x8BC1;&#x5982;&#x679C;$k_1 &lt; k_2$&#xFF0C;&#x90A3;&#x4E48;$f(k_1) &lt; f(k_2)$&#xFF0C;&#x5206;&#x6876;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$O(n)$&#xFF0C;&#x6392;&#x5E8F;&#x6700;&#x597D;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$O(nlogn)$&#xFF0C;&#x5BF9;&#x4E8E;N&#x4E2A;&#x6570;&#x636E;&#xFF0C;M&#x4E2A;&#x6876;&#xFF0C;&#x5E73;&#x5747;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x4E3A;$O(N)+O(M\times\frac{N}{M}\times\log{\frac{N}{M}})$ = $O(N+N\times \log{N} - N \times \log{M})$,&#x6876;&#x6392;&#x5E8F;&#x662F;&#x7A33;&#x5B9A;&#x7684;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x5F53;&#x4E00;&#x4E2A;&#x6876;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x65F6;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x662F;&#x7EBF;&#x6027;&#x7684;&#xFF0C;&#x7A7A;&#x95F4;&#x590D;&#x6742;&#x5EA6;&#x76F8;&#x5BF9;&#x800C;&#x8A00;&#x5C31;&#x5F88;&#x9AD8;&#xFF0C;&#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BuckerSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bucketSort</span><span class="params">(<span class="keyword">int</span>[ ] array)</span></span>{</span><br><span class="line">        <span class="keyword">if</span> (array == <span class="keyword">null</span> || array.length == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> bucketNUms = <span class="number">10</span>; <span class="comment">//&#x4E3A;&#x4E86;&#x65B9;&#x4FBF;&#xFF0C;&#x89C4;&#x5B9A;&#x6570;&#x5B57;&#x5927;&#x5C0F;&#x4E3A;[0,100)</span></span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; buckets = <span class="keyword">new</span> ArrayList&lt;List&lt;Integer&gt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++){</span><br><span class="line">            buckets.add(<span class="keyword">new</span> LinkedList&lt;&gt;());</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; buckets.size(); i++){</span><br><span class="line">            <span class="keyword">if</span> (!buckets.get(f(array[i])).isEmpty()){</span><br><span class="line">                Collections.sort(buckets.get(i));</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (List&lt;Integer&gt; bucket: buckets){</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> ele :bucket){</span><br><span class="line">                array[k++] = ele;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> x)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> x / <span class="number">10</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x57FA;&#x6570;&#x6392;&#x5E8F;"><a href="#&#x57FA;&#x6570;&#x6392;&#x5E8F;" class="headerlink" title="&#x57FA;&#x6570;&#x6392;&#x5E8F;"></a>&#x57FA;&#x6570;&#x6392;&#x5E8F;</h2><p>&#x591A;&#x6B21;&#x5165;&#x6876;&#xFF0C;&#x5148;&#x6309;&#x6700;&#x5C0F;&#x672A;&#x5927;&#x5C0F;&#x6392;&#x5E8F;&#xFF0C;&#x7136;&#x540E;&#x4F9D;&#x6B21;&#x5347;&#x9AD8;&#xFF0C;&#x6700;&#x80FD;&#x80FD;&#x4FDD;&#x8BC1;&#xFF0C;&#x5728;&#x6700;&#x9AD8;&#x4F4D;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6876;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x662F;&#x6709;&#x5E8F;&#x7684;&#xFF0C;&#x7136;&#x540E;&#x5408;&#x5E76;&#x6876;&#xFF0C;&#x7B97;&#x6CD5;&#x7A33;&#x5B9A;&#xFF0C;&#x4EE3;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RadixSort</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] number, <span class="keyword">int</span> d)</span> <span class="comment">//d&#x8868;&#x793A;&#x6700;&#x5927;&#x7684;&#x6570;&#x6709;&#x591A;&#x5C11;&#x4F4D;</span></span></span><br><span class="line"><span class="function">    </span>{</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> n = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> m = <span class="number">1</span>; <span class="comment">//&#x63A7;&#x5236;&#x952E;&#x503C;&#x6392;&#x5E8F;&#x4F9D;&#x636E;&#x5728;&#x54EA;&#x4E00;&#x4F4D;</span></span><br><span class="line">        <span class="keyword">int</span>[][]temp = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>][number.length]; <span class="comment">//&#x6570;&#x7EC4;&#x7684;&#x7B2C;&#x4E00;&#x7EF4;&#x8868;&#x793A;&#x53EF;&#x80FD;&#x7684;&#x4F59;&#x6570;0-9</span></span><br><span class="line">        <span class="keyword">int</span>[]order = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>]; <span class="comment">//&#x6570;&#x7EC4;orderp[i]&#x7528;&#x6765;&#x8868;&#x793A;&#x8BE5;&#x4F4D;&#x662F;i&#x7684;&#x6570;&#x7684;&#x4E2A;&#x6570;</span></span><br><span class="line">        <span class="keyword">while</span>(m &lt;= d)</span><br><span class="line">        {</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; number.length; i++)</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">int</span> lsd = ((number[i] / n) % <span class="number">10</span>);</span><br><span class="line">                temp[lsd][order[lsd]] = number[i];</span><br><span class="line">                order[lsd]++;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">if</span>(order[i] != <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; order[i]; j++)</span><br><span class="line">                    {</span><br><span class="line">                        number[k] = temp[i][j];</span><br><span class="line">                        k++;</span><br><span class="line">                    }</span><br><span class="line">                order[i] = <span class="number">0</span>;</span><br><span class="line">            }</span><br><span class="line">            n *= <span class="number">10</span>;</span><br><span class="line">            k = <span class="number">0</span>;</span><br><span class="line">            m++;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h2><table>
+<thead>
+<tr>
+<th align="center">&#x540D;&#x79F0;</th>
+<th align="center">&#x6700;&#x597D;</th>
+<th align="center">&#x6700;&#x574F;</th>
+<th align="center">&#x5E73;&#x5747;</th>
+<th align="center">&#x7A7A;&#x95F4;</th>
+<th align="center">&#x7A33;&#x5B9A;</th>
+<th align="center">&#x65B9;&#x6CD5;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&#x5192;&#x6CE1;&#x6392;&#x5E8F;</td>
+<td align="center">$ O(n) $</td>
+<td align="center">$O(n^2)$</td>
+<td align="center">$O(n^2)$</td>
+<td align="center">1</td>
+<td align="center">&#x7A33;&#x5B9A;</td>
+<td align="center">&#x4EA4;&#x6362;</td>
+</tr>
+<tr>
+<td align="center">&#x9009;&#x62E9;&#x6392;&#x5E8F;</td>
+<td align="center">$O(n^2)$</td>
+<td align="center">$O(n^2)$</td>
+<td align="center">$O(n^2)$</td>
+<td align="center">1</td>
+<td align="center">&#x7A33;&#x5B9A;</td>
+<td align="center">&#x9009;&#x62E9;</td>
+</tr>
+<tr>
+<td align="center">&#x63D2;&#x5165;&#x6392;&#x5E8F;</td>
+<td align="center">$ O(n) $</td>
+<td align="center">$O(n^2)$</td>
+<td align="center">$O(n^2)$</td>
+<td align="center">1</td>
+<td align="center">&#x7A33;&#x5B9A;</td>
+<td align="center">&#x63D2;&#x5165;</td>
+</tr>
+<tr>
+<td align="center">&#x5E0C;&#x5C14;&#x6392;&#x5E8F;</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">$ O(n^{\frac{4}{3}}) $</td>
+<td align="center">&#x53D6;&#x51B3;&#x4E8E;&#x5DEE;&#x8DDD;&#x5E8F;&#x5217;</td>
+<td align="center">1</td>
+<td align="center">&#x4E0D;&#x7A33;&#x5B9A;</td>
+<td align="center">&#x63D2;&#x5165;</td>
+</tr>
+<tr>
+<td align="center">&#x5F52;&#x5E76;&#x6392;&#x5E8F;</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">n</td>
+<td align="center">&#x7A33;&#x5B9A;</td>
+<td align="center">&#x5F52;&#x5E76;</td>
+</tr>
+<tr>
+<td align="center">&#x5FEB;&#x901F;&#x6392;&#x5E8F;</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">$ O(n^2) $</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">1</td>
+<td align="center">&#x4E0D;&#x7A33;&#x5B9A;</td>
+<td align="center">&#x5206;&#x533A;</td>
+</tr>
+<tr>
+<td align="center">&#x5806;&#x6392;&#x5E8F;</td>
+<td align="center">$ O(n) $</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">$ O(n\log n) $</td>
+<td align="center">1</td>
+<td align="center">&#x4E0D;&#x7A33;&#x5B9A;</td>
+<td align="center">&#x9009;&#x62E9;</td>
+</tr>
+<tr>
+<td align="center">&#x8BA1;&#x6570;&#x6392;&#x5E8F;</td>
+<td align="center">-</td>
+<td align="center">$ O(n+r) $</td>
+<td align="center">$ O(n+r) $</td>
+<td align="center">$ O(n+r) $</td>
+<td align="center">&#x7A33;&#x5B9A;</td>
+<td align="center">&#x975E;&#x6BD4;&#x8F83;</td>
+</tr>
+<tr>
+<td align="center">&#x6876;&#x6392;&#x5E8F;</td>
+<td align="center">-</td>
+<td align="center">$ O(n+r) $</td>
+<td align="center">$ O(n+r) $</td>
+<td align="center">$ O(n+r) $</td>
+<td align="center">&#x7A33;&#x5B9A;</td>
+<td align="center">&#x975E;&#x6BD4;&#x8F83;</td>
+</tr>
+<tr>
+<td align="center">&#x57FA;&#x6570;&#x6392;&#x5E8F;</td>
+<td align="center">-</td>
+<td align="center">$ O(n\times \frac{k}{d}) $</td>
+<td align="center">$ O(n\times \frac{k}{d}) $</td>
+<td align="center">$ O(n+r) $</td>
+<td align="center">&#x7A33;&#x5B9A;</td>
+<td align="center">&#x975E;&#x6BD4;&#x8F83;</td>
+</tr>
+</tbody></table>
+<h2 id="&#x53C2;&#x8003;&#x6587;&#x732E;"><a href="#&#x53C2;&#x8003;&#x6587;&#x732E;" class="headerlink" title="&#x53C2;&#x8003;&#x6587;&#x732E;"></a>&#x53C2;&#x8003;&#x6587;&#x732E;</h2><p>[1] <a href="https://en.wikipedia.org/wiki/Sorting_algorithm" target="_blank" rel="noopener">&#x7EF4;&#x57FA;</a></p>
+<p>[2] <a href="https://github.com/francistao/LearningNotes/blob/master/Part3/Algorithm/Sort/%E9%9D%A2%E8%AF%95%E4%B8%AD%E7%9A%84%2010%20%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93.md" target="_blank" rel="noopener">&#x9762;&#x8BD5;&#x4E2D;&#x5E38;&#x7528;&#x7684;&#x5341;&#x5927;&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x603B;&#x7ED3;</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/排序-算法/" rel="tag"># 排序,算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/14/RootKit系列二-基于VFS层的rootkit/" rel="next" title="RootKit系列二--基于VFS层的rootkit">
+                <i class="fa fa-chevron-left"></i> RootKit系列二--基于VFS层的rootkit
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#排序算法总结"><span class="nav-number">1.</span> <span class="nav-text">排序算法总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冒泡排序"><span class="nav-number">1.1.</span> <span class="nav-text">冒泡排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择排序"><span class="nav-number">1.2.</span> <span class="nav-text">选择排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序"><span class="nav-number">1.3.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#希尔排序"><span class="nav-number">1.4.</span> <span class="nav-text">希尔排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归并排序"><span class="nav-number">1.5.</span> <span class="nav-text">归并排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速排序"><span class="nav-number">1.6.</span> <span class="nav-text">快速排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆排序"><span class="nav-number">1.7.</span> <span class="nav-text">堆排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计数排序"><span class="nav-number">1.8.</span> <span class="nav-text">计数排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桶排序"><span class="nav-number">1.9.</span> <span class="nav-text">桶排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基数排序"><span class="nav-number">1.10.</span> <span class="nav-text">基数排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.11.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.12.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2019/10/14/排序算法总结/';
+          this.page.identifier = '2019/10/14/排序算法总结/';
+          this.page.title = '排序算法总结';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
