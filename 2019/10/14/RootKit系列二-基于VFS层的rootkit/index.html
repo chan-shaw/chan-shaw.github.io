@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="rootkit,系统调用,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一个基于VFS层的rootkit实现文件隐藏">
+<meta name="keywords" content="rootkit,系统调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RootKit系列二--基于VFS层的rootkit">
+<meta property="og:url" content="http://yoursite.com/2019/10/14/RootKit系列二-基于VFS层的rootkit/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="一个基于VFS层的rootkit实现文件隐藏">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-14T11:18:12.869Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RootKit系列二--基于VFS层的rootkit">
+<meta name="twitter:description" content="一个基于VFS层的rootkit实现文件隐藏">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/14/RootKit系列二-基于VFS层的rootkit/">
+
+
+
+
+
+  <title>RootKit系列二--基于VFS层的rootkit | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/RootKit系列二-基于VFS层的rootkit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RootKit系列二--基于VFS层的rootkit</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-14T19:17:30+08:00">
+                2019-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux-Rootkit/" itemprop="url" rel="index">
+                    <span itemprop="name">linux Rootkit</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/14/RootKit系列二-基于VFS层的rootkit/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/14/RootKit系列二-基于VFS层的rootkit/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/10/14/RootKit系列二-基于VFS层的rootkit/" class="leancloud_visitors" data-flag-title="RootKit系列二--基于VFS层的rootkit">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  一个基于VFS层的rootkit实现文件隐藏
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="&#x57FA;&#x4E8E;VFS&#x7684;Rootkit"><a href="#&#x57FA;&#x4E8E;VFS&#x7684;Rootkit" class="headerlink" title="&#x57FA;&#x4E8E;VFS&#x7684;Rootkit"></a>&#x57FA;&#x4E8E;VFS&#x7684;Rootkit</h1><blockquote>
+<p>Virtual file systems (VFS) are an abstraction layer to allow easy communication with other filesystems such as ext4, reiser fs, or other special filesystems like procfs. This extra layer translates easy to use VFS functions to their appropriate functions offered by the given filesystem. This allows a developer to interact solely with the VFS and not needing to find, handle, and support the different functions and types of individual filesystems. </p>
+<p>&#x4E3A;&#x4EC0;&#x4E48;VFS&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x9690;&#x85CF;&#xFF1A;</p>
+<ol>
+<li>First, we can hook a VFS function and deal with that one function to hide information from the concrete filesystem.</li>
+<li>procfs is a supported filesystem</li>
+</ol>
+<p><strong>Procfs (Proc filesystem)</strong> </p>
+<p>The proc filesystem is an interface to easily manage kernel data structures. This includes being able to retrieve and even change data inside the linux kernel at runtime. More importantly, for us, it also provides an interface for process data. Each process is mapped to procfs by its given process id number. Retrieving this pid number allows any tool to pull, with appropriate privileges, whatever data it needs to find out about that given process. This includes its memory mapping, memory usage, network usage, parameters, environment variables, and etc. Given this, if we know the pid and we&#x2019;re hooked into the VFS for procfs, we can also manipulate data returned to these tools to hide processes. </p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">SYSCALL_DEFINE3(getdents, <span class="keyword">unsigned</span> <span class="keyword">int</span>, fd,</span><br><span class="line">		struct linux_dirent __user *, dirent, <span class="keyword">unsigned</span> <span class="keyword">int</span>, count)</span><br><span class="line">{</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fd</span> <span class="title">f</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">linux_dirent</span> __<span class="title">user</span> * <span class="title">lastdirent</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">getdents_callback</span> <span class="title">buf</span> = {</span></span><br><span class="line">		.ctx.actor = filldir,</span><br><span class="line">		.count = count,</span><br><span class="line">		.current_dir = dirent</span><br><span class="line">	};</span><br><span class="line">	<span class="keyword">int</span> error;</span><br><span class="line">	<span class="keyword">if</span> (!access_ok(VERIFY_WRITE, dirent, count))</span><br><span class="line">		<span class="keyword">return</span> -EFAULT;</span><br><span class="line">	f = fdget(fd);</span><br><span class="line">	<span class="keyword">if</span> (!f.file)</span><br><span class="line">		<span class="keyword">return</span> -EBADF;</span><br><span class="line">    <span class="comment">// &#x8C03;&#x7528;&#x7684;&#x662F;iterate_dir&#x51FD;&#x6570;</span></span><br><span class="line">	error = iterate_dir(f.file, &amp;buf.ctx);</span><br><span class="line">	<span class="keyword">if</span> (error &gt;= <span class="number">0</span>)</span><br><span class="line">		error = buf.error;</span><br><span class="line">	lastdirent = buf.previous;</span><br><span class="line">	<span class="keyword">if</span> (lastdirent) {</span><br><span class="line">		<span class="keyword">if</span> (put_user(buf.ctx.pos, &amp;lastdirent-&gt;d_off))</span><br><span class="line">			error = -EFAULT;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			error = count - buf.count;</span><br><span class="line">	}</span><br><span class="line">	fdput(f);</span><br><span class="line">	<span class="keyword">return</span> error;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>fs.h&#x6709;iterate_dir&#x51FD;&#x6570;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dir_context</span> {</span></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">filldir_t</span> actor;</span><br><span class="line">	<span class="keyword">loff_t</span> pos;</span><br><span class="line">};</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">iterate_dir</span><span class="params">(struct file *file, struct dir_context *ctx)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">inode</span> *<span class="title">inode</span> = <span class="title">file_inode</span>(<span class="title">file</span>);</span></span><br><span class="line">	<span class="keyword">int</span> res = -ENOTDIR;</span><br><span class="line">	<span class="keyword">if</span> (!file-&gt;f_op-&gt;iterate)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">	res = security_file_permission(file, MAY_READ);</span><br><span class="line">	<span class="keyword">if</span> (res)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">	res = mutex_lock_killable(&amp;inode-&gt;i_mutex);</span><br><span class="line">	<span class="keyword">if</span> (res)</span><br><span class="line">		<span class="keyword">goto</span> out;</span><br><span class="line">	res = -ENOENT;</span><br><span class="line">	<span class="keyword">if</span> (!IS_DEADDIR(inode)) {</span><br><span class="line">		ctx-&gt;pos = file-&gt;f_pos;</span><br><span class="line">		res = file-&gt;f_op-&gt;iterate(file, ctx);</span><br><span class="line">		file-&gt;f_pos = ctx-&gt;pos;</span><br><span class="line">		file_accessed(file);</span><br><span class="line">	}</span><br><span class="line">	mutex_unlock(&amp;inode-&gt;i_mutex);</span><br><span class="line">out:</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">}</span><br><span class="line">EXPORT_SYMBOL(iterate_dir);</span><br></pre></td></tr></table></figure>
+
+<p>&#x8C03;&#x7528;&#x4E86;file_operations&#x91CC;&#x9762;&#x7684;iterate&#x51FD;&#x6570;&#xFF0C;&#x5728;VFS&#x4E2D;&#x6709;&#x5173;file_operation&#x5B9A;&#x4E49;&#x5982;&#x4E0B;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">ext4_dir_operations</span> = {</span></span><br><span class="line">	.llseek		= ext4_dir_llseek,</span><br><span class="line">	.read		= generic_read_dir,</span><br><span class="line">	.iterate	= ext4_readdir,</span><br><span class="line">	.unlocked_ioctl = ext4_ioctl,</span><br><span class="line">#ifdef CONFIG_COMPAT</span><br><span class="line">	.compat_ioctl	= ext4_compat_ioctl,</span><br><span class="line">#endif</span><br><span class="line">	.fsync		= ext4_sync_file,</span><br><span class="line">	.release	= ext4_release_dir,</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x5B9E;&#x73B0;&#x7684;&#x662F;readdir</p>
+<p>&#xFF0C;&#x4E2D;&#x95F4;&#x8FC7;&#x7A0B;&#x6BD4;&#x8F83;&#x590D;&#x6742;&#xFF0C;&#x7B80;&#x5355;&#x63CF;&#x8FF0;&#x5982;&#x4E0B;&#xFF1A;&#x901A;&#x8FC7;getdents&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x4E86;&#x6765;&#x83B7;&#x53D6;&#x5F53;&#x524D;&#x76EE;&#x5F55;&#x4E0B;&#x7684;&#x6587;&#x4EF6;&#x65F6;&#xFF0C;file-&gt;f_op-&gt;readdir(file, buf, filler)&#x8C03;&#x7528;&#x7684;&#x5B9E;&#x9645;&#x4E0A;&#x662F;ext4_dir_operations&#x51FD;&#x6570;&#x96C6;&#x4E2D;&#x7684;readdir()&#x51FD;&#x6570;&#x3002;&#x5373;&#x7531;ex4&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x9A71;&#x52A8;&#x6765;&#x8BFB;&#x53D6;&#x5F53;&#x524D;&#x76EE;&#x5F55;&#x6587;&#x4EF6;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x4E2A;&#x76EE;&#x5F55;&#x9879;&#x3002; ext4_readdir&#x6700;&#x7EC8;&#x4F1A;&#x901A;&#x8FC7;filldir&#x628A;&#x76EE;&#x5F55;&#x91CC;&#x9762;&#x7684;&#x9879;&#x76EE;&#x4E00;&#x4E2A;&#x4E00;&#x4E2A;&#x7684;&#x586B;&#x5230;getdents&#x8FD4;&#x56DE;&#x7684;&#x7F13;&#x51B2;&#x533A;&#x91CC;&#xFF0C;&#x7F13;&#x51B2;&#x533A;&#x91CC;&#x662F;&#x4E00;&#x4E2A;&#x4E2A;&#x7684;linux_dirent&#x3002;</p>
+<p>&#x6240;&#x4EE5;&#x771F;&#x6B63;&#x91CD;&#x8981;&#x7684;&#x662F;filler&#x90E8;&#x5206;&#xFF0C;&#x5728;fs.h&#x4E2D;&#x53EF;&#x4EE5;&#x627E;&#x5230;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span>  <span class="title">int</span> <span class="params">(*<span class="keyword">filldir_t</span>)</span><span class="params">(<span class="keyword">void</span> *, <span class="keyword">const</span> <span class="keyword">char</span> *, <span class="keyword">int</span>, <span class="keyword">loff_t</span>, u64, <span class="keyword">unsigned</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>&#x603B;&#x7684;&#x6765;&#x8BF4;&#xFF0C;&#x8C03;&#x7528;&#x5C42;&#x6B21;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys_getdents-&gt; iterate_dir-&gt; <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span>.<span class="title">iterate</span>-&gt;&#x7701;&#x7565;&#x82E5;&#x5E72;&#x5C42;&#x6B21; -&gt; <span class="title">struct</span> <span class="title">dir_context</span>.<span class="title">actor</span>(<span class="title">mostly</span> <span class="title">filldir</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x8981;&#x8FBE;&#x5230;&#x9690;&#x85CF;&#x6587;&#x4EF6;&#x7684;&#x76EE;&#x7684;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;hooking filldir&#xFF0C;&#x5728;hooking function&#x4E2D;&#x53BB;&#x6389;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x9690;&#x85CF;&#x7684;&#x6587;&#x4EF6;&#x8BB0;&#x5F55;&#xFF0C;&#x4E0D;&#x586B;&#x5230;&#x7F13;&#x51B2;&#x533A;&#xFF0C;&#x8FD9;&#x6837;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5C31;&#x6536;&#x4E0D;&#x5230;&#x76F8;&#x5E94;&#x7684;&#x8BB0;&#x5F55;&#xFF0C;&#x4E5F;&#x5C31;&#x6253;&#x5230;&#x4E86;&#x9690;&#x85CF;&#x6587;&#x4EF6;&#x7684;&#x76EE;&#x7684;&#x3002;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fake_filldir</span><span class="params">(struct dir_context *ctx, <span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> namlen,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">loff_t</span> offset, u64 ino, <span class="keyword">unsigned</span> d_type)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strncmp</span>(name, SECRET_FILE, <span class="built_in">strlen</span>(SECRET_FILE)) == <span class="number">0</span>) {</span><br><span class="line">                printk(<span class="string">&quot;Hiding: %s&quot;</span>, name);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> real_filldir(ctx, name, namlen, offset, ino, d_type);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x9644;:VFS &#x5C42;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> {</span></span><br><span class="line">         <span class="class"><span class="keyword">struct</span> <span class="title">module</span> *<span class="title">owner</span>;</span></span><br><span class="line">         <span class="keyword">loff_t</span> (*llseek) (struct file *, <span class="keyword">loff_t</span>, <span class="keyword">int</span>);</span><br><span class="line">         <span class="keyword">ssize_t</span> (*read) (struct file *, <span class="keyword">char</span> __user *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *);</span><br><span class="line">         <span class="keyword">ssize_t</span> (*write) (struct file *, <span class="keyword">const</span> <span class="keyword">char</span> __user *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *);</span><br><span class="line">         <span class="keyword">ssize_t</span> (*aio_read) (struct kiocb *, <span class="keyword">const</span> struct iovec *, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">loff_t</span>);</span><br><span class="line">         <span class="keyword">ssize_t</span> (*aio_write) (struct kiocb *, <span class="keyword">const</span> struct iovec *, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">loff_t</span>);</span><br><span class="line">         <span class="keyword">int</span> (*readdir) (struct file *, <span class="keyword">void</span> *, <span class="keyword">filldir_t</span>);</span><br><span class="line">         <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span> <span class="params">(*poll)</span> <span class="params">(struct file *, struct poll_table_struct *)</span></span>;</span><br><span class="line">         <span class="keyword">long</span> (*unlocked_ioctl) (struct file *, <span class="keyword">unsigned</span> <span class="keyword">int</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>);</span><br><span class="line">         <span class="keyword">long</span> (*compat_ioctl) (struct file *, <span class="keyword">unsigned</span> <span class="keyword">int</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>);</span><br><span class="line">         <span class="keyword">int</span> (*mmap) (struct file *, struct vm_area_struct *);</span><br><span class="line">         <span class="keyword">int</span> (*open) (struct inode *, struct file *);</span><br><span class="line">         <span class="keyword">int</span> (*flush) (struct file *, <span class="keyword">fl_owner_t</span> id);</span><br><span class="line">         <span class="keyword">int</span> (*release) (struct inode *, struct file *);</span><br><span class="line">         <span class="keyword">int</span> (*fsync) (struct file *, <span class="keyword">loff_t</span>, <span class="keyword">loff_t</span>, <span class="keyword">int</span> datasync);</span><br><span class="line">         <span class="keyword">int</span> (*aio_fsync) (struct kiocb *, <span class="keyword">int</span> datasync);</span><br><span class="line">         <span class="keyword">int</span> (*fasync) (<span class="keyword">int</span>, struct file *, <span class="keyword">int</span>);</span><br><span class="line">         <span class="keyword">int</span> (*lock) (struct file *, <span class="keyword">int</span>, struct file_lock *);</span><br><span class="line">         <span class="keyword">ssize_t</span> (*sendpage) (struct file *, struct page *, <span class="keyword">int</span>, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *, <span class="keyword">int</span>);</span><br><span class="line">         <span class="function"><span class="keyword">unsigned</span> <span class="title">long</span> <span class="params">(*get_unmapped_area)</span><span class="params">(struct file *, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>)</span></span>;</span><br><span class="line">         <span class="keyword">int</span> (*check_flags)(<span class="keyword">int</span>);</span><br><span class="line">         <span class="keyword">int</span> (*flock) (struct file *, <span class="keyword">int</span>, struct file_lock *);</span><br><span class="line">         <span class="keyword">ssize_t</span> (*splice_write)(struct pipe_inode_info *, struct file *, <span class="keyword">loff_t</span> *, <span class="keyword">size_t</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>);</span><br><span class="line">         <span class="keyword">ssize_t</span> (*splice_read)(struct file *, <span class="keyword">loff_t</span> *, struct pipe_inode_info *, <span class="keyword">size_t</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>);</span><br><span class="line">         <span class="keyword">int</span> (*setlease)(struct file *, <span class="keyword">long</span>, struct file_lock **);</span><br><span class="line">         <span class="keyword">long</span> (*fallocate)(struct file *file, <span class="keyword">int</span> mode, <span class="keyword">loff_t</span> offset, <span class="keyword">loff_t</span> len);</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p><strong>Readdir</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">linux_dirent</span> {</span></span><br><span class="line">               <span class="keyword">unsigned</span> <span class="keyword">long</span>  d_ino;     <span class="comment">/* Inode number */</span></span><br><span class="line">               <span class="keyword">unsigned</span> <span class="keyword">long</span>  d_off;     <span class="comment">/* Offset to next linux_dirent */</span></span><br><span class="line">               <span class="keyword">unsigned</span> <span class="keyword">short</span> d_reclen;  <span class="comment">/* Length of this linux_dirent */</span></span><br><span class="line">               <span class="keyword">char</span>           d_name[];  <span class="comment">/* Filename (null-terminated) */</span></span><br><span class="line">                                   <span class="comment">/* length is actually (d_reclen - 2 -</span></span><br><span class="line"><span class="comment">                                      offsetof(struct linux_dirent, d_name) */</span></span><br><span class="line">               <span class="comment">/*</span></span><br><span class="line"><span class="comment">               char           pad;       // Zero padding byte</span></span><br><span class="line"><span class="comment">               char           d_type;    // File type (only since Linux 2.6.4;</span></span><br><span class="line"><span class="comment">                                         // offset is (d_reclen - 1))</span></span><br><span class="line"><span class="comment">               */</span></span><br><span class="line"></span><br><span class="line">           }</span><br></pre></td></tr></table></figure>
+
+<p><strong>fillter</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">dirent = buf-&gt;previous;</span><br><span class="line"><span class="keyword">if</span> (dirent) {</span><br><span class="line"> <span class="keyword">if</span> (__put_user(offset, &amp;dirent-&gt;d_off))</span><br><span class="line">         <span class="keyword">goto</span> efault;</span><br><span class="line">}</span><br><span class="line">dirent = buf-&gt;current_dir;</span><br><span class="line"><span class="keyword">if</span> (__put_user(d_ino, &amp;dirent-&gt;d_ino))</span><br><span class="line"> <span class="keyword">goto</span> efault;</span><br><span class="line"><span class="keyword">if</span> (__put_user(reclen, &amp;dirent-&gt;d_reclen))</span><br><span class="line"> <span class="keyword">goto</span> efault;</span><br><span class="line"><span class="keyword">if</span> (copy_to_user(dirent-&gt;d_name, name, namlen))</span><br><span class="line"> <span class="keyword">goto</span> efault;</span><br><span class="line"><span class="keyword">if</span> (__put_user(<span class="number">0</span>, dirent-&gt;d_name + namlen))</span><br><span class="line"> <span class="keyword">goto</span> efault;</span><br><span class="line"><span class="keyword">if</span> (__put_user(d_type, (<span class="keyword">char</span> __user *) dirent + reclen - <span class="number">1</span>))</span><br><span class="line"> <span class="keyword">goto</span> efault;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rootkit-系统调用/" rel="tag"># rootkit,系统调用</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/14/RootKit系列一-系统调用/" rel="next" title="RootKit系列一--系统调用">
+                <i class="fa fa-chevron-left"></i> RootKit系列一--系统调用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于VFS的Rootkit"><span class="nav-number">1.</span> <span class="nav-text">基于VFS的Rootkit</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2019/10/14/RootKit系列二-基于VFS层的rootkit/';
+          this.page.identifier = '2019/10/14/RootKit系列二-基于VFS层的rootkit/';
+          this.page.title = 'RootKit系列二--基于VFS层的rootkit';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
