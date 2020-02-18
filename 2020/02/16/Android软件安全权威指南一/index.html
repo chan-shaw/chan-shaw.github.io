@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="apk, smali, Dalvik">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Android软件安全权威指南阅读笔记">
+<meta name="keywords" content="apk, smali, Dalvik">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android软件安全权威指南阅读笔记一">
+<meta property="og:url" content="http://yoursite.com/2020/02/16/Android软件安全权威指南一/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="Android软件安全权威指南阅读笔记">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/02/16/Android软件安全权威指南一/change.png">
+<meta property="og:image" content="http://yoursite.com/2020/02/16/Android软件安全权威指南一/Dalvik%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80.png">
+<meta property="og:updated_time" content="2020-02-18T09:39:13.079Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android软件安全权威指南阅读笔记一">
+<meta name="twitter:description" content="Android软件安全权威指南阅读笔记">
+<meta name="twitter:image" content="http://yoursite.com/2020/02/16/Android软件安全权威指南一/change.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/16/Android软件安全权威指南一/">
+
+
+
+
+
+  <title>Android软件安全权威指南阅读笔记一 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/16/Android软件安全权威指南一/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android软件安全权威指南阅读笔记一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-16T20:27:29+08:00">
+                2020-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/16/Android软件安全权威指南一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/02/16/Android软件安全权威指南一/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/02/16/Android软件安全权威指南一/" class="leancloud_visitors" data-flag-title="Android软件安全权威指南阅读笔记一">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Android软件安全权威指南阅读笔记
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Android&#x8F6F;&#x4EF6;&#x5B89;&#x5168;&#x6743;&#x5A01;&#x6307;&#x5357;&#x9605;&#x8BFB;&#x7B14;&#x8BB0;&#x4E00;"><a href="#Android&#x8F6F;&#x4EF6;&#x5B89;&#x5168;&#x6743;&#x5A01;&#x6307;&#x5357;&#x9605;&#x8BFB;&#x7B14;&#x8BB0;&#x4E00;" class="headerlink" title="Android&#x8F6F;&#x4EF6;&#x5B89;&#x5168;&#x6743;&#x5A01;&#x6307;&#x5357;&#x9605;&#x8BFB;&#x7B14;&#x8BB0;&#x4E00;"></a>Android&#x8F6F;&#x4EF6;&#x5B89;&#x5168;&#x6743;&#x5A01;&#x6307;&#x5357;&#x9605;&#x8BFB;&#x7B14;&#x8BB0;&#x4E00;</h1><blockquote>
+<p>&#x6D51;&#x6D51;&#x5669;&#x5669;&#x7684;&#x4ECE;&#x5927;&#x5B66;&#x6DF7;&#x5230;&#x7814;&#x7A76;&#x751F;&#xFF0C;&#x518D;&#x6DF7;&#x5230;&#x4E86;&#x5B9E;&#x4E60;&#x4E86;&#x534A;&#x5E74;&#xFF0C;&#x4E0D;&#x7518;&#x5FC3;&#x5E72;&#x5F00;&#x53D1;&#xFF0C;&#x6BCF;&#x6B21;&#x60F3;&#x6C89;&#x4E0B;&#x5FC3;&#x5B66;&#x4E60;&#xFF0C;&#x4F46;&#x603B;&#x611F;&#x89C9;&#x5DF2;&#x7ECF;&#x4E27;&#x5931;&#x4E86;&#x5B66;&#x4E60;&#x7684;&#x52A8;&#x529B;&#xFF0C;&#x6548;&#x7387;&#x6781;&#x5176;&#x4F4E;&#x4E0B;&#xFF0C;&#x8D81;&#x7740;&#x88AB;&#x5F3A;&#x884C;&#x5173;&#x5728;&#x5BBF;&#x820D;&#x8FD9;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;&#xFF0C;&#x5E0C;&#x671B;&#x81EA;&#x5DF1;&#x80FD;&#x591F;&#x8E0F;&#x5165;&#x5B89;&#x5168;&#x7684;&#x5927;&#x95E8;&#xFF0C;&#x8F6C;&#x884C;&#xFF0C;&#x5FC3;&#x6BD4;&#x5929;&#x9AD8;&#xFF0C;&#x4E5F;&#x8981;&#x811A;&#x8E0F;&#x5B9E;&#x5730;&#x3002;&#x8FD9;&#x4E2A;&#x7CFB;&#x5217;&#x4E00;&#x5B9A;&#x8981;&#x505A;&#x5B8C;&#x3002;&#x63A5;&#x4E0B;&#x6765;&#x6BCF;&#x5468;&#x65E5;&#x90FD;&#x4F1A;&#x505A;&#x4E00;&#x4E2A;&#x603B;&#x7ED3;&#x3002;&#x52A0;&#x6CB9;&#xFF01;</p>
+</blockquote>
+<h2 id="1-&#x642D;&#x5EFA;&#x73AF;&#x5883;"><a href="#1-&#x642D;&#x5EFA;&#x73AF;&#x5883;" class="headerlink" title="1 &#x642D;&#x5EFA;&#x73AF;&#x5883;"></a>1 &#x642D;&#x5EFA;&#x73AF;&#x5883;</h2><blockquote>
+<p>&#x7B2C;&#x4E00;&#x4E2A;&#x96BE;&#x9898;&#xFF0C;&#x81EA;&#x5DF1;&#x4F7F;&#x7528;&#x7684;Windows&#x6E38;&#x620F;&#x672C;&#xFF0C;&#x52A0;&#x4E0A;&#x5076;&#x5C14;&#x4F7F;&#x7528;&#x7684;&#x865A;&#x62DF;&#x673A;&#x4EE5;&#x53CA;WSL&#xFF0C;&#x672C;&#x6765;&#x8DB3;&#x591F;&#x6EE1;&#x8DB3;&#x65E5;&#x5E38;&#x4F7F;&#x7528;&#x8981;&#x6C42;&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x914D;&#x7F6E;&#x73AF;&#x5883;&#x7684;&#x65F6;&#x5019;&#x660E;&#x663E;&#x611F;&#x5230;&#x6709;&#x70B9;&#x5403;&#x529B;&#xFF0C;Android Studio &#x9700;&#x8981;&#x914D;&#x7F6E;Proxy,Docker&#x9700;&#x8981;&#x914D;&#x7F6E;Proxy,&#x914D;&#x7F6E;&#x5B8C;&#x4E86;&#x4E4B;&#x540E;&#x8FD8;&#x6709;&#x8BB8;&#x591A;&#x5947;&#x5947;&#x602A;&#x602A;&#x7684;&#x95EE;&#x9898;&#x3002;&#x4EE5;&#x540E;&#x6709;&#x94B1;&#x4E4B;&#x540E;&#x5DE5;&#x4F5C;&#x672C;&#x4E00;&#x5B9A;&#x8981;&#x6362;&#x6210;mac&#x3002;&#x73AF;&#x5883;&#x642D;&#x5EFA;&#x5927;&#x6982;&#x8017;&#x8D39;&#x4E86;&#x6211;2&#x665A;&#x4E0A;&#x65F6;&#x95F4;&#x3002;&#x4E07;&#x5E78;&#x5728;&#x6700;&#x540E;&#x7EC8;&#x4E8E;&#x662F;&#x8DB3;&#x591F;&#x4F7F;&#x7528;&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x4ECD;&#x7136;&#x7559;&#x4E0B;&#x4E86;android&#x6E90;&#x7801;&#x7F16;&#x8BD1;&#x7684;&#x5751;&#x6CA1;&#x6709;&#x586B;&#x3002;Docker&#x7528;&#x8D77;&#x6765;&#x7F51;&#x7EDC;&#x5B9E;&#x5728;&#x662F;&#x4E0D;&#x591F;&#x53CB;&#x597D;&#x3002;</p>
+</blockquote>
+<h2 id="2-&#x5206;&#x6790;Android-&#x7A0B;&#x5E8F;"><a href="#2-&#x5206;&#x6790;Android-&#x7A0B;&#x5E8F;" class="headerlink" title="2 &#x5206;&#x6790;Android &#x7A0B;&#x5E8F;"></a>2 &#x5206;&#x6790;Android &#x7A0B;&#x5E8F;</h2><p>&#x6709;&#x7740;&#x4E00;&#x70B9;Java&#x5F00;&#x53D1;&#x7ECF;&#x9A8C;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x9605;&#x8BFB;Android&#x6E90;&#x7801;&#x7684;&#x65F6;&#x5019;&#x4ECD;&#x7136;&#x611F;&#x5230;&#x7591;&#x60D1;&#xFF0C;&#x4EE5;&#x524D;&#x6CA1;&#x6709;&#x600E;&#x4E48;&#x63A5;&#x89E6;&#x8FC7;Andorid&#x5F00;&#x53D1;&#xFF0C;&#x672C;&#x79D1;&#x4E0A;&#x8BFE;&#x7684;&#x65F6;&#x5019;&#x4E5F;&#x6CA1;&#x6709;&#x597D;&#x597D;&#x542C;&#xFF0C;&#x679C;&#x7136;&#x51FA;&#x6765;&#x6DF7;&#x8FD8;&#x662F;&#x8981;&#x8FD8;&#x7684;&#xFF0C;&#x6309;&#x4E0B;&#x4E0D;&#x8868;&#xFF0C;&#x5F00;&#x59CB;&#x8BB0;&#x5F55;&#x7B2C;&#x4E00;&#x4E2A;Android&#x7A0B;&#x5E8F;&#x5206;&#x6790;&#x7684;&#x8FC7;&#x7A0B;&#x3002;</p>
+<p>&#x4EE3;&#x7801;&#x76F4;&#x63A5;&#x4E0B;&#x8F7D;&#x5DF2;&#x7ECF;&#x6709;&#x7684;&#xFF0C;Andorid&#x57FA;&#x7840;&#x77E5;&#x8BC6;&#x5C31;&#x5728;&#x5B66;&#x4E60;&#x9006;&#x5411;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#x8865;&#x4E00;&#x4E0B;&#x5427;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x4E4B;&#x524D;&#x9009;&#x62E9;&#x4F7F;&#x7528;Android Studio &#x5F00;&#x53D1;,&#x5173;&#x952E;&#x4EE3;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">checkSN</span><span class="params">(String userName, String sn)</span> </span>{</span><br><span class="line">    <span class="comment">// &#x8BA1;&#x7B97;&#x7528;&#x6237;&#x540D;&#x4E0E;&#x6CE8;&#x518C;&#x7801;&#x662F;&#x5426;&#x5339;&#x914D;</span></span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="keyword">if</span> ((userName == <span class="keyword">null</span>) || (userName.length() == <span class="number">0</span>))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span> ((sn == <span class="keyword">null</span>) || (sn.length() != <span class="number">16</span>))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            MessageDigest digest = MessageDigest.getInstance(<span class="string">&quot;MD5&quot;</span>);</span><br><span class="line">            digest.reset();</span><br><span class="line">            <span class="comment">// &#x7528;&#x6237;&#x540D;MD5&#x6563;&#x5217;</span></span><br><span class="line">            digest.update(userName.getBytes());</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = digest.digest();</span><br><span class="line">            String hexstr = toHexString(bytes, <span class="string">&quot;&quot;</span>);</span><br><span class="line">            StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            <span class="comment">// &#x5947;&#x6570;&#x4F4D;&#x91CD;&#x65B0;&#x7EC4;&#x5408;</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; hexstr.length(); i += <span class="number">2</span>) {</span><br><span class="line">                sb.append(hexstr.charAt(i));</span><br><span class="line">            }</span><br><span class="line">            <span class="comment">// &#x6CE8;&#x518C;&#x7801;</span></span><br><span class="line">            String userSN = sb.toString();</span><br><span class="line">            <span class="comment">//Log.d(&quot;crackme&quot;, hexstr);</span></span><br><span class="line">            <span class="comment">//Log.d(&quot;crackme&quot;, userSN);</span></span><br><span class="line">            <span class="comment">// &#x5224;&#x65AD;</span></span><br><span class="line">            <span class="keyword">if</span> (!userSN.equalsIgnoreCase(sn))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        } <span class="keyword">catch</span> (NoSuchAlgorithmException e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+
+<p>&#x754C;&#x9762;&#x76D1;&#x542C;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        setTitle(R.string.unregister);</span><br><span class="line">        edit_userName = (EditText) findViewById(R.id.edit_username);</span><br><span class="line">        edit_sn = (EditText) findViewById(R.id.edit_sn);</span><br><span class="line">        btn_register = (Button) findViewById(R.id.button_register);</span><br><span class="line">        btn_register.setOnClickListener(<span class="keyword">new</span> OnClickListener() {</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{</span><br><span class="line">                <span class="comment">// &#x68C0;&#x67E5;&#x7528;&#x6237;&#x540D;&#x548C;&#x6CE8;&#x518C;&#x7801;&#x662F;&#x4E0D;&#x662F;&#x5339;&#x914D;&#x7684;</span></span><br><span class="line">                <span class="keyword">if</span> (!checkSN(edit_userName.getText().toString().trim(),</span><br><span class="line">                        edit_sn.getText().toString().trim())) {</span><br><span class="line">                    Toast.makeText(MainActivity.<span class="keyword">this</span>,</span><br><span class="line">                            R.string.unsuccessed, Toast.LENGTH_SHORT).show();</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    Toast.makeText(MainActivity.<span class="keyword">this</span>,</span><br><span class="line">                            R.string.successed, Toast.LENGTH_SHORT).show();</span><br><span class="line">                    btn_register.setEnabled(<span class="keyword">false</span>);</span><br><span class="line">                    setTitle(R.string.registered);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        });</span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-&#x7F16;&#x8BD1;&#x751F;&#x6210;apk&#x6587;&#x4EF6;"><a href="#2-1-&#x7F16;&#x8BD1;&#x751F;&#x6210;apk&#x6587;&#x4EF6;" class="headerlink" title="2.1 &#x7F16;&#x8BD1;&#x751F;&#x6210;apk&#x6587;&#x4EF6;"></a>2.1 &#x7F16;&#x8BD1;&#x751F;&#x6210;apk&#x6587;&#x4EF6;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">d-----        2020/2/12     15:03                .gradle</span><br><span class="line">d-----        2020/2/15     11:54                .idea</span><br><span class="line">d-----        2020/2/12     15:04                .settings</span><br><span class="line">d-----        2020/2/12     15:41                app</span><br><span class="line">d-----        2020/2/12     15:04                build</span><br><span class="line">d-----        2020/2/12     15:04                gradle</span><br><span class="line">-a----        2017/2/21     12:11            118 .gitignore</span><br><span class="line">-a----       2019/12/21     16:20            458 .project</span><br><span class="line">-a----       2019/12/21     16:53            498 build.gradle</span><br><span class="line">-a----        2017/2/21     12:11            865 Crackme0201.iml	</span><br><span class="line">-a----        2017/2/21     12:11            730 gradle.properties</span><br><span class="line">-a----        2017/2/28     11:04           5082 gradlew</span><br><span class="line">-a----        2017/2/21     12:11           2404 gradlew.bat</span><br><span class="line">-a----        2020/2/12     14:57            331 local.properties</span><br><span class="line">-a----        2017/2/21     12:11             15 settings.gradle</span><br></pre></td></tr></table></figure>
+
+<p>&#x6587;&#x4EF6;&#x76EE;&#x5F55;&#x5982;&#x4E0A;&#x6240;&#x793A;&#xFF0C;</p>
+<ul>
+<li><code>Crackme0201.iml</code>: Android Studio &#x751F;&#x6210;&#x7684;&#x9879;&#x76EE;&#x914D;&#x7F6E;&#x6587;&#x4EF6;</li>
+<li><code>local.properties</code>: &#x6307;&#x5B9A;&#x5305;&#x542B;&#x9879;&#x76EE;&#x6A21;&#x5757;&#x7684;&#x8DEF;&#x5F84;</li>
+<li><code>build</code>: &#x547D;&#x4EE4;&#x6267;&#x884C;&#x4E4B;&#x540E;&#x8F93;&#x51FA;&#x6587;&#x4EF6;&#x7684;&#x5B58;&#x653E;&#x76EE;&#x5F55;</li>
+<li><code>build.gradle</code>: &#x9879;&#x76EE;&#x7684;&#x6784;&#x5EFA;&#x811A;&#x672C;</li>
+<li><code>gradlew</code> &amp; <code>gradlew.bat</code>&#xFF1A; &#x811A;&#x672C;&#x7F16;&#x8BD1;&#x547D;&#x4EE4;</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./gradlew assembleDubug <span class="comment"># &#x7F16;&#x8BD1;&#x751F;&#x6210;apk&#x6587;&#x4EF6;,&#x5B58;&#x653E;&#x5728; build/outputs/apk &#x76EE;&#x5F55;&#x4E0B;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-&#x4F7F;&#x7528;ApkTool&#x53CD;&#x7F16;&#x8BD1;"><a href="#2-2-&#x4F7F;&#x7528;ApkTool&#x53CD;&#x7F16;&#x8BD1;" class="headerlink" title="2.2 &#x4F7F;&#x7528;ApkTool&#x53CD;&#x7F16;&#x8BD1;"></a>2.2 &#x4F7F;&#x7528;ApkTool&#x53CD;&#x7F16;&#x8BD1;</h3><p>&#x4F7F;&#x7528;&#x53C2;&#x8003;&#xFF1A;<a href="https://ibotpeaches.github.io/Apktool/documentation/" target="_blank" rel="noopener">&#x5B98;&#x65B9;&#x6587;&#x6863;</a></p>
+<h4 id="2-2-1-Decoding"><a href="#2-2-1-Decoding" class="headerlink" title="2.2.1 Decoding"></a>2.2.1 Decoding</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ apktool d foo.jar</span><br><span class="line">// decodes foo.jar to foo.jar.out folder</span><br><span class="line"></span><br><span class="line">$ apktool decode foo.jar</span><br><span class="line">// decodes foo.jar to foo.jar.out folder</span><br><span class="line"></span><br><span class="line">$ apktool d bar.apk</span><br><span class="line">// decodes bar.apk to bar folder</span><br><span class="line"></span><br><span class="line">$ apktool decode bar.apk</span><br><span class="line">// decodes bar.apk to bar folder</span><br><span class="line"></span><br><span class="line">$ apktool d bar.apk -o baz</span><br><span class="line">// decodes bar.apk to baz folder</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-2-Building"><a href="#2-2-2-Building" class="headerlink" title="2.2.2 Building"></a>2.2.2 Building</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ apktool b foo.jar.out</span><br><span class="line">// builds foo.jar.out folder into foo.jar.out/dist/foo.jar file</span><br><span class="line"></span><br><span class="line">$ apktool build foo.jar.out</span><br><span class="line">// builds foo.jar.out folder into foo.jar.out/dist/foo.jar file</span><br><span class="line"></span><br><span class="line">$ apktool b bar</span><br><span class="line">// builds bar folder into bar/dist/bar.apk file</span><br><span class="line"></span><br><span class="line">$ apktool b .</span><br><span class="line">// builds current directory into ./dist</span><br><span class="line"></span><br><span class="line">$ apktool b bar -o new_bar.apk</span><br><span class="line">// builds bar folder into new_bar.apk</span><br><span class="line"></span><br><span class="line">$ apktool b bar.apk</span><br><span class="line">// WRONG: brut.androlib.AndrolibException: brut.directory.PathNotExist: apktool.yml</span><br><span class="line">// Must use folder, not apk/jar file</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-3-Frameworks"><a href="#2-2-3-Frameworks" class="headerlink" title="2.2.3 Frameworks"></a>2.2.3 Frameworks</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ apktool <span class="keyword">if</span> framework-res.apk</span><br><span class="line">I: Framework installed to: 1.apk </span><br><span class="line">// pkgId of framework-res.apk determines number (<span class="built_in">which</span> is 0x01)</span><br><span class="line"></span><br><span class="line">$ apktool <span class="keyword">if</span> com.htc.resources.apk</span><br><span class="line">I: Framework installed to: 2.apk </span><br><span class="line">// pkgId of com.htc.resources is 0x02</span><br><span class="line"></span><br><span class="line">$ apktool <span class="keyword">if</span> com.htc.resources.apk -t htc</span><br><span class="line">I: Framework installed to: 2-htc.apk </span><br><span class="line">// pkgId-tag.apk</span><br><span class="line"></span><br><span class="line">$ apktool <span class="keyword">if</span> framework-res.apk -p foo/bar</span><br><span class="line">I: Framework installed to: foo/bar/1.apk</span><br><span class="line"></span><br><span class="line">$ apktool <span class="keyword">if</span> framework-res.apk -t baz -p foo/bar</span><br><span class="line">I: Framework installed to: foo/bar/1-baz.apk</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Android &#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5229;&#x7528;&#x4E86;Android OS&#x672C;&#x8EAB;&#x7684;&#x67B6;&#x6784;&#x8D44;&#x6E90;&#xFF0C;ApkTool&#x4F9D;&#x9760;&#x8FD9;&#x4E9B;&#x67B6;&#x6784;&#x8D44;&#x6E90;&#x6765;&#x6B63;&#x786E;&#x89E3;&#x7801;&#x548C;&#x6784;&#x5EFA;apk&#x3002;</p>
+<p> &#x6BCF;&#x4E2A;Apktool&#x7248;&#x672C;&#x5728;&#x53D1;&#x5E03;&#x65F6;&#x5185;&#x90E8;&#x90FD;&#x5305;&#x542B;&#x6700;&#x65B0;&#x7684;AOSP&#x6846;&#x67B6; &#x53EF;&#x4EE5;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x89E3;&#x7801;&#x548C;&#x6784;&#x5EFA;&#x5927;&#x591A;&#x6570;apk&#x3002;&#x4F46;&#x662F;&#xFF0C;&#x5236;&#x9020;&#x5546;&#x9664;&#x4E86;&#x5E38;&#x89C4;&#x7684;AOSP&#x6587;&#x4EF6;&#x5916;&#xFF0C;&#x8FD8;&#x53EF;&#x80FD;&#x6DFB;&#x52A0;&#x4E86;&#x81EA;&#x5DF1;&#x7684;&#x6846;&#x67B6;&#x6587;&#x4EF6;&#x3002; &#x8981;&#x9488;&#x5BF9;&#x8FD9;&#x4E9B;&#x5236;&#x9020;&#x5546;apk&#x4F7F;&#x7528;apktool&#xFF0C;&#x5FC5;&#x987B;&#x9996;&#x5148;&#x5B89;&#x88C5;&#x5236;&#x9020;&#x5546;&#x6846;&#x67B6;&#x6587;&#x4EF6;&#x3002; </p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ apktool d HtcContacts.apk</span><br><span class="line">I: Loading resource table...</span><br><span class="line">I: Decoding resources...</span><br><span class="line">I: Loading resource table from file: 1.apk</span><br><span class="line">W: Could not decode attr value, using undecoded value instead: ns=android, name=drawable</span><br><span class="line">W: Could not decode attr value, using undecoded value instead: ns=android, name=icon</span><br><span class="line">Can<span class="string">&apos;t find framework resources for package of id: 2. You must install proper framework files, see project website for more info.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$ apktool if com.htc.resources.apk</span></span><br><span class="line"><span class="string">I: Framework installed to: 2.apk</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$ apktool d HtcContacts.apk </span></span><br><span class="line"><span class="string">I: Loading resource table...</span></span><br><span class="line"><span class="string">I: Decoding resources...</span></span><br><span class="line"><span class="string">I: Loading resource table from file: /home/brutall/apktool/framework/1.apk</span></span><br><span class="line"><span class="string">I: Loading resource table from file: /home/brutall/apktool/framework/2.apk</span></span><br><span class="line"><span class="string">I: Copying assets and libs...</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-4-&#x53CD;&#x7F16;&#x8BD1;&#x8FC7;&#x7A0B;"><a href="#2-2-4-&#x53CD;&#x7F16;&#x8BD1;&#x8FC7;&#x7A0B;" class="headerlink" title="2.2.4 &#x53CD;&#x7F16;&#x8BD1;&#x8FC7;&#x7A0B;"></a>2.2.4 &#x53CD;&#x7F16;&#x8BD1;&#x8FC7;&#x7A0B;</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ apktool d ./app-debug.apk -o outdir</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">d-----        2020/2/12     15:18                original</span><br><span class="line">d-----        2020/2/12     15:18                res</span><br><span class="line">d-----        2020/2/12     15:18                smali</span><br><span class="line">-a----        2020/2/12     15:18            830 AndroidManifest.xml</span><br><span class="line">-a----        2020/2/12     15:18            433 apktool.yml</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>smali</code>&#x76EE;&#x5F55;&#x4E0B;&#x5B58;&#x653E;&#x4E86;&#x7A0B;&#x5E8F;&#x6240;&#x6709;&#x7684;&#x53CD;&#x6C47;&#x7F16;&#x4EE3;&#x7801;,&#x683C;&#x5F0F;&#x4E3A;<code>.smali</code></p>
+</li>
+<li><p><code>res</code>&#x76EE;&#x5F55;&#x4E0B;&#x5B58;&#x653E;&#x7684;&#x662F;&#x7A0B;&#x5E8F;&#x4E2D;&#x7684;&#x6240;&#x6709;&#x8D44;&#x6E90;&#x6587;&#x4EF6;</p>
+</li>
+</ul>
+<h5 id="2-2-4-1-&#x5206;&#x6790;apk&#x6587;&#x4EF6;"><a href="#2-2-4-1-&#x5206;&#x6790;apk&#x6587;&#x4EF6;" class="headerlink" title="2.2.4.1 &#x5206;&#x6790;apk&#x6587;&#x4EF6;"></a>2.2.4.1 &#x5206;&#x6790;apk&#x6587;&#x4EF6;</h5><p>&#x6CE8;&#x518C;&#x51FA;&#x9519;&#x4F1A;&#x6709;<strong>&#x9519;&#x8BEF;&#x63D0;&#x793A;</strong>&#xFF0C;&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#x63D0;&#x793A;&#x662F;&#x6211;&#x4EEC;&#x5206;&#x6790;&#x5927;&#x591A;&#x6570;Android &#x7A0B;&#x5E8F;&#x7684;&#x660E;&#x706F;&#x3002;&#x9519;&#x8BEF;&#x63D0;&#x793A;&#x4EE3;&#x7801;&#x9644;&#x8FD1;&#x4E00;&#x822C;&#x5C31;&#x4F1A;&#x627E;&#x5230;&#x6838;&#x5FC3;&#x4EE3;&#x7801;&#x3002;&#x901A;&#x8FC7;&#x8FD9;&#x4E9B;&#x4EE3;&#x7801;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x68B3;&#x7406;&#x8F6F;&#x4EF6;&#x7684;&#x6CE8;&#x518C;&#x6D41;&#x7A0B;&#x3002;</p>
+<p>&#x9519;&#x8BEF;&#x63D0;&#x793A;&#x5C5E;&#x4E8E;<strong>&#x5B57;&#x7B26;&#x4E32;&#x8D44;&#x6E90;</strong>&#xFF0C;&#x8FD9;&#x4E9B;&#x8D44;&#x6E90;&#x53EF;&#x80FD;&#x4F1A;&#x88AB;&#x786C;&#x7F16;&#x7801;&#x5230;&#x6E90;&#x7801;&#x4E2D;&#xFF0C;&#x4E5F;&#x6709;&#x53EF;&#x80FD;&#x5F15;&#x7528;&#x81EA;<code>res/values</code>&#x76EE;&#x5F55;&#x4E0B;&#x7684;<code>string.xml</code>&#x6587;&#x4EF6;&#x3002;apk&#x6587;&#x4EF6;&#x6253;&#x5305;&#x7684;&#x65F6;&#x5019;&#xFF0C;<code>string.xml</code>&#x4E2D;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x4F1A;&#x88AB;&#x52A0;&#x5BC6;&#x5B58;&#x50A8;&#x5230;<code>resource.arsc</code>&#x6587;&#x4EF6;&#x5E76;&#x88AB;&#x4FDD;&#x5B58;&#x5230;apk&#x7A0B;&#x5E8F;&#x5305;&#x4E2D;&#xFF1B;&#x5982;&#x679C;&#x80FD;&#x6210;&#x529F;&#x53CD;&#x7F16;&#x8BD1;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x5C31;&#x4F1A;&#x88AB;&#x89E3;&#x5BC6;&#x3002;&#x5F00;&#x53D1;&#x8FC7;&#x7A0B;&#x4E2D;<code>string.xml</code>&#x8D44;&#x6E90;&#x90FD;&#x5728;<code>gen/R.java</code>&#x6587;&#x4EF6;&#x7684;String&#x7C7B;&#x4E2D;&#xFF0C;&#x53CD;&#x7F16;&#x8BD1;&#x4E4B;&#x540E;&#xFF0C;&#x6587;&#x4EF6;&#x7684;&#x7D22;&#x5F15;&#x503C;&#x90FD;&#x4FDD;&#x5B58;&#x5728;<code>public.xml</code>&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;&#x67E5;&#x8BE2;&#x4E00;&#x4E0B;&#xFF0C;<code>unsuccessed</code>&#x5BF9;&#x5E94;&#x7684;<code>id=0x7f06002c</code> &#x4F7F;&#x7528;<code>grep</code>&#x5168;&#x5C40;&#x641C;&#x7D22;&#x4E00;&#x4E0B;</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">.line</span> 56</span><br><span class="line">   <span class="built_in"> iget-object </span>v0, p0, <span class="class">Lcom/droider/crackme0201/MainActivity$1;</span>-&gt;this$0:<span class="class">Lcom/droider/crackme0201/MainActivity;</span></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> const </span>v1, 0x7f06002c</span><br><span class="line"></span><br><span class="line">   <span class="built_in"> invoke-static </span>{v0, v1, v3}, <span class="class">Landroid/widget/Toast;</span>-&gt;makeText(<span class="class">Landroid/content/Context;</span>II)<span class="class">Landroid/widget/Toast;</span></span><br><span class="line"></span><br><span class="line">   <span class="built_in"> move-result-object </span>v0</span><br></pre></td></tr></table></figure>
+
+<p>&#x80FD;&#x627E;&#x5230;&#x8C03;&#x7528;&#xFF0C;&#x4E14;&#x9605;&#x8BFB;<code>smali</code>&#x6587;&#x4EF6;&#xFF0C;&#x53D1;&#x73B0;&#x4E86;<code>checkSN</code>&#x51FD;&#x6570;&#xFF0C;&#x731C;&#x6D4B;&#x4E3A;&#x68C0;&#x67E5;&#x6CE8;&#x518C;&#x7801;&#x51FD;&#x6570;&#xFF0C;</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">.method</span><span class="keyword"> static</span><span class="keyword"> synthetic</span> access$200(<span class="class">Lcom/droider/crackme0201/MainActivity;</span><span class="class">Ljava/lang/String;</span><span class="class">Ljava/lang/String;</span>)Z</span><br><span class="line"><span class="keyword">    .locals</span> 1</span><br><span class="line"><span class="keyword">    .param</span> p0, <span class="string">&quot;x0&quot;</span>    <span class="comment"># Lcom/droider/crackme0201/MainActivity;</span></span><br><span class="line"><span class="keyword">    .param</span> p1, <span class="string">&quot;x1&quot;</span>    <span class="comment"># Ljava/lang/String;</span></span><br><span class="line"><span class="keyword">    .param</span> p2, <span class="string">&quot;x2&quot;</span>    <span class="comment"># Ljava/lang/String;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">    .prologue</span></span><br><span class="line"><span class="keyword">    .line</span> 38</span><br><span class="line">   <span class="built_in"> invoke-direct </span>{p0, p1, p2}, <span class="class">Lcom/droider/crackme0201/MainActivity;</span>-&gt;checkSN(<span class="class">Ljava/lang/String;</span><span class="class">Ljava/lang/String;</span>)Z</span><br><span class="line"></span><br><span class="line">   <span class="built_in"> move-result </span>v0</span><br><span class="line"></span><br><span class="line">   <span class="built_in"> return </span>v0</span><br><span class="line"><span class="keyword">.end method</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">.line</span> 54</span><br><span class="line">   <span class="built_in"> invoke-static </span>{v0, v1, v2}, <span class="class">Lcom/droider/crackme0201/MainActivity;</span>-&gt;access$200(<span class="class">Lcom/droider/crackme0201/MainActivity;</span><span class="class">Ljava/lang/String;</span><span class="class">Ljava/lang/String;</span>)Z</span><br><span class="line">    <span class="comment"># &#x8C03;&#x7528; checkSN &#x51FD;&#x6570;&#xFF0C;&#x4F20;&#x5165; v1, v2 &#x8FD4;&#x56DE; v0,&#x5982;&#x679C;&#x4E0D;&#x7B49;&#x4E8E;0&#x8DF3;&#x8F6C;&#x5230; cond_0</span></span><br><span class="line">   <span class="built_in"> move-result </span>v0</span><br><span class="line"></span><br><span class="line">   <span class="built_in"> if-nez </span>v0,<span class="keyword"> :cond_0</span> <span class="comment"># &#x6539;&#x4E3A;&#x5982;&#x679C;&#x503C;&#x4E3A;0 &#x8DF3;&#x8F6C;&#x5230;cond_0 if-eqz</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x5269;&#x4F59;&#x5206;&#x6790;&#x8FC7;&#x7A0B;&#x7565;&#x8FC7;&#x3002;&#x4FEE;&#x6539;&#x4E0A;&#x9762;&#x4EE3;&#x7801;&#x6700;&#x540E;&#x4E00;&#x884C;&#x5373;&#x53EF;</p>
+<h5 id="2-2-4-2-&#x91CD;&#x65B0;&#x7F16;&#x8BD1;apk&#x6587;&#x4EF6;&#x5E76;&#x7B7E;&#x540D;"><a href="#2-2-4-2-&#x91CD;&#x65B0;&#x7F16;&#x8BD1;apk&#x6587;&#x4EF6;&#x5E76;&#x7B7E;&#x540D;" class="headerlink" title="2.2.4.2 &#x91CD;&#x65B0;&#x7F16;&#x8BD1;apk&#x6587;&#x4EF6;&#x5E76;&#x7B7E;&#x540D;"></a>2.2.4.2 &#x91CD;&#x65B0;&#x7F16;&#x8BD1;apk&#x6587;&#x4EF6;&#x5E76;&#x7B7E;&#x540D;</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ apktool b outdir_rel</span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;<code>outdir_rel/dist</code>&#x76EE;&#x5F55;&#x4E0B;&#xFF0C;&#x53EF;&#x4EE5;&#x53D1;&#x73B0;<code>app-debug.apk</code></p>
+<p>&#x4F7F;&#x7528;<code>signapk</code>&#x5B8C;&#x6210;apk&#x7B7E;&#x540D;(&#x8FD9;&#x4E2A;&#x5305;&#x9700;&#x8981;&#x81EA;&#x5DF1;&#x4E0B;&#x8F7D;&#xFF0C;windows&#x4E0B;&#x7684;&#x6279;&#x5904;&#x7406;&#x6587;&#x4EF6;&#x4E5F;&#x662F;&#x81EA;&#x5DF1;&#x5199;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x4F7F;&#x7528;&#x7684;&#x65F6;&#x5019;&#x53EF;&#x80FD;&#x4E0D;&#x540C;)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ signapk app-debug.apk app.apk</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-2-4-3-&#x5B89;&#x88C5;&#x548C;&#x6D4B;&#x8BD5;-&#xFF08;adb&#x547D;&#x4EE4;"><a href="#2-2-4-3-&#x5B89;&#x88C5;&#x548C;&#x6D4B;&#x8BD5;-&#xFF08;adb&#x547D;&#x4EE4;" class="headerlink" title="2.2.4.3 &#x5B89;&#x88C5;&#x548C;&#x6D4B;&#x8BD5; &#xFF08;adb&#x547D;&#x4EE4;)"></a>2.2.4.3 &#x5B89;&#x88C5;&#x548C;&#x6D4B;&#x8BD5; &#xFF08;adb&#x547D;&#x4EE4;)</h5><p>&#x542F;&#x52A8;&#x865A;&#x62DF;&#x673A;&#x6216;&#x8005;&#x6570;&#x636E;&#x7EBF;&#x5F00;&#x542F;&#x5F00;&#x53D1;&#x8005;&#x6A21;&#x5F0F;</p>
+<p>&#x4F7F;&#x7528;<code>adb device [-l]</code>&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x5F53;&#x524D;&#x53EF;&#x7528;&#x8BBE;&#x5907;&#xFF0C; <code>-l</code>&#x547D;&#x4EE4;&#x4F1A;&#x544A;&#x77E5;&#x8BBE;&#x5907;&#x7684;&#x5177;&#x4F53;&#x4FE1;&#x606F;</p>
+<p>&#x4F7F;&#x7528;<code>emulator -list-avds</code>&#x547D;&#x4EE4;&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x5F53;&#x524D;&#x53EF;&#x7528;&#x7684; avd</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># &#x505C;&#x6B62;&#x5F53;&#x524D;&#x670D;&#x52A1;&#x5E76;&#x5F00;&#x542F;&#x65B0;&#x7684;avd&#x8FDE;&#x63A5;</span></span><br><span class="line">$ emulator -list-avds</span><br><span class="line">Nexus_6P_API_25</span><br><span class="line">$ adb <span class="built_in">kill</span>-server</span><br><span class="line">$ emulator -avd Nexus_6P_API_25 -port 5555</span><br><span class="line">$ adb devices</span><br></pre></td></tr></table></figure>
+
+<h6 id="adb&#x547D;&#x4EE4;"><a href="#adb&#x547D;&#x4EE4;" class="headerlink" title="adb&#x547D;&#x4EE4;"></a>adb&#x547D;&#x4EE4;</h6><p><strong>&#x5B89;&#x88C5;&#x5E94;&#x7528;</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install path_to_apk</span><br></pre></td></tr></table></figure>
+
+<p><strong>&#x8BBE;&#x7F6E;&#x7AEF;&#x53E3;&#x8F6C;&#x53D1;</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb forward tcp:6100 tcp:7100</span><br></pre></td></tr></table></figure>
+
+<p><strong>&#x5C06;&#x6587;&#x4EF6;&#x590D;&#x5236;&#x5230;&#x8BBE;&#x5907;/&#x4ECE;&#x8BBE;&#x5907;&#x590D;&#x5236;&#x6587;&#x4EF6;</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb pull remote <span class="built_in">local</span> <span class="comment"># &#x4ECE;&#x8BBE;&#x5907;&#x4E2D;&#x590D;&#x5236;</span></span><br><span class="line">adb push <span class="built_in">local</span> remote <span class="comment"># &#x590D;&#x5236;&#x5230;&#x8BBE;&#x5907;</span></span><br><span class="line"><span class="comment"># eg:adb push foo.txt /sdcard/foo.txt</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>&#x505C;&#x6B62; adb &#x670D;&#x52A1;&#x5668;</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb <span class="built_in">kill</span>-server</span><br></pre></td></tr></table></figure>
+
+<p>&#x66F4;&#x591A;&#x547D;&#x4EE4;&#x9700;&#x8981;&#x7684;&#x8BDD;&#x67E5;&#x8BE2;<a href="https://developer.android.com/studio/command-line/adb?hl=zh-cn" target="_blank" rel="noopener">&#x6587;&#x6863;</a></p>
+<p>&#x6700;&#x540E;&#x6D4B;&#x8BD5;&#x53D1;&#x73B0;&#x786E;&#x5B9E;&#x53EF;&#x4EE5;&#x968F;&#x610F;&#x6CE8;&#x518C;&#xFF0C;&#x5DF2;&#x7834;&#x89E3;</p>
+<h2 id="3-Dalvik-&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x548C;&#x5B57;&#x8282;&#x7801;&#x89C4;&#x8303;"><a href="#3-Dalvik-&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x548C;&#x5B57;&#x8282;&#x7801;&#x89C4;&#x8303;" class="headerlink" title="3 Dalvik &#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x548C;&#x5B57;&#x8282;&#x7801;&#x89C4;&#x8303;"></a>3 Dalvik &#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x548C;&#x5B57;&#x8282;&#x7801;&#x89C4;&#x8303;</h2><p><img src="/2020/02/16/Android&#x8F6F;&#x4EF6;&#x5B89;&#x5168;&#x6743;&#x5A01;&#x6307;&#x5357;&#x4E00;/change.png" alt> </p>
+<p><strong>Dalvik&#x865A;&#x62DF;&#x673A;&#x548C;Java&#x865A;&#x62DF;&#x673A;&#x533A;&#x522B;</strong></p>
+<ol>
+<li>Java&#x865A;&#x62DF;&#x673A;&#x8FD0;&#x884C;<code>.class</code> java&#x5B57;&#x8282;&#x7801;&#x6587;&#x4EF6;&#xFF0C;Dalvik&#x865A;&#x62DF;&#x673A;&#x8FD0;&#x884C;&#x7684;&#x662F;<code>.dex</code>Dalvik&#x5B57;&#x8282;&#x7801;&#x6587;&#x4EF6;</li>
+<li>&#x4F20;&#x7EDF;&#x7684;java&#x6587;&#x4EF6;&#x901A;&#x8FC7;&#x7F16;&#x8BD1;&#x751F;&#x6210;java&#x5B57;&#x8282;&#x7801;&#x4FDD;&#x5B58;&#x5728;<code>.class</code>&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;java&#x865A;&#x62DF;&#x673A;&#x901A;&#x8FC7;<strong>&#x89E3;&#x7801;</strong><code>.class</code>&#x6587;&#x4EF6;&#x6765;&#x8FD0;&#x884C;&#x7A0B;&#x5E8F;&#xFF0C;&#x800C; Dalvik&#x865A;&#x62DF;&#x673A;&#x8FD0;&#x884C;&#x7684;&#x662F;Dalvik&#x5B57;&#x8282;&#x7801;&#x6587;&#x4EF6;&#xFF0C;&#x5B83;&#x90FD;&#x662F;&#x901A;&#x8FC7;java&#x5B57;&#x8282;&#x7801;&#x8F6C;&#x6362;&#x800C;&#x6765;&#xFF0C;&#x5E76;&#x88AB;&#x6253;&#x5305;&#x5230;&#x4E00;&#x4E2A;<code>.dex</code>&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;Dalvik&#x865A;&#x62DF;&#x673A;&#x901A;&#x8FC7;<strong>&#x89E3;&#x91CA;</strong>DEX&#x6587;&#x4EF6;&#x6765;&#x6267;&#x884C;&#x5B57;&#x8282;&#x7801; </li>
+<li>Java&#x865A;&#x62DF;&#x673A;&#x57FA;&#x4E8E;<strong>&#x6808;</strong>&#x67B6;&#x6784;&#xFF0C;&#x800C;Dalvik&#x865A;&#x62DF;&#x673A;&#x57FA;&#x4E8E;<strong>&#x5BC4;&#x5B58;&#x5668;</strong>&#x67B6;&#x6784;&#xFF0C;&#x6570;&#x636E;&#x95F4;&#x8BBF;&#x95EE;&#x66F4;&#x5FEB;&#x3002;</li>
+</ol>
+<h3 id="3-1-&#x4E00;&#x4E2A;&#x6D41;&#x7A0B;"><a href="#3-1-&#x4E00;&#x4E2A;&#x6D41;&#x7A0B;" class="headerlink" title="3.1 &#x4E00;&#x4E2A;&#x6D41;&#x7A0B;"></a>3.1 &#x4E00;&#x4E2A;&#x6D41;&#x7A0B;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># JDK&#x7248;&#x672C;&#x9AD8;&#x4E8E;7&#x9700;&#x8981;&#x5F3A;&#x5236;&#x751F;&#x6210;&#x5BF9;&#x5E94;&#x4E8E;Android 1.7&#x7248;&#x672C;&#x7684;&#x5B57;&#x8282;&#x7801;</span></span><br><span class="line">$ javac -<span class="built_in">source</span> 1.7 -target 1.7 Hello.java</span><br><span class="line"></span><br><span class="line"><span class="comment"># &#x4F7F;&#x7528;dx&#x547D;&#x4EE4;&#x751F;&#x6210;dex&#x6587;&#x4EF6;</span></span><br><span class="line">$ dx --dex --output=Hello.dex Hello.class</span><br><span class="line"></span><br><span class="line"><span class="comment"># &#x4F7F;&#x7528;javap &#x53CD;&#x7F16;&#x8BD1;Hello.class &#x67E5;&#x770B;&#x5B57;&#x8282;&#x7801;&#x6587;&#x4EF6;</span></span><br><span class="line">$ javap -c -classpath . Hello</span><br><span class="line"></span><br><span class="line"><span class="comment"># &#x8D34;&#x51FA;&#x5173;&#x4E8E;foo &#x51FD;&#x6570;&#x7684;&#x4EE3;&#x7801;</span></span><br><span class="line"> public int foo(int, int);</span><br><span class="line">    Code:</span><br><span class="line">       0: iload_1</span><br><span class="line">       1: iload_2</span><br><span class="line">       2: iadd</span><br><span class="line">       3: iload_1</span><br><span class="line">       4: iload_2</span><br><span class="line">       5: isub</span><br><span class="line">       6: imul</span><br><span class="line">       7: ireturn</span><br><span class="line"></span><br><span class="line"><span class="comment"># &#x4F7F;&#x7528;dexdump(&#x5728;Android SDK&#x7684;platdorm-tools&#x76EE;&#x5F55;&#x4E2D;&#x5B58;&#x5728;) &#x67E5;&#x770B;foo()&#x51FD;&#x6570;&#x7684;&#x5B57;&#x8282;&#x7801;</span></span><br><span class="line">  Virtual methods   -</span><br><span class="line">    <span class="comment">#0              : (in LHello;)</span></span><br><span class="line">      name          : <span class="string">&apos;foo&apos;</span></span><br><span class="line">      <span class="built_in">type</span>          : <span class="string">&apos;(II)I&apos;</span></span><br><span class="line">      access        : 0x0001 (PUBLIC)</span><br><span class="line">      code          -</span><br><span class="line">      registers     : 5</span><br><span class="line">      ins           : 3</span><br><span class="line">      outs          : 0</span><br><span class="line">      insns size    : 6 16-bit code units</span><br><span class="line">000198:                                        |[000198] Hello.foo:(II)I</span><br><span class="line">0001a8: 9000 0304                              |0000: add-int v0, v3, v4</span><br><span class="line">0001ac: 9101 0304                              |0002: sub-int v1, v3, v4</span><br><span class="line">0001b0: b210                                   |0004: mul-int/2addr v0, v1</span><br><span class="line">0001b2: 0f00                                   |0005: <span class="built_in">return</span> v0</span><br><span class="line">      catches       : (none)</span><br><span class="line">      positions     :</span><br><span class="line">        0x0000 line=3</span><br><span class="line">      locals        :</span><br><span class="line">        0x0000 - 0x0006 reg=2 this LHello;</span><br></pre></td></tr></table></figure>
+
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;java&#x865A;&#x62DF;&#x673A;&#x662F;&#x57FA;&#x4E8E;&#x6808;&#x64CD;&#x4F5C;&#xFF0C;&#x53D6;&#x503C;&#xFF0C;&#x8BA1;&#x7B97;&#x5B58;&#x56DE;&#x5BC4;&#x5B58;&#x5668;&#xFF1B;&#x800C;davlik&#x865A;&#x62DF;&#x673A;&#x90FD;&#x662F;&#x4ECE;&#x5BC4;&#x5B58;&#x5668;&#x8FDB;&#x884C;&#x503C;&#x64CD;&#x4F5C;&#x3002;</p>
+<p><strong>&#x865A;&#x62DF;&#x673A;&#x6267;&#x884C;&#x6D41;&#x7A0B;&#x548C;&#x6267;&#x884C;&#x65B9;&#x5F0F;&#x6682;&#x65F6;&#x4E0D;&#x8868;</strong></p>
+<h3 id="3-2-Dalvik&#x8BED;&#x8A00;&#x57FA;&#x7840;"><a href="#3-2-Dalvik&#x8BED;&#x8A00;&#x57FA;&#x7840;" class="headerlink" title="3.2 Dalvik&#x8BED;&#x8A00;&#x57FA;&#x7840;"></a>3.2 Dalvik&#x8BED;&#x8A00;&#x57FA;&#x7840;</h3><p>&#x8BE6;&#x7EC6;&#x603B;&#x7ED3;&#x89C1;&#x4E00;&#x7BC7;<a href="https://juejin.im/post/5cfe59f16fb9a07eb051b744" target="_blank" rel="noopener">&#x6398;&#x91D1;&#x535A;&#x5BA2;</a></p>
+<p>&#x5728;&#x8FD9;&#x91CC;&#x5217;&#x4E00;&#x4E0B;&#x6211;&#x5728;&#x5B66;&#x4E60;&#x8FC7;&#x7A0B;&#x4E2D;&#x7684;&#x7B80;&#x5355;&#x603B;&#x7ED3;:</p>
+<p><img src="/2020/02/16/Android&#x8F6F;&#x4EF6;&#x5B89;&#x5168;&#x6743;&#x5A01;&#x6307;&#x5357;&#x4E00;/Dalvik%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80.png" alt></p>
+<h1 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h1><p>&#x521A;&#x5F00;&#x59CB;&#x63A5;&#x89E6;&#xFF0C;&#x603B;&#x6709;&#x8BB8;&#x8BB8;&#x591A;&#x591A;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x6BD4;&#x5982;&#x5404;&#x79CD;&#x5DE5;&#x5177;&#x4F7F;&#x7528;&#x7684;&#x65F6;&#x5019;&#x9700;&#x8981;&#x5230;&#x5904;&#x5BFB;&#x627E;&#x5728;&#x54EA;&#xFF0C;&#x6BD4;&#x5982;&#x6307;&#x4EE4;&#x96C6;&#x5B66;&#x5B8C;&#x4E4B;&#x540E;&#x8FC7;&#x4E24;&#x5929;&#x5C31;&#x4F1A;&#x9057;&#x5FD8;&#xFF0C;&#x4EE5;&#x53CA;&#x5176;&#x4ED6;&#x5404;&#x79CD;&#x5404;&#x6837;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x6162;&#x6162;&#x6765;&#x5427;&#xFF0C;&#x4E00;&#x70B9;&#x70B9;&#x603B;&#x7ED3;&#xFF0C;&#x4E00;&#x6B65;&#x6B65;&#x5F80;&#x524D;&#x8D70;&#xFF0C;&#x8D70;&#x8D70;&#x770B;&#xFF0C;&#x53EA;&#x8981;&#x4E0D;&#x539F;&#x5730;&#x8E0F;&#x6B65;&#x5C31;&#x597D;&#x4E86;&#x3002;</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag"># 逆向</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/11/x86汇编语言导论/" rel="next" title="x86汇编语言导论">
+                <i class="fa fa-chevron-left"></i> x86汇编语言导论
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android软件安全权威指南阅读笔记一"><span class="nav-number">1.</span> <span class="nav-text">Android软件安全权威指南阅读笔记一</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-搭建环境"><span class="nav-number">1.1.</span> <span class="nav-text">1 搭建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-分析Android-程序"><span class="nav-number">1.2.</span> <span class="nav-text">2 分析Android 程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-编译生成apk文件"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 编译生成apk文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-使用ApkTool反编译"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 使用ApkTool反编译</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-Decoding"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 Decoding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-Building"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2.2 Building</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-Frameworks"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">2.2.3 Frameworks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4-反编译过程"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">2.2.4 反编译过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-4-1-分析apk文件"><span class="nav-number">1.2.2.4.1.</span> <span class="nav-text">2.2.4.1 分析apk文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-4-2-重新编译apk文件并签名"><span class="nav-number">1.2.2.4.2.</span> <span class="nav-text">2.2.4.2 重新编译apk文件并签名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-4-3-安装和测试-（adb命令"><span class="nav-number">1.2.2.4.3.</span> <span class="nav-text">2.2.4.3 安装和测试 （adb命令)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#adb命令"><span class="nav-number">1.2.2.4.3.1.</span> <span class="nav-text">adb命令</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Dalvik-可执行文件和字节码规范"><span class="nav-number">1.3.</span> <span class="nav-text">3 Dalvik 可执行文件和字节码规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-一个流程"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 一个流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Dalvik语言基础"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 Dalvik语言基础</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/02/16/Android软件安全权威指南一/';
+          this.page.identifier = '2020/02/16/Android软件安全权威指南一/';
+          this.page.title = 'Android软件安全权威指南阅读笔记一';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
