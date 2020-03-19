@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="apk">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于Dex文件的完整解析">
+<meta name="keywords" content="apk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DEX文件解析">
+<meta property="og:url" content="http://yoursite.com/2020/03/17/DEX文件解析/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="对于Dex文件的完整解析">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/03/17/DEX文件解析/d985020caa93cc8d0a8dc209b44a673a.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/17/DEX文件解析/Users/82540/AppData/Roaming/Typora/typora-user-images/1584602765164.png">
+<meta property="og:updated_time" content="2020-03-19T09:26:25.795Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DEX文件解析">
+<meta name="twitter:description" content="对于Dex文件的完整解析">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/17/DEX文件解析/d985020caa93cc8d0a8dc209b44a673a.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/17/DEX文件解析/">
+
+
+
+
+
+  <title>DEX文件解析 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/17/DEX文件解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DEX文件解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-17T21:55:31+08:00">
+                2020-03-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/17/DEX文件解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/17/DEX文件解析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/03/17/DEX文件解析/" class="leancloud_visitors" data-flag-title="DEX文件解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对于Dex文件的完整解析
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="DEX&#x6587;&#x4EF6;&#x89E3;&#x6790;"><a href="#DEX&#x6587;&#x4EF6;&#x89E3;&#x6790;" class="headerlink" title="DEX&#x6587;&#x4EF6;&#x89E3;&#x6790;"></a>DEX&#x6587;&#x4EF6;&#x89E3;&#x6790;</h1><blockquote>
+<p>&#x5BF9;Dex&#x8FDB;&#x884C;&#x5206;&#x6790;&#x4E4B;&#x524D;&#xFF0C;&#x9996;&#x5148;&#x8981;&#x77E5;&#x9053;&#x5B83;&#x662F;&#x4EC0;&#x4E48;&#xFF0C;&#x4E3A;&#x4EC0;&#x4E48;&#x503C;&#x5F97;&#x6211;&#x4EEC;&#x53BB;&#x5206;&#x6790;&#x3002;&#x7531;&#x4E8E;&#x662F;&#x521D;&#x5B66;&#xFF0C;&#x5BF9;&#x4E8E;&#x5176;&#x4E2D;&#x90E8;&#x5206;&#x5185;&#x5BB9;&#x63CF;&#x8FF0;&#x53EF;&#x80FD;&#x5E76;&#x4E0D;&#x662F;&#x7279;&#x522B;&#x51C6;&#x786E;&#xFF0C;&#x4EC5;&#x5EFA;&#x7ACB;&#x5728;&#x4E2A;&#x4EBA;&#x7684;&#x7406;&#x89E3;&#x57FA;&#x7840;&#x4E0A;&#x3002;&#x5982;&#x679C;&#x6709;&#x4E0D;&#x540C;&#x610F;&#x89C1;&#xFF0C;&#x6B22;&#x8FCE;&#x5728;issues&#x4E0A;&#x8BA8;&#x8BBA;&#x3002;</p>
+</blockquote>
+<ul>
+<li><code>classes.dex</code>&#x6587;&#x4EF6;&#x4E2D;&#x5305;&#x542B;&#x4E86;apk&#x7684;&#x53EF;&#x6267;&#x884C;&#x4EE3;&#x7801;&#x3002;&#x4E4B;&#x524D;&#x5728;&#x5BF9;Apk&#x6587;&#x4EF6;&#x8FDB;&#x884C;&#x7B80;&#x5355;&#x7684;&#x5206;&#x6790;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x77E5;&#x9053;&#x4E86;java&#x751F;&#x6210;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x4F1A;&#x7F16;&#x8BD1;&#x751F;&#x6210;<code>.dex</code>&#x6587;&#x4EF6;&#x3002;</li>
+<li>DEX&#x6587;&#x4EF6;&#x4E2D;&#x5305;&#x542B;&#x4E86;&#x8BB8;&#x591A;&#x7684;&#x903B;&#x8F91;&#x4FE1;&#x606F;&#xFF0C;&#x901A;&#x8FC7;&#x5BF9;&#x5B83;&#x7684;&#x5206;&#x6790;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C1D;&#x8BD5;&#x9006;&#x5411;&#x5F97;&#x5230;&#x7F16;&#x5199;&#x7684;&#x6E90;&#x7801;&#x3002;</li>
+</ul>
+<h2 id="1-DEX&#x6587;&#x4EF6;&#x6574;&#x4F53;&#x7ED3;&#x6784;"><a href="#1-DEX&#x6587;&#x4EF6;&#x6574;&#x4F53;&#x7ED3;&#x6784;" class="headerlink" title="1 DEX&#x6587;&#x4EF6;&#x6574;&#x4F53;&#x7ED3;&#x6784;"></a>1 DEX&#x6587;&#x4EF6;&#x6574;&#x4F53;&#x7ED3;&#x6784;</h2><p>&#x4E0B;&#x56FE;&#x662F;&#x4E00;&#x5E45;&#x5BF9;Dex&#x4E2D;&#x5404;&#x90E8;&#x5206;&#x8BE6;&#x7EC6;&#x5206;&#x6790;&#x7684;&#x56FE;&#x7247;&#xFF0C;<a href="https://tech.youzan.com/qian-tan-android-dexwen-jian/" target="_blank" rel="noopener">&#x6765;&#x6E90;</a></p>
+<p> <img src="/2020/03/17/DEX&#x6587;&#x4EF6;&#x89E3;&#x6790;/d985020caa93cc8d0a8dc209b44a673a.png" alt="img"> </p>
+<p>&#x7B80;&#x5355;&#x533A;&#x5206;&#x7684;&#x8BDD;&#xFF0C;&#x5219;&#x53EF;&#x4EE5;&#x5212;&#x5206;&#x4E3A;&#x4EE5;&#x4E0B;&#x51E0;&#x4E2A;&#x90E8;&#x5206;:</p>
+<p><img src="/2020/03/17/DEX&#x6587;&#x4EF6;&#x89E3;&#x6790;/Users/82540/AppData/Roaming/Typora/typora-user-images/1584602765164.png" alt="1584602765164"></p>
+<p>&#x6587;&#x4EF6;&#x5934;&#xFF0C;&#x7D22;&#x5F15;&#x533A;&#xFF0C;&#x6570;&#x636E;&#x533A;,&#x63A5;&#x4E0B;&#x6765;&#x5C31;&#x662F;&#x5BF9;&#x8FD9;&#x51E0;&#x4E2A;&#x90E8;&#x5206;&#x7684;&#x9010;&#x6B65;&#x5206;&#x6790;&#x8FC7;&#x7A0B;</p>
+<h2 id="2-Dex&#x89E3;&#x6790;&#x8FC7;&#x7A0B;"><a href="#2-Dex&#x89E3;&#x6790;&#x8FC7;&#x7A0B;" class="headerlink" title="2 Dex&#x89E3;&#x6790;&#x8FC7;&#x7A0B;"></a>2 Dex&#x89E3;&#x6790;&#x8FC7;&#x7A0B;</h2><h3 id="2-1-&#x6587;&#x4EF6;&#x5934;-Dexheader"><a href="#2-1-&#x6587;&#x4EF6;&#x5934;-Dexheader" class="headerlink" title="2.1 &#x6587;&#x4EF6;&#x5934; Dexheader"></a>2.1 &#x6587;&#x4EF6;&#x5934; Dexheader</h3><p>&#x53EF;&#x4EE5;&#x8BF4;&#x7406;&#x89E3;&#x4E86;Dexheader&#xFF0C;&#x7136;&#x540E;&#x77E5;&#x9053;&#x4E00;&#x70B9;&#x70B9;&#x7F16;&#x8BD1;&#x539F;&#x7406;&#xFF0C;&#x5BF9;&#x4E8E;&#x6211;&#x4EEC;&#x7406;&#x89E3;&#x7D22;&#x5F15;&#x533A;&#x53EF;&#x4EE5;&#x6709;&#x5F88;&#x5927;&#x7684;&#x5E2E;&#x52A9;&#x3002;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Direct-mapped &quot;header_item&quot; struct.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">DexHeader</span> {</span></span><br><span class="line">    u1  magic[<span class="number">8</span>];       <span class="comment">//&#x5206;&#x6790;&#x7684;&#x6587;&#x4EF6;&#x7248;&#x672C;&#x4EE5;&#x53CA;&#x7C7B;&#x578B;</span></span><br><span class="line">    u4  checksum;       <span class="comment">//&#x6587;&#x4EF6;&#x5185;&#x5BB9;&#x7684;&#x6821;&#x9A8C;&#x548C;,&#x4E0D;&#x5305;&#x62EC;magic&#x548C;&#x81EA;&#x5DF1;,&#x4E3B;&#x8981;&#x7528;&#x4E8E;&#x68C0;&#x67E5;&#x6587;&#x4EF6;&#x662F;&#x5426;&#x635F;&#x574F;</span></span><br><span class="line">    u1  signature[kSHA1DigestLen];      <span class="comment">//&#x7B7E;&#x540D;&#x4FE1;&#x606F;,&#x4E0D;&#x5305;&#x62EC; magic\checksum&#x548C;&#x81EA;&#x5DF1;</span></span><br><span class="line">    u4  fileSize;       <span class="comment">//&#x6574;&#x4E2A;&#x6587;&#x4EF6;&#x7684;&#x957F;&#x5EA6;,&#x5355;&#x4F4D;&#x4E3A;&#x5B57;&#x8282;,&#x5305;&#x62EC;&#x6240;&#x6709;&#x7684;&#x5185;&#x5BB9;</span></span><br><span class="line">    u4  headerSize;     <span class="comment">//&#x9ED8;&#x8BA4;&#x662F;0x70&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">    u4  endianTag;      <span class="comment">//&#x5927;&#x5C0F;&#x7AEF;&#x6807;&#x7B7E;&#xFF0C;&#x6807;&#x51C6;.dex&#x6587;&#x4EF6;&#x4E3A;&#x5C0F;&#x7AEF;&#xFF0C;&#x6B64;&#x9879;&#x4E00;&#x822C;&#x56FA;&#x5B9A;&#x4E3A;0x12345678&#x5E38;&#x91CF;</span></span><br><span class="line">    u4  linkSize;       <span class="comment">//&#x94FE;&#x63A5;&#x6570;&#x636E;&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  linkOff;        <span class="comment">//&#x94FE;&#x63A5;&#x6570;&#x636E;&#x7684;&#x504F;&#x79FB;&#x503C;</span></span><br><span class="line">    u4  mapOff;         <span class="comment">//map item&#x7684;&#x504F;&#x79FB;&#x5730;&#x5740;&#xFF0C;&#x8BE5;item&#x5C5E;&#x4E8E;data&#x533A;&#x91CC;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x503C;&#x8981;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;dataOff&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  stringIdsSize;      <span class="comment">//DEX&#x4E2D;&#x7528;&#x5230;&#x7684;&#x6240;&#x6709;&#x5B57;&#x7B26;&#x4E32;&#x5185;&#x5BB9;&#x7684;&#x5927;&#x5C0F;*</span></span><br><span class="line">    u4  stringIdsOff;       <span class="comment">//DEX&#x4E2D;&#x7528;&#x5230;&#x7684;&#x6240;&#x6709;&#x5B57;&#x7B26;&#x4E32;&#x5185;&#x5BB9;&#x7684;&#x504F;&#x79FB;&#x91CF;</span></span><br><span class="line">    u4  typeIdsSize;        <span class="comment">//DEX&#x4E2D;&#x7C7B;&#x578B;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  typeIdsOff;         <span class="comment">//DEX&#x4E2D;&#x7C7B;&#x578B;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x504F;&#x79FB;&#x503C;</span></span><br><span class="line">    u4  protoIdsSize;       <span class="comment">//DEX&#x4E2D;&#x7684;&#x5143;&#x6570;&#x636E;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  protoIdsOff;        <span class="comment">//DEX&#x4E2D;&#x7684;&#x5143;&#x6570;&#x636E;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x504F;&#x79FB;&#x503C;</span></span><br><span class="line">    u4  fieldIdsSize;       <span class="comment">//DEX&#x4E2D;&#x5B57;&#x6BB5;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  fieldIdsOff;        <span class="comment">//DEX&#x4E2D;&#x5B57;&#x6BB5;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x504F;&#x79FB;&#x503C;</span></span><br><span class="line">    u4  methodIdsSize;      <span class="comment">//DEX&#x4E2D;&#x65B9;&#x6CD5;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  methodIdsOff;       <span class="comment">//DEX&#x4E2D;&#x65B9;&#x6CD5;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x504F;&#x79FB;&#x503C;</span></span><br><span class="line">    u4  classDefsSize;      <span class="comment">//DEX&#x4E2D;&#x7684;&#x7C7B;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  classDefsOff;       <span class="comment">//DEX&#x4E2D;&#x7684;&#x7C7B;&#x4FE1;&#x606F;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x7684;&#x504F;&#x79FB;&#x503C;</span></span><br><span class="line">    u4  dataSize;           <span class="comment">//DEX&#x4E2D;&#x6570;&#x636E;&#x533A;&#x57DF;&#x7684;&#x7ED3;&#x6784;&#x4FE1;&#x606F;&#x7684;&#x5927;&#x5C0F;</span></span><br><span class="line">    u4  dataOff;            <span class="comment">//DEX&#x4E2D;&#x6570;&#x636E;&#x533A;&#x57DF;&#x7684;&#x7ED3;&#x6784;&#x4FE1;&#x606F;&#x7684;&#x504F;&#x79FB;&#x503C;</span></span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p>&#x4EE5;&#x4E0A;&#x662F;<code>dexheader.h</code>&#x4E2D;<code>DexHeader</code>&#x7ED3;&#x6784;&#x4F53;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5177;&#x4F53;&#x6709;&#x4E9B;&#x4EC0;&#x4E48;&#x4FE1;&#x606F;&#x3002;&#x5BF9;&#x4E8E;&#x5176;&#x4E2D;&#x5404;&#x90E8;&#x5206;&#x7684;&#x610F;&#x4E49;&#x5DF2;&#x7ECF;&#x6807;&#x6CE8;&#xFF0C;&#x4E0B;&#x8868;&#x5219;&#x662F;&#x6211;&#x4E2A;&#x4EBA;&#x5BF9;&#x4E8E;&#x5176;&#x4E2D;&#x90E8;&#x5206;&#x7ED3;&#x6784;&#x7684;&#x7406;&#x89E3;&#xFF1A;</p>
+<table>
+<thead>
+<tr>
+<th align="center">&#x540D;&#x79F0;</th>
+<th align="center">&#x610F;&#x4E49;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">magic</td>
+<td align="center">&#x63CF;&#x8FF0;&#x4E86;&#x6587;&#x4EF6;&#x7684;&#x7C7B;&#x578B;&#x4EE5;&#x53CA;&#x7248;&#x672C;</td>
+</tr>
+<tr>
+<td align="center">checksum</td>
+<td align="center">&#x6574;&#x4E2A;&#x6587;&#x4EF6;&#x68C0;&#x9A8C;&#x548C;&#xFF0C;&#x9664;&#x6389;checksum&#x548C;signature</td>
+</tr>
+<tr>
+<td align="center">signature</td>
+<td align="center">&#x6587;&#x4EF6;&#x7684;&#x7B7E;&#x540D;&#x4FE1;&#x606F;&#xFF0C;&#x540C;&#x6837;&#x4E0D;&#x5305;&#x62EC;checksum&#x548C;signature</td>
+</tr>
+<tr>
+<td align="center">filesize</td>
+<td align="center">&#x6574;&#x4E2A;&#x6587;&#x4EF6;&#x4E00;&#x5171;&#x6709;&#x591A;&#x5927;</td>
+</tr>
+<tr>
+<td align="center">headerSize</td>
+<td align="center">DexHeader&#x6709;&#x591A;&#x5927;</td>
+</tr>
+<tr>
+<td align="center">endiantag</td>
+<td align="center">&#x6587;&#x4EF6;&#x5E8F;&#x6807;&#x7B7E;&#xFF0C;&#x8868;&#x660E;&#x662F;&#x5927;&#x7AEF;&#x5B58;&#x50A8;&#x8FD8;&#x662F;&#x5C0F;&#x7AEF;&#x5B58;&#x50A8;</td>
+</tr>
+<tr>
+<td align="center">link</td>
+<td align="center">&#x94FE;&#x63A5;&#x6BB5;</td>
+</tr>
+<tr>
+<td align="center">map</td>
+<td align="center">&#x8FD9;&#x662F;&#x5728;&#x6570;&#x636E;&#x533A;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x53EF;&#x80FD;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x8BFB;&#x53D6;&#x8FD9;&#x4E00;&#x5757;&#x5B8C;&#x6210;&#x5BF9;Dex&#x6587;&#x4EF6;&#x7684;&#x89E3;&#x6790;</td>
+</tr>
+<tr>
+<td align="center">stringid</td>
+<td align="center">&#x662F;.dex&#x6587;&#x4EF6;&#x4E2D;&#x6240;&#x6709;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x7D22;&#x5F15;</td>
+</tr>
+<tr>
+<td align="center">typeid</td>
+<td align="center">&#x4EE3;&#x7801;&#x4E2D;&#x7684;&#x6240;&#x6709;&#x6570;&#x636E;&#x7C7B;&#x578B;&#x4FE1;&#x606F;</td>
+</tr>
+<tr>
+<td align="center">proto</td>
+<td align="center">&#x65B9;&#x6CD5;&#x539F;&#x578B;</td>
+</tr>
+<tr>
+<td align="center">field</td>
+<td align="center">&#x5B57;&#x6BB5;(&#x57DF;)&#x533A;</td>
+</tr>
+<tr>
+<td align="center">method</td>
+<td align="center">&#x65B9;&#x6CD5;&#x533A;</td>
+</tr>
+<tr>
+<td align="center">class</td>
+<td align="center">&#x7C7B;&#x533A;</td>
+</tr>
+<tr>
+<td align="center">data</td>
+<td align="center">&#x6570;&#x636E;&#x533A;</td>
+</tr>
+</tbody></table>
+<p>&#x5BF9;&#x4E8E;&#x8FD9;&#x90E8;&#x5206;&#x89E3;&#x6790;&#x7684;&#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">self.header_data = {</span><br><span class="line">        <span class="string">&apos;magic&apos;</span>: self.data[<span class="number">0</span>:<span class="number">8</span>],  <span class="comment"># Dex &#x7248;&#x672C;&#x6807;&#x8BC6;,8&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;checksum&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">8</span>:<span class="number">0xC</span>])[<span class="number">0</span>],  <span class="comment"># &#x6821;&#x9A8C;&#x548C;&#xFF0C;&#x5360;4&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;signature&apos;</span>: self.data[<span class="number">0xC</span>:<span class="number">0x20</span>],  <span class="comment"># SHA-1 &#x6563;&#x5217;&#x503C; 20&#x4E2A;&#x5B57;&#x8282; 0x14</span></span><br><span class="line">        <span class="string">&apos;file_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x20</span>:<span class="number">0x24</span>])[<span class="number">0</span>],  <span class="comment"># &#x603B;&#x6587;&#x4EF6;&#x5927;&#x5C0F;&#x3002;&#x5360;4&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;header_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x24</span>:<span class="number">0x28</span>])[<span class="number">0</span>],  <span class="comment"># DexHeader&#x5927;&#x5C0F;&#xFF0C;&#x5360;4&#x4E2A;&#x5B57;&#x8282;&#xFF0C;&#x76EE;&#x524D;&#x6052;&#x4E3A;0x70,112&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;endian_tag&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x28</span>:<span class="number">0x2C</span>])[<span class="number">0</span>],  <span class="comment"># &#x5B57;&#x8282;&#x5E8F;&#x6807;&#x8BB0;&#xFF0C;&#x5360;4&#x4E2A;&#x5B57;&#x8282;&#xFF0C;&#x76EE;&#x524D;&#x503C;&#x4E3A; 0x12345678,&#x8868;&#x793A;&#x5C0F;&#x7AEF;&#x5B58;&#x50A8;</span></span><br><span class="line">        <span class="string">&apos;link_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x2C</span>:<span class="number">0x30</span>])[<span class="number">0</span>],  <span class="comment"># &#x94FE;&#x63A5;&#x6BB5;&#x4E2A;&#x6570;&#xFF0C;&#x5360;4&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;link_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x30</span>:<span class="number">0x34</span>])[<span class="number">0</span>],  <span class="comment"># &#x94FE;&#x63A5;&#x6BB5;&#x8D77;&#x59CB;&#x504F;&#x79FB;&#xFF0C;&#x5360;4&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;map_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x34</span>:<span class="number">0x38</span>])[<span class="number">0</span>],  <span class="comment"># DexMapList&#x8D77;&#x59CB;&#x504F;&#x79FB;&#xFF0C;&#x5360;4&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;string_ids_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x38</span>:<span class="number">0x3C</span>])[<span class="number">0</span>],  <span class="comment"># DexStringId &#x4E2A;&#x6570;&#xFF0C;&#x5360;4&#x4E2A;&#x5B57;&#x8282;</span></span><br><span class="line">        <span class="string">&apos;string_ids_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x3C</span>:<span class="number">0x40</span>])[<span class="number">0</span>],  <span class="comment"># DexStringId &#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">        <span class="string">&apos;type_ids_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x40</span>:<span class="number">0x44</span>])[<span class="number">0</span>],  <span class="comment"># DexTypeId &#x4E2A;&#x6570;</span></span><br><span class="line">        <span class="string">&apos;type_ids_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x44</span>:<span class="number">0x48</span>])[<span class="number">0</span>],  <span class="comment"># DexTypeId &#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">        <span class="string">&apos;proto_ids_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x48</span>:<span class="number">0x4C</span>])[<span class="number">0</span>],  <span class="comment"># DexProtoId &#x4E2A;&#x6570;</span></span><br><span class="line">        <span class="string">&apos;proto_ids_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x4C</span>:<span class="number">0x50</span>])[<span class="number">0</span>],  <span class="comment"># DexProtoId &#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">        <span class="string">&apos;field_ids_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x50</span>:<span class="number">0x54</span>])[<span class="number">0</span>],  <span class="comment"># DexFieldId &#x4E2A;&#x6570;</span></span><br><span class="line">        <span class="string">&apos;field_ids_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x54</span>:<span class="number">0x58</span>])[<span class="number">0</span>],  <span class="comment"># DexFieldId &#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">        <span class="string">&apos;method_ids_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x58</span>:<span class="number">0x5C</span>])[<span class="number">0</span>],  <span class="comment"># DexMethodId &#x4E2A;&#x6570;</span></span><br><span class="line">        <span class="string">&apos;method_ids_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x5C</span>:<span class="number">0x60</span>])[<span class="number">0</span>],  <span class="comment"># DexMethodId &#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">        <span class="string">&apos;class_defs_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x60</span>:<span class="number">0x64</span>])[<span class="number">0</span>],  <span class="comment"># DexClassDef &#x4E2A;&#x6570;</span></span><br><span class="line">        <span class="string">&apos;class_defs_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x64</span>:<span class="number">0x68</span>])[<span class="number">0</span>],  <span class="comment"># DexClassDef &#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">        <span class="string">&apos;data_size&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x68</span>:<span class="number">0x6C</span>])[<span class="number">0</span>],  <span class="comment"># &#x6570;&#x636E;&#x6BB5;&#x5927;&#x5C0F;</span></span><br><span class="line">        <span class="string">&apos;data_off&apos;</span>: unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[<span class="number">0x6C</span>:<span class="number">0x70</span>])[<span class="number">0</span>]  <span class="comment"># &#x6570;&#x636E;&#x6BB5;&#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">    }</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-DexMapList"><a href="#2-2-DexMapList" class="headerlink" title="2.2 DexMapList"></a>2.2 DexMapList</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DexMaplist : {</span><br><span class="line">	size,           u4</span><br><span class="line">	DexMapItem--&gt;{</span><br><span class="line">			type,   u2,&#x7C7B;&#x578B;</span><br><span class="line">			unused, u2,&#x5BF9;&#x9F50;</span><br><span class="line">			size,   u4,&#x7C7B;&#x578B;&#x4E2A;&#x6570;</span><br><span class="line">			offset  u4,&#x7C7B;&#x578B;&#x8D77;&#x59CB;&#x504F;&#x79FB;</span><br><span class="line">		}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x9996;&#x5148;&#x662F;MapList&#x7684;&#x4E2A;&#x6570;n&#xFF0C;&#x540E;&#x9762;&#x7D27;&#x63A5;&#x7740;n&#x4E2A;&#x5927;&#x5C0F;&#x4E3A;12&#x4E2A;DexMapItem&#x7ED3;&#x6784;&#x4F53;&#x3002;</p>
+<p>&#x7C7B;&#x578B;&#x6709;&#x4EE5;&#x4E0B;&#x51E0;&#x79CD;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* map item type codes */</span></span><br><span class="line"><span class="keyword">enum</span> {</span><br><span class="line">    kDexTypeHeaderItem               = <span class="number">0x0000</span>,</span><br><span class="line">    kDexTypeStringIdItem             = <span class="number">0x0001</span>,</span><br><span class="line">    kDexTypeTypeIdItem               = <span class="number">0x0002</span>,</span><br><span class="line">    kDexTypeProtoIdItem              = <span class="number">0x0003</span>,</span><br><span class="line">    kDexTypeFieldIdItem              = <span class="number">0x0004</span>,</span><br><span class="line">    kDexTypeMethodIdItem             = <span class="number">0x0005</span>,</span><br><span class="line">    kDexTypeClassDefItem             = <span class="number">0x0006</span>,</span><br><span class="line">    kDexTypeCallSiteIdItem           = <span class="number">0x0007</span>,</span><br><span class="line">    kDexTypeMethodHandleItem         = <span class="number">0x0008</span>,</span><br><span class="line">    kDexTypeMapList                  = <span class="number">0x1000</span>,</span><br><span class="line">    kDexTypeTypeList                 = <span class="number">0x1001</span>,</span><br><span class="line">    kDexTypeAnnotationSetRefList     = <span class="number">0x1002</span>,</span><br><span class="line">    kDexTypeAnnotationSetItem        = <span class="number">0x1003</span>,</span><br><span class="line">    kDexTypeClassDataItem            = <span class="number">0x2000</span>,</span><br><span class="line">    kDexTypeCodeItem                 = <span class="number">0x2001</span>,</span><br><span class="line">    kDexTypeStringDataItem           = <span class="number">0x2002</span>,</span><br><span class="line">    kDexTypeDebugInfoItem            = <span class="number">0x2003</span>,</span><br><span class="line">    kDexTypeAnnotationItem           = <span class="number">0x2004</span>,</span><br><span class="line">    kDexTypeEncodedArrayItem         = <span class="number">0x2005</span>,</span><br><span class="line">    kDexTypeAnnotationsDirectoryItem = <span class="number">0x2006</span>,</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p>&#x6839;&#x636E;map&#x5B57;&#x6BB5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#x6BCF;&#x4E2A;&#x7C7B;&#x578B;&#x5B57;&#x6BB5;&#x7684;&#x4E2A;&#x6570;&#xFF0C;&#x8D77;&#x59CB;&#x504F;&#x79FB;</p>
+<h3 id="2-3-DexStringId"><a href="#2-3-DexStringId" class="headerlink" title="2.3 DexStringId"></a>2.3 DexStringId</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DexStringId : {</span><br><span class="line">	stringDataOff   &#x5B57;&#x7B26;&#x4E32;&#x6570;&#x636E;&#x7684;&#x8D77;&#x59CB;&#x504F;&#x79FB;,u4</span><br><span class="line">}</span><br><span class="line">stringData : {</span><br><span class="line">	size,    &#x7F16;&#x7801;&#x5B57;&#x7B26;&#x7684;&#x4E2A;&#x6570;,u1</span><br><span class="line">	string   &#x7F16;&#x7801;&#x5B57;&#x7B26;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;<code>Dexhead</code>&#x4E2D;&#xFF0C;&#x5F97;&#x5230;<code>DexStringId</code>&#x7684;&#x8D77;&#x59CB;&#x504F;&#x79FB;&#x540E;&#x548C;&#x4E2A;&#x6570;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#x6BCF;&#x4E00;&#x4E2A;string&#x7684;&#x6570;&#x636E;&#x533A;&#x4E2D;&#x8D77;&#x59CB;&#x504F;&#x79FB;&#xFF0C;&#x800C;dex&#x4E2D;&#x7684;string&#x4F7F;&#x7528;&#x7684;&#x662F;<code>MUTF-8</code>&#x6570;&#x636E;&#x7ED3;&#x6784;&#x3002;&#x5BF9;&#x4E8E;DexStringId&#x7684;&#x89E3;&#x6790;&#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x5BF9;DexStringID&#x7684;&#x89E3;&#x6790;</span></span><br><span class="line"><span class="comment"># DexStringId -&gt; StringDataOff -&gt; StringData:{size , data}</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_strings</span><span class="params">(self)</span>:</span></span><br><span class="line">    strings = []</span><br><span class="line">    strings_ids_size = self.header_data[<span class="string">&apos;string_ids_size&apos;</span>]</span><br><span class="line">    strings_ids_off = self.header_data[<span class="string">&apos;string_ids_off&apos;</span>]  <span class="comment"># &#x8D77;&#x59CB;&#x504F;&#x79FB;</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(strings_ids_size):</span><br><span class="line">        <span class="comment"># &#x6BCF;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x8D77;&#x59CB;&#x504F;&#x79FB;&#xFF0C;&#x4ECE;strings_id_off &#x5F00;&#x59CB;&#xFF0C;&#x6709;&#x8FDE;&#x7EED;strings_id_size&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x8D77;&#x59CB;&#x5730;&#x5740;&#xFF0C;&#x5927;&#x5C0F;&#x4E3A; u4</span></span><br><span class="line">        offset = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[strings_ids_off + (index * <span class="number">4</span>):strings_ids_off + (index * <span class="number">4</span>) + <span class="number">4</span>])[<span class="number">0</span>]</span><br><span class="line">        <span class="comment"># &#x6BCF;&#x4E2A;StringData&#x662F;&#x7531;MUTF-8&#x7F16;&#x7801;&#xFF0C;&#x7B2C;&#x4E00;&#x4E2A;&#x5B57;&#x8282;&#x8868;&#x793A;&#x5B57;&#x7B26;&#x4E32;&#x957F;&#x5EA6;n&#xFF0C;&#x540E;&#x9762;&#x8DDF;&#x7740;n&#x4E2A;&#x5B57;&#x7B26; + &quot;00&quot;&#x4F5C;&#x4E3A;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x7ED3;&#x5C3E;</span></span><br><span class="line">        c_size = self.data[offset]</span><br><span class="line">        c_char = self.data[offset + <span class="number">1</span>:offset + <span class="number">1</span> + c_size]</span><br><span class="line">        strings.append(c_char)</span><br><span class="line">    <span class="keyword">return</span> strings_ids_size, hex(strings_ids_off), strings</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x6790;&#x7ED3;&#x679C;&#x5982;&#x4E0B;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">strings_id&#x4E2A;&#x6570;: 16 	</span><br><span class="line">&#x8D77;&#x59CB;&#x504F;&#x79FB;: 0x70	 </span><br><span class="line">&#x5185;&#x5BB9;&#xFF1A;[</span><br><span class="line">b&apos;&lt;init&gt;&apos;, </span><br><span class="line">b&apos;Hello.java&apos;, </span><br><span class="line">b&apos;I&apos;, </span><br><span class="line">b&apos;III&apos;, </span><br><span class="line">b&apos;LHello;&apos;, </span><br><span class="line">b&apos;Ljava/io/PrintStream;&apos;, </span><br><span class="line">b&apos;Ljava/lang/Object;&apos;, </span><br><span class="line">b&apos;Ljava/lang/System;&apos;, </span><br><span class="line">b&apos;V&apos;, </span><br><span class="line">b&apos;VI&apos;, </span><br><span class="line">b&apos;VL&apos;, </span><br><span class="line">b&apos;[Ljava/lang/String;&apos;, </span><br><span class="line">b&apos;foo&apos;, </span><br><span class="line">b&apos;main&apos;, </span><br><span class="line">b&apos;out&apos;, </span><br><span class="line">b&apos;println&apos;]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-DexTypeID"><a href="#2-4-DexTypeID" class="headerlink" title="2.4 DexTypeID"></a>2.4 DexTypeID</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DexTypeId : {</span><br><span class="line">	DescriptorIdx     DexTypeID &#x5728;String ID &#x4E2D;&#x7684;&#x7D22;&#x5F15;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x6790;&#x4EE3;&#x7801;:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x5BF9;DexTypeId &#x7684;&#x89E3;&#x6790;</span></span><br><span class="line"><span class="comment"># DexTypeId -&gt; DescriptorIdx:&#x5B58;&#x50A8;&#x4E86;DexType&#x5728;DexStringId&#x79CD;&#x7684;&#x7D22;&#x5F15;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_types</span><span class="params">(self)</span>:</span></span><br><span class="line">    type_ids = []</span><br><span class="line">    type_ids_size = self.header_data[<span class="string">&apos;type_ids_size&apos;</span>]</span><br><span class="line">    type_ids_off = self.header_data[<span class="string">&apos;type_ids_off&apos;</span>]</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(type_ids_size):</span><br><span class="line">        types_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[type_ids_off + (index * <span class="number">4</span>):type_ids_off + (index * <span class="number">4</span>) + <span class="number">4</span>])[<span class="number">0</span>]</span><br><span class="line">        type_ids.append(types_idx)</span><br><span class="line">    <span class="keyword">return</span> type_ids_size, hex(type_ids_off), type_ids</span><br></pre></td></tr></table></figure>
+
+<p>&#x7ED3;&#x679C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type_id&#x4E2A;&#x6570;: 7 	 </span><br><span class="line">&#x8D77;&#x59CB;&#x504F;&#x79FB;: 0xb0	 </span><br><span class="line">&#x5728;strings_id&#x4E2D;&#x7684;&#x7D22;&#x5F15;: [2, 4, 5, 6, 7, 8, 11]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-DexProtoID"><a href="#2-5-DexProtoID" class="headerlink" title="2.5 DexProtoID"></a>2.5 DexProtoID</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DexProtoID : {</span><br><span class="line">	shortyIdx,		u4,&#x6307;&#x5411;DexStringId&#x7684;&#x7D22;&#x5F15;</span><br><span class="line">	returnTypeIdx,  u4,&#x6307;&#x5411;DexTypeId&#x7684;&#x7D22;&#x5F15;&#xFF0C;&#x8FD4;&#x56DE;&#x7C7B;&#x578B;</span><br><span class="line">	parametersOff   u4,&#x6307;&#x5411;DexTypeList&#x7684;&#x7D22;&#x5F15; </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">parametersOff --&gt; DexTypeList : {</span><br><span class="line">	size, u4, &#x53C2;&#x6570;&#x4E2A;&#x6570;</span><br><span class="line">	DexTypeItem : {</span><br><span class="line">		idx  u2,&#x6307;&#x5411;DexTypeId &#x7684;&#x7D22;&#x5F15;&#xFF0C;&#x53C2;&#x6570;&#x7C7B;&#x578B;</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x6790;&#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x5BF9;DexProtoId&#x7684;&#x89E3;&#x6790;</span></span><br><span class="line">    <span class="comment"># DexProtoId -&gt; {shortyIdx, returnTypeIDx, parametersOff -&gt; {size, DexTypeItem -&gt; type_idx} }</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_proto_ids</span><span class="params">(self)</span>:</span></span><br><span class="line">        proto_ids = []</span><br><span class="line">        proto_ids_size = self.header_data[<span class="string">&apos;proto_ids_size&apos;</span>]</span><br><span class="line">        proto_ids_off = self.header_data[<span class="string">&apos;proto_ids_off&apos;</span>]</span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> range(proto_ids_size):</span><br><span class="line">            <span class="comment"># &#x6BCF;&#x4E00;&#x4E2A;DexProtoId &#x5927;&#x5C0F;&#x90FD;&#x662F;12&#x5B57;&#x8282;</span></span><br><span class="line">            <span class="comment"># &#x6307;&#x5411;DexStringId&#x5217;&#x8868;&#x7D22;&#x5F15;</span></span><br><span class="line">            shorty_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[proto_ids_off + (index * <span class="number">12</span>):proto_ids_off + (index * <span class="number">12</span>) + <span class="number">4</span>])[<span class="number">0</span>]</span><br><span class="line">            <span class="comment"># &#x6307;&#x5411;DexTypeId&#x5217;&#x8868;&#x7D22;&#x5F15;</span></span><br><span class="line">            return_type_id = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[proto_ids_off + <span class="number">4</span> + (index * <span class="number">12</span>):proto_ids_off + <span class="number">8</span> + (index * <span class="number">12</span>)])[</span><br><span class="line">                <span class="number">0</span>]</span><br><span class="line">            <span class="comment"># &#x6307;&#x5411;DexTypeList&#x7684;&#x504F;&#x79FB;&#x91CF;</span></span><br><span class="line">            parameters_off = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[proto_ids_off + <span class="number">8</span> + (index * <span class="number">12</span>):proto_ids_off + <span class="number">12</span> + (index * <span class="number">12</span>)])[<span class="number">0</span>]</span><br><span class="line">            type_ids = []</span><br><span class="line">            dex_type_size = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> parameters_off != <span class="number">0</span>:</span><br><span class="line">                <span class="comment"># parameters_off&#x6307;&#x5411; DexTypeList&#x7ED3;&#x6784;</span></span><br><span class="line">                <span class="comment"># &#x524D;&#x56DB;&#x4E2A;&#x5B57;&#x8282;&#x662F;DexTypeItem&#x7ED3;&#x6784;&#x7684;&#x4E2A;&#x6570;</span></span><br><span class="line">                dex_type_size = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[parameters_off:parameters_off + <span class="number">4</span>])[<span class="number">0</span>]</span><br><span class="line">                <span class="comment"># &#x540E;&#x9762;&#x6709;dex_type_size&#x4E2A;DexTypeItem</span></span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> range(dex_type_size):</span><br><span class="line">                    type_idx = unpack(<span class="string">&apos;&lt;H&apos;</span>, self.data[parameters_off+<span class="number">4</span>+(i*<span class="number">2</span>):parameters_off+<span class="number">6</span>+(i*<span class="number">2</span>)])[<span class="number">0</span>]</span><br><span class="line">                    type_ids.append(type_idx)</span><br><span class="line">            proto_ids.append({<span class="string">&apos;shorty_idx&apos;</span>: shorty_idx,</span><br><span class="line">                              <span class="string">&apos;return_type_id&apos;</span>: return_type_id,</span><br><span class="line">                              <span class="string">&apos;parameters&apos;</span>: {<span class="string">&apos;parameters_off&apos;</span>: hex(parameters_off),</span><br><span class="line">                                             <span class="string">&apos;dex_type_size&apos;</span>: dex_type_size,</span><br><span class="line">                                             <span class="string">&apos;type_ids&apos;</span>: type_ids</span><br><span class="line">                                             }</span><br><span class="line">                              })</span><br><span class="line">        <span class="keyword">return</span> proto_ids_size, hex(proto_ids_off), proto_ids</span><br></pre></td></tr></table></figure>
+
+<p>&#x7ED3;&#x679C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">proto_id&#x4E2A;&#x6570;&#x4E3A;: 4	 </span><br><span class="line">&#x8D77;&#x59CB;&#x504F;&#x79FB;&#x4E3A;: 0xcc	</span><br><span class="line">&#x5185;&#x5BB9;&#x4E3A;: [</span><br><span class="line">{&apos;shorty_idx&apos;: 3, &apos;return_type_id&apos;: 0, &apos;parameters&apos;: {&apos;parameters_off&apos;: &apos;0x1b4&apos;, &apos;dex_type_size&apos;: 2, &apos;type_ids&apos;: [0, 0]}}, </span><br><span class="line">{&apos;shorty_idx&apos;: 8, &apos;return_type_id&apos;: 5, &apos;parameters&apos;: {&apos;parameters_off&apos;: &apos;0x0&apos;, &apos;dex_type_size&apos;: 0, &apos;type_ids&apos;: []}}, </span><br><span class="line">{&apos;shorty_idx&apos;: 9, &apos;return_type_id&apos;: 5, &apos;parameters&apos;: {&apos;parameters_off&apos;: &apos;0x1bc&apos;, &apos;dex_type_size&apos;: 1, &apos;type_ids&apos;: [0]}}, </span><br><span class="line">{&apos;shorty_idx&apos;: 10, &apos;return_type_id&apos;: 5, &apos;parameters&apos;: {&apos;parameters_off&apos;: &apos;0x1c4&apos;, &apos;dex_type_size&apos;: 1, &apos;type_ids&apos;: [6]}}]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-DexFieldID"><a href="#2-6-DexFieldID" class="headerlink" title="2.6 DexFieldID"></a>2.6 DexFieldID</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DexFieldID : {</span><br><span class="line">	classIdx,    u2, &#x7C7B;&#x7684;&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x5411;TypeID</span><br><span class="line">	typeIdx,     u2, &#x5B57;&#x6BB5;&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x5411;TypeID</span><br><span class="line">	nameIdx,	 u4, &#x540D;&#x79F0;&#xFF0C;&#x6307;&#x5411;StringID</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x6790;&#x4EE3;&#x7801;:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x5BF9; DexFieldId&#x7684;&#x89E3;&#x6790;&#xFF0C;&#x5B57;&#x6BB5;</span></span><br><span class="line">    <span class="comment"># DexFieldId -&gt; {classIdx, tyedIdx, nameIdx }</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_field_ids</span><span class="params">(self)</span>:</span></span><br><span class="line">        field_ids = []</span><br><span class="line">        field_ids_size = self.header_data[<span class="string">&apos;field_ids_size&apos;</span>]</span><br><span class="line">        field_ids_off = self.header_data[<span class="string">&apos;field_ids_off&apos;</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> range(field_ids_size):</span><br><span class="line">            <span class="comment"># &#x7C7B;&#x7684;&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x5411; DexTypeId &#x5217;&#x8868;&#x7684;&#x7D22;&#x5F15;</span></span><br><span class="line">            class_idx = unpack(<span class="string">&apos;&lt;H&apos;</span>, self.data[field_ids_off + (index * <span class="number">8</span>):field_ids_off + (index * <span class="number">8</span>) + <span class="number">2</span>])[<span class="number">0</span>]</span><br><span class="line">            <span class="comment"># &#x5B57;&#x6BB5;&#x7C7B;&#x578B;&#xFF0C;&#x6307;&#x5411; DexTypeId &#x5217;&#x8868;&#x7684;&#x7D22;&#x5F15;</span></span><br><span class="line">            type_idx = unpack(<span class="string">&apos;&lt;H&apos;</span>, self.data[field_ids_off + (index * <span class="number">8</span>) + <span class="number">2</span>:field_ids_off + (index * <span class="number">8</span>) + <span class="number">4</span>])[<span class="number">0</span>]</span><br><span class="line">            <span class="comment"># &#x5B57;&#x6BB5;&#x540D;&#xFF0C;&#x6307;&#x5411; DexString &#x5217;&#x8868;&#x7684;&#x7D22;&#x5F15;</span></span><br><span class="line">            name_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[field_ids_off + (index * <span class="number">8</span>) + <span class="number">4</span>:field_ids_off + (index * <span class="number">8</span>) + <span class="number">8</span>])[<span class="number">0</span>]</span><br><span class="line">            field_ids.append({<span class="string">&apos;class_idx&apos;</span>: class_idx, <span class="string">&apos;type_idx&apos;</span>: type_idx, <span class="string">&apos;name_idx&apos;</span>: name_idx})</span><br><span class="line">        <span class="keyword">return</span> field_ids_size, hex(field_ids_off), field_ids</span><br></pre></td></tr></table></figure>
+
+<p>&#x7ED3;&#x679C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Field_id&#x4E2A;&#x6570;&#x4E3A;: 1	 </span><br><span class="line">&#x8D77;&#x59CB;&#x504F;&#x79FB;&#x4E3A;: 0xfc	 </span><br><span class="line">&#x7D22;&#x5F15;&#x5B57;&#x6BB5;&#x4E3A;: [{&apos;class_idx&apos;: 4, &apos;type_idx&apos;: 2, &apos;name_idx&apos;: 14}]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-7-DexMethodID"><a href="#2-7-DexMethodID" class="headerlink" title="2.7 DexMethodID"></a>2.7 DexMethodID</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DexMethodId : {</span><br><span class="line">	classIDx,     u2,&#x6307;&#x5411;TypeId,&#x7C7B;&#x58F0;&#x660E;    </span><br><span class="line">	protoIdx,	  u2,&#x6307;&#x5411;TypeId,&#x539F;&#x578B;&#x58F0;&#x660E;</span><br><span class="line">	nameIdx		  u4,&#x6307;&#x5411;StringId,&#x540D;&#x5B57;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x6790;&#x4EE3;&#x7801;:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x5BF9; DexMethodId&#x7684;&#x89E3;&#x6790;</span></span><br><span class="line">    <span class="comment"># DexMethodIId -&gt; {classIdx, protoIdx, nameIdx}</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_method_ids</span><span class="params">(self)</span>:</span></span><br><span class="line">        methods = []</span><br><span class="line">        method_ids_size = self.header_data[<span class="string">&apos;method_ids_size&apos;</span>]</span><br><span class="line">        method_ids_off = self.header_data[<span class="string">&apos;method_ids_off&apos;</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> range(method_ids_size):</span><br><span class="line">            class_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[method_ids_off+(index*<span class="number">12</span>):method_ids_off+(index*<span class="number">12</span>)+<span class="number">4</span>])[<span class="number">0</span>]</span><br><span class="line">            proto_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[method_ids_off+(index*<span class="number">12</span>)+<span class="number">4</span>:method_ids_off+(index*<span class="number">12</span>)+<span class="number">8</span>])[<span class="number">0</span>]</span><br><span class="line">            name_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>, self.data[method_ids_off+(index*<span class="number">12</span>)+<span class="number">8</span>:method_ids_off+(index*<span class="number">12</span>)+<span class="number">12</span>])[<span class="number">0</span>]</span><br><span class="line">            methods.append({<span class="string">&apos;class_idx&apos;</span>: class_idx, <span class="string">&apos;proto_idx&apos;</span>: proto_idx, <span class="string">&apos;name_idx&apos;</span>: name_idx})</span><br><span class="line">        <span class="keyword">return</span> method_ids_size, hex(method_ids_off), methods</span><br></pre></td></tr></table></figure>
+
+<p>&#x7ED3;&#x679C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Method &#x4E2A;&#x6570;&#x4E3A;5	 </span><br><span class="line">&#x8D77;&#x59CB;&#x504F;&#x79FB;&#x4E3A;:0x104	 </span><br><span class="line">&#x7D22;&#x5F15;&#x5B57;&#x6BB5;&#x4E3A;: [</span><br><span class="line">{&apos;class_idx&apos;: 65537, &apos;proto_idx&apos;: 0, &apos;name_idx&apos;: 1}, </span><br><span class="line">{&apos;class_idx&apos;: 12, &apos;proto_idx&apos;: 196609, &apos;name_idx&apos;: 13}, </span><br><span class="line">{&apos;class_idx&apos;: 131074, &apos;proto_idx&apos;: 15, &apos;name_idx&apos;: 65539}, </span><br><span class="line">{&apos;class_idx&apos;: 0, &apos;proto_idx&apos;: 1, &apos;name_idx&apos;: 1}, </span><br><span class="line">{&apos;class_idx&apos;: 3, &apos;proto_idx&apos;: 0, &apos;name_idx&apos;: 1}]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-8-DexClassID"><a href="#2-8-DexClassID" class="headerlink" title="2.8 DexClassID"></a>2.8 DexClassID</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">DexClassId : {</span><br><span class="line">	classIdx,        &#x7C7B;&#x7684;&#x7C7B;&#x578B;,u4,&#x6307;&#x5411;TypeId</span><br><span class="line">	accessFlags,     &#x8BBF;&#x95EE;&#x6807;&#x5FD7;,u4,&#x89C1;&#x4E0B;&#x56FE;</span><br><span class="line">	superclassIdx,	 &#x7236;&#x7C7B;&#x7C7B;&#x578B;,u4,&#x6307;&#x5411;TypeId</span><br><span class="line">	interfaceOff,    &#x63A5;&#x53E3;&#x504F;&#x79FB;,u4,&#x6307;&#x5411;DexTypeList&#x504F;&#x79FB;</span><br><span class="line">	sourceFileIdx,   &#x6E90;&#x6587;&#x4EF6;&#x540D;,u4,&#x6307;&#x5411;stringId</span><br><span class="line">	annotationsOff,  &#x6CE8;&#x89E3;&#x533A;&#x504F;&#x79FB;,u4,&#x6307;&#x5411; DexAnnotationsDirectoryItem</span><br><span class="line">	classDataOff,    &#x7C7B;&#x6570;&#x636E;&#x504F;&#x79FB;,u4&#xFF0C;&#x6307;&#x5411; Dexclassdata</span><br><span class="line">	staticValuesOff  &#x9759;&#x6001;&#x6570;&#x636E;,u4,&#x6307;&#x5411; DexEncodeArray</span><br><span class="line">}</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">interfaceOff --&gt; DexTypeList : {</span><br><span class="line">	size, u4, &#x53C2;&#x6570;&#x4E2A;&#x6570;</span><br><span class="line">	DexTypeItem : {</span><br><span class="line">		idx  u2,&#x6307;&#x5411;DexTypeId &#x7684;&#x7D22;&#x5F15;&#xFF0C;&#x63A5;&#x53E3;&#x7C7B;&#x578B;</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">##TODO &#x6CE8;&#x89E3;&#x7C7B;&#x7684;&#x89E3;&#x6790;(&#x5B9E;&#x5728;&#x662F;&#x592A;&#x591A;&#x4E86;)</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">classDataOff --&gt; DexClassData {</span><br><span class="line">    DexClassDataHeader header;</span><br><span class="line">    DexField*          staticFields;</span><br><span class="line">    DexField*          instanceFields;</span><br><span class="line">    DexMethod*         directMethods;</span><br><span class="line">    DexMethod*         virtualMethods;</span><br><span class="line">};</span><br><span class="line">header --&gt; struct DexClassDataHeader {</span><br><span class="line">    u4 staticFieldsSize;</span><br><span class="line">    u4 instanceFieldsSize;</span><br><span class="line">    u4 directMethodsSize;</span><br><span class="line">    u4 virtualMethodsSize;</span><br><span class="line">};</span><br><span class="line">/* expanded form of encoded_field */</span><br><span class="line">staticFields | instanceFields --&gt; </span><br><span class="line">struct DexField {</span><br><span class="line">    u4 fieldIdx;    /* index to a field_id_item */</span><br><span class="line">    u4 accessFlags;</span><br><span class="line">};</span><br><span class="line">/* expanded form of encoded_method */</span><br><span class="line">directMethods | virtualMethods</span><br><span class="line">struct DexMethod {</span><br><span class="line">    u4 methodIdx;    /* index to a method_id_item */</span><br><span class="line">    u4 accessFlags;</span><br><span class="line">    u4 codeOff;      /* file offset to a code_item */</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">codeOff --&gt; struct DexCode {</span><br><span class="line">    u2  registersSize;</span><br><span class="line">    u2  insSize;</span><br><span class="line">    u2  outsSize;</span><br><span class="line">    u2  triesSize;</span><br><span class="line">    u4  debugInfoOff;       /* file offset to debug info stream */</span><br><span class="line">    u4  insnsSize;          /* size of the insns array, in u2 units */</span><br><span class="line">    u2  insns[1];</span><br><span class="line">    /* followed by optional u2 padding */</span><br><span class="line">    /* followed by try_item[triesSize] */</span><br><span class="line">    /* followed by uleb128 handlersSize */</span><br><span class="line">    /* followed by catch_handler_item[handlersSize] */</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x6790;&#x4EE3;&#x7801;:</p>
+<p>&#x4EC5;&#x4EC5;&#x89E3;&#x6790;&#x5230;&#x4E86;&#x6BCF;&#x4E2A;&#x5B57;&#x6BB5;&#x7684;&#x504F;&#x79FB;&#xFF0C;&#x540E;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x4EE5;&#x540E;&#x6709;&#x673A;&#x4F1A;&#x5728;&#x8BE6;&#x7EC6;&#x6574;&#x7406;&#xFF0C;&#x6574;&#x7406;&#x4E0A;&#x7ED3;&#x6784;&#x68B3;&#x7406;&#x8FC7;&#x7A0B;</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_class_defs</span><span class="params">(self)</span>:</span></span><br><span class="line">    class_defs = []</span><br><span class="line">    class_defs_size = self.header_data[<span class="string">&apos;class_defs_size&apos;</span>]</span><br><span class="line">    class_defs_off = self.header_data[<span class="string">&apos;class_defs_off&apos;</span>]</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(class_defs_size):</span><br><span class="line">        class_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>):class_defs_off+(index*<span class="number">32</span>)+<span class="number">4</span>])[<span class="number">0</span>]</span><br><span class="line">        access_flags = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>)+<span class="number">4</span>:class_defs_off+(index*<span class="number">32</span>)+<span class="number">8</span>])[<span class="number">0</span>]</span><br><span class="line">        superclass_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>)+<span class="number">8</span>:class_defs_off+(index*<span class="number">32</span>)+<span class="number">12</span>])[<span class="number">0</span>]</span><br><span class="line">        interfaces_off = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>)+<span class="number">12</span>:class_defs_off+(index*<span class="number">32</span>)+<span class="number">16</span>])[<span class="number">0</span>]</span><br><span class="line">        source_file_idx = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>)+<span class="number">16</span>:class_defs_off+(index*<span class="number">32</span>)+<span class="number">20</span>])[<span class="number">0</span>]</span><br><span class="line">        annotations_off = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>)+<span class="number">20</span>:class_defs_off+(index*<span class="number">32</span>)+<span class="number">24</span>])[<span class="number">0</span>]</span><br><span class="line">        class_data_off = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>)+<span class="number">24</span>:class_defs_off+(index*<span class="number">32</span>)+<span class="number">28</span>])[<span class="number">0</span>]</span><br><span class="line">        static_values_off = unpack(<span class="string">&apos;&lt;L&apos;</span>,self.data[class_defs_off+(index*<span class="number">32</span>)+<span class="number">28</span>:class_defs_off+(index*<span class="number">32</span>)+<span class="number">32</span>])[<span class="number">0</span>]</span><br><span class="line">        class_defs.append({</span><br><span class="line">            <span class="string">&apos;class_idx&apos;</span>: class_idx,</span><br><span class="line">            <span class="string">&apos;access&apos;</span>: access_flags,</span><br><span class="line">            <span class="string">&apos;superclass_idx&apos;</span>: superclass_idx,</span><br><span class="line">            <span class="string">&apos;interfaces_off&apos;</span>: interfaces_off,</span><br><span class="line">            <span class="string">&apos;source_file_idx&apos;</span>: source_file_idx,</span><br><span class="line">            <span class="string">&apos;annotation_off&apos;</span>: annotations_off,</span><br><span class="line">            <span class="string">&apos;class_data_off&apos;</span>: class_data_off,</span><br><span class="line">            <span class="string">&apos;static_values_off&apos;</span>: static_values_off</span><br><span class="line">        })</span><br><span class="line">    <span class="keyword">return</span> class_defs_size,hex(class_defs_off), class_defs</span><br></pre></td></tr></table></figure>
+
+<p>&#x89E3;&#x6790;&#x7ED3;&#x679C;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class_def_id&#x4E2A;&#x6570;&#x4E3A;: 1	 </span><br><span class="line">&#x8D77;&#x59CB;&#x504F;&#x79FB;&#x4E3A;: 0x12c	</span><br><span class="line">&#x5185;&#x5BB9;&#x4E3A;:[{&apos;class_idx&apos;: 1, &apos;access&apos;: 1, &apos;superclass_idx&apos;: 3, &apos;interfaces_off&apos;: &apos;0x0&apos;, &apos;source_file_idx&apos;: 1, &apos;annotation_off&apos;: &apos;0x0&apos;, &apos;class_data_off&apos;: &apos;0x27b&apos;, &apos;static_values_off&apos;: &apos;0x0&apos;}]</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-&#x603B;&#x7ED3;"><a href="#3-&#x603B;&#x7ED3;" class="headerlink" title="3 &#x603B;&#x7ED3;"></a>3 &#x603B;&#x7ED3;</h2><p>&#x82B1;&#x4E86;&#x51E0;&#x5929;&#xFF0C;&#x91CD;&#x65B0;&#x68B3;&#x7406;&#x4E86;&#x4E00;&#x904D;Dex&#x6587;&#x4EF6;&#xFF0C;&#x5927;&#x6982;&#x662F;&#x6E05;&#x695A;&#x4E86;&#x4E2D;&#x95F4;&#x7684;&#x4E00;&#x4E2A;&#x6D41;&#x7A0B;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x540E;&#x7EED;&#x5B66;&#x4E60;&#x4E2D;&#x8FD8;&#x6709;&#x8BB8;&#x591A;&#x5730;&#x65B9;&#x503C;&#x5F97;&#x7EE7;&#x7EED;&#x6DF1;&#x5165;&#x5B66;&#x4E60;&#x7684;&#xFF0C;&#x6BD4;&#x5982;&#xFF1A;</p>
+<ul>
+<li>&#x4E3A;&#x4EC0;&#x4E48;&#x9700;&#x8981;DexMapList&#x6570;&#x636E;&#x7ED3;&#x6784;&#x6765;&#x505A;&#x4E00;&#x4E2A;map</li>
+<li>&#x5728;<code>classDef</code>&#x540E;&#x9762;&#x7684;&#x6570;&#x636E;&#x533A;&#x5F00;&#x59CB;&#x7684;&#x4F4D;&#x7F6E;&#x5B58;&#x50A8;&#x7684;&#x662F;&#x4EC0;&#x4E48;</li>
+<li>&#x7B7E;&#x540D;&#x9A8C;&#x8BC1;&#x7684;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x662F;&#x4EC0;&#x4E48;&#x6837;&#x7684;</li>
+<li>MultiDex&#x7684;&#x600E;&#x4E48;&#x5206;&#x6790;</li>
+<li>opcode&#x89E3;&#x6790;&#x8FC7;&#x7A0B;&#x7406;&#x89E3;</li>
+</ul>
+<h2 id="&#x53C2;&#x8003;&#x8D44;&#x6599;"><a href="#&#x53C2;&#x8003;&#x8D44;&#x6599;" class="headerlink" title="&#x53C2;&#x8003;&#x8D44;&#x6599;"></a>&#x53C2;&#x8003;&#x8D44;&#x6599;</h2><p>[1] Android &#x8F6F;&#x4EF6;&#x5B89;&#x5168;&#x6743;&#x5A01;&#x6307;&#x5357;</p>
+<p>[2] <a href="https://source.android.google.cn/devices/tech/dalvik/dex-format" target="_blank" rel="noopener">&#x5B98;&#x65B9;&#x6587;&#x6863;</a></p>
+<p>[3] <a href="https://www.kanxue.com/chm.htm?id=14879&amp;pid=node1001302" target="_blank" rel="noopener">Dex&#x6587;&#x4EF6;&#x7ED3;&#x6784;&#x5B66;&#x4E60;,&#x987A;&#x4FBF;&#x8FD8;&#x5199;&#x4E86;&#x4E00;&#x4E2A;&#x89E3;&#x6790;Dex&#x6587;&#x4EF6;&#x7684;&#x5C0F;&#x7A0B;&#x5E8F;.</a></p>
+<p>[3] <a href="https://blog.51cto.com/devilogic/1198916" target="_blank" rel="noopener">51CTO&#x4E0A;&#x4E00;&#x7BC7;&#x5173;&#x4E8E;dexfile&#x76F8;&#x5173;&#x6E90;&#x7801;&#x7684;&#x5206;&#x6790;</a></p>
+<p>[4] <a href="https://github.com/callmejacob/dexfactory" target="_blank" rel="noopener">github&#x4E0A;&#x4E00;&#x4E2A;python&#x5199;&#x7684;dex&#x6587;&#x4EF6;&#x89E3;&#x6790;&#x5668;</a></p>
+<p>[5] <a href="https://tech.youzan.com/qian-tan-android-dexwen-jian/" target="_blank" rel="noopener">&#x6D45;&#x8C08; Android Dex &#x6587;&#x4EF6;</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag"># 逆向</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/16/分析Android程序/" rel="next" title="分析Android程序">
+                <i class="fa fa-chevron-left"></i> 分析Android程序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DEX文件解析"><span class="nav-number">1.</span> <span class="nav-text">DEX文件解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-DEX文件整体结构"><span class="nav-number">1.1.</span> <span class="nav-text">1 DEX文件整体结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Dex解析过程"><span class="nav-number">1.2.</span> <span class="nav-text">2 Dex解析过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-文件头-Dexheader"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 文件头 Dexheader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-DexMapList"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 DexMapList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-DexStringId"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 DexStringId</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-DexTypeID"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 DexTypeID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-DexProtoID"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 DexProtoID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-DexFieldID"><span class="nav-number">1.2.6.</span> <span class="nav-text">2.6 DexFieldID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-DexMethodID"><span class="nav-number">1.2.7.</span> <span class="nav-text">2.7 DexMethodID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-DexClassID"><span class="nav-number">1.2.8.</span> <span class="nav-text">2.8 DexClassID</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-总结"><span class="nav-number">1.3.</span> <span class="nav-text">3 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.4.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/17/DEX文件解析/';
+          this.page.identifier = '2020/03/17/DEX文件解析/';
+          this.page.title = 'DEX文件解析';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
