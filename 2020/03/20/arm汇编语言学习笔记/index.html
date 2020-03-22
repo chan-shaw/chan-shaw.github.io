@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="x86,汇编语言">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="arm汇编语言学习">
+<meta name="keywords" content="x86,汇编语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="arm汇编语言学习笔记">
+<meta property="og:url" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="arm汇编语言学习">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584694475144.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/UM9UDR6JG3B2MR6.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/E7YWA2T5KHKRX48.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/registers.png.pagespeed.ce.X3aWfmEHDn.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/arm-vs-x86.png.pagespeed.ce.i0t9LSiqml.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584886176648.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584886209083.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584718803127.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/5GUBK76KEGQPC7J.jpg">
+<meta property="og:image" content="https://azeria-labs.com/wp-content/uploads/2017/04/ldr1-gif2.gif">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/pc-relative1-1.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/ldr1-1gif2.gif">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/ldr-reg-gif1-1.gif">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/ldr-shift1.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584860897620.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584861973432.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584865450580.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/803510_N6X3C3SQ8BUNYNN.gif">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/Users/82540/AppData/Roaming/Typora/typora-user-images/1584866523726.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/stack2-2-gif.gif.pagespeed.ce.6o3j450o2l.gif">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/Users/82540/AppData/Roaming/Typora/typora-user-images/1584867505560.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/nonleaf-func-gif5-3.gif.pagespeed.ce.I2bb_3KRnx.gif">
+<meta property="og:updated_time" content="2020-03-22T15:01:58.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="arm汇编语言学习笔记">
+<meta name="twitter:description" content="arm汇编语言学习">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/1584694475144.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/">
+
+
+
+
+
+  <title>arm汇编语言学习笔记 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/arm汇编语言学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">arm汇编语言学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-20T15:38:00+08:00">
+                2020-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/20/arm汇编语言学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/20/arm汇编语言学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/03/20/arm汇编语言学习笔记/" class="leancloud_visitors" data-flag-title="arm汇编语言学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  arm汇编语言学习
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ARM-&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;"><a href="#ARM-&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;" class="headerlink" title="ARM &#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;"></a>ARM &#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;</h1><blockquote>
+<p> &#x5728;&#x4E4B;&#x524D;&#x7FFB;&#x8BD1;&#x300A;x86&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5BFC;&#x8BBA;&#x300B;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5927;&#x81F4;&#x4E0A;&#x91CD;&#x65B0;&#x68B3;&#x7406;&#x4E86;&#x4E00;&#x4E0B;&#x6C47;&#x7F16;&#x7684;&#x8BED;&#x8A00;&#x7684;&#x601D;&#x60F3;&#x3002;&#x4F46;&#x662F;&#x8FD9;&#x51E0;&#x5929;&#x5F00;&#x59CB;&#x5B66;&#x4E60;Android NDK&#x7684;&#x65F6;&#x5019;&#x8FD8;&#x662F;&#x5BF9;arm&#x4E0A;&#x7684;&#x6307;&#x4EE4;&#x96C6;&#x4E00;&#x77E5;&#x534A;&#x89E3;&#xFF0C;&#x6240;&#x4EE5;&#x51B3;&#x5B9A;&#x4E5F;&#x505A;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x68B3;&#x7406;&#xFF0C;&#x53C2;&#x8003;&#x8D44;&#x6599;&#x57FA;&#x4E8E;<a href="https://azeria-labs.com" target="_blank" rel="noopener">AZERIA lab</a>&#x7684;&#x300A;Introduction to arm assembly basics&#x300B;&#x7CFB;&#x5217;&#x6587;&#x7AE0;&#x3002;&#x4E0B;&#x9762;&#x5F00;&#x59CB;&#x5427;</p>
+</blockquote>
+<h2 id="1-ARM-&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x7B80;&#x4ECB;"><a href="#1-ARM-&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x7B80;&#x4ECB;" class="headerlink" title="1 ARM &#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x7B80;&#x4ECB;"></a>1 ARM &#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x7B80;&#x4ECB;</h2><p>&#x6307;&#x4EE4;&#x96C6;&#x67B6;&#x6784;:</p>
+<ul>
+<li>Inter&#x662F;&#x4E00;&#x4E2A;CISC(complex instruction set computing)&#x590D;&#x6742;&#x6307;&#x4EE4;&#x96C6;&#x5904;&#x7406;&#x5668;&#xFF0C;&#x5177;&#x6709;&#x529F;&#x80FD;&#x66F4;&#x52A0;&#x5E9E;&#x5927;&#xFF0C;&#x66F4;&#x52A0;&#x4E30;&#x5BCC;&#x7684;&#x6307;&#x4EE4;&#x96C6;&#x3002;&#x4EE5;&#x53CA;&#x66F4;&#x52A0;&#x590D;&#x6742;&#x7684;&#x64CD;&#x4F5C;&#x548C;&#x5BFB;&#x5740;&#x65B9;&#x5F0F;&#xFF0C;&#x4E14;&#x5BC4;&#x5B58;&#x5668;&#x66F4;&#x5C11;&#x3002;&#x57FA;&#x4E8E;&#x6808;&#x67B6;&#x6784;&#x3002;</li>
+<li>arm&#x662F;&#x4E00;&#x4E2A;RISC(Reduced instruction set computing)&#x7CBE;&#x7B80;&#x6307;&#x4EE4;&#x96C6;&#x5904;&#x7406;&#x5668;&#xFF0C;&#x5BC4;&#x5B58;&#x5668;&#x6570;&#x91CF;&#x591A;&#xFF0C;&#x6307;&#x4EE4;&#x96C6;&#x7B80;&#x5355;&#xFF0C;&#x57FA;&#x4E8E;&#x5BC4;&#x5B58;&#x5668;&#x67B6;&#x6784;&#xFF0C;&#x4F7F;&#x7528;load/store&#x7ED3;&#x6784;&#x8BBF;&#x95EE;&#x5B58;&#x50A8;&#x5668;&#x3002;</li>
+<li>RISC &#x6BD4;&#x4E4B;&#x4E8E;CISC&#x4E3B;&#x8981;&#x662F;&#x529B;&#x56FE;&#x4FDD;&#x6301;&#x5404;opcode&#x7684;&#x957F;&#x5EA6;&#x76F8;&#x7B49;&#xFF0C;&#x5728;&#x6700;&#x5F00;&#x59CB;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6240;&#x6709;&#x6307;&#x4EE4;&#x7684;&#x957F;&#x5EA6;&#x90FD;&#x662F;4&#x4E2A;&#x5B57;&#x8282;&#x7684;&#x3002;</li>
+<li>RISC&#x6307;&#x4EE4;&#x53EF;&#x4EE5;&#x66F4;&#x5FEB;&#x7684;&#x88AB;&#x6267;&#x884C;&#xFF0C;&#x51CF;&#x5C11;&#x4E86;&#x6BCF;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x5360;&#x7528;CPU&#x7684;&#x65F6;&#x949F;&#x5468;&#x671F;&#xFF0C;&#x4F46;&#x5B83;&#x8F83;&#x5C11;&#x7684;&#x6307;&#x4EE4;&#x589E;&#x52A0;&#x4E86;&#x7F16;&#x8BD1;&#x5668;&#x7684;&#x590D;&#x6742;&#x6027;</li>
+<li>arm&#x6307;&#x4EE4;&#x96C6;&#x53C8;&#x5206;&#x4E3A;&#x4E09;&#x7C7B;&#xFF0C;ARM&#x6A21;&#x5F0F;&#xFF0C;Thumb&#x6A21;&#x5F0F;&#xFF0C;ARM64&#x6A21;&#x5F0F;</li>
+</ul>
+<p>&#x5728;arm&#x4E2D;&#xFF0C;&#x7531;&#x4E8E;&#x53EA;&#x5904;&#x7406;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x4E14;&#x4F7F;&#x7528;load/store&#x7ED3;&#x6784;&#x8BBF;&#x95EE;&#x5B58;&#x50A8;&#x5668;&#xFF0C;&#x6240;&#x4EE5;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x589E;&#x52A0;&#x67D0;&#x4E00;&#x4E2A;&#x5185;&#x5B58;&#x5730;&#x5740;&#x4E2D;&#x7684;&#x503C;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x81F3;&#x5C11;&#x4F7F;&#x7528;&#x4E09;&#x79CD;&#x7C7B;&#x578B;&#x7684;&#x6307;&#x4EE4;(load&#x4ECE;&#x5185;&#x5B58;&#x4E2D;&#x53D6;&#x503C;&#x5B58;&#x5165;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;add&#x52A0;&#x6CD5;&#x6307;&#x4EE4;&#x8FDB;&#x884C;&#x52A0;&#x6CD5;&#x8FD0;&#x7B97;,store&#x53C8;&#x5C06;&#x503C;&#x4ECE;&#x5BC4;&#x5B58;&#x5668;&#x5B58;&#x5230;&#x5185;&#x5B58;&#x79CD;)</p>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/1584694475144.png" alt="1584694475144"></p>
+<p>arm&#x6307;&#x4EE4;&#x96C6;&#x53C8;&#x4E0D;&#x540C;&#x7684;&#x7248;&#x672C;&#xFF0C;&#x4EE5;&#x4E0A;&#x7684;&#x8868;&#x4E2D;&#x5BF9;&#x5E94;&#x7684;&#x662F;arm&#x6307;&#x4EE4;&#x96C6;&#x7248;&#x672C;&#x548C;&#x5904;&#x7406;&#x5668;&#x7248;&#x672C;&#x4E4B;&#x95F4;&#x7684;&#x6620;&#x5C04;&#x5173;&#x7CFB;</p>
+<p>&#x5F53;&#x6211;&#x4EEC;&#x7F16;&#x5199;&#x597D;&#x4E86;&#x6C47;&#x7F16;&#x4E4B;&#x540E;&#xFF0C;&#x540C;&#x6837;&#x9700;&#x8981;&#x6C47;&#x7F16;&#xFF0C;&#x94FE;&#x63A5;&#xFF0C;&#x7136;&#x540E;&#x6267;&#x884C;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ as program.s -o program.o   <span class="comment"># &#x6C47;&#x7F16;</span></span><br><span class="line">$ ld program.o -o program     <span class="comment"># &#x94FE;&#x63A5;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-ARM&#x6570;&#x636E;&#x7C7B;&#x578B;&#x548C;&#x5BC4;&#x5B58;&#x5668;"><a href="#2-ARM&#x6570;&#x636E;&#x7C7B;&#x578B;&#x548C;&#x5BC4;&#x5B58;&#x5668;" class="headerlink" title="2 ARM&#x6570;&#x636E;&#x7C7B;&#x578B;&#x548C;&#x5BC4;&#x5B58;&#x5668;"></a>2 ARM&#x6570;&#x636E;&#x7C7B;&#x578B;&#x548C;&#x5BC4;&#x5B58;&#x5668;</h2><h3 id="2-1-&#x6570;&#x636E;&#x7C7B;&#x578B;"><a href="#2-1-&#x6570;&#x636E;&#x7C7B;&#x578B;" class="headerlink" title="2.1 &#x6570;&#x636E;&#x7C7B;&#x578B;"></a>2.1 &#x6570;&#x636E;&#x7C7B;&#x578B;</h3><p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/UM9UDR6JG3B2MR6.jpg" alt="img"> </p>
+<p>ARM&#x4E2D;&#x7684;&#x6570;&#x636E;&#x540C;&#x6837;&#x53EF;&#x5206;&#x4E3A;&#x6709;&#x7B26;&#x53F7;&#x6570;&#x548C;&#x65E0;&#x7B26;&#x53F7;&#x6570;&#x4E24;&#x79CD;&#xFF0C;&#x6309;&#x5B58;&#x50A8;&#x7A7A;&#x95F4;&#x53C8;&#x53EF;&#x5206;&#x4E3A;&#x5B57;&#xFF0C;&#x534A;&#x5B57;&#xFF0C;&#x5B57;&#x8282;&#x4E09;&#x79CD;&#x7C7B;&#x578B;&#xFF0C;1&#x4E2A;&#x5B57;&#x8282;8&#x4F4D;&#xFF0C;&#x4E00;&#x4E2A;&#x534A;&#x5B57;16&#x4F4D;&#xFF0C;&#x4E00;&#x4E2A;&#x5B57;32&#x4F4D;&#x3002;</p>
+<p>&#x4E0B;&#x9762;&#x662F;&#x6570;&#x636E;&#x76F8;&#x5173;&#x6307;&#x4EE4;&#x96C6;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ldr   # Load Word</span><br><span class="line">ldrh  # Load unsigned Half Word</span><br><span class="line">ldrsh # Load signed Half Word</span><br><span class="line">ldrb  # Load unsigned Byte</span><br><span class="line">ldrsb # Load signed Bytes</span><br><span class="line"></span><br><span class="line">str   # Store Word</span><br><span class="line">strh  # Store unsigned Half Word</span><br><span class="line">strsh # Store signed Half Word</span><br><span class="line">strb  # Store unsigned Byte</span><br><span class="line">strsb # Store signed Byte</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-&#x5B57;&#x8282;&#x5E8F;"><a href="#2-2-&#x5B57;&#x8282;&#x5E8F;" class="headerlink" title="2.2 &#x5B57;&#x8282;&#x5E8F;"></a>2.2 &#x5B57;&#x8282;&#x5E8F;</h3><p>&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x5B57;&#x8282;&#x5E8F;&#x4E00;&#x822C;&#x6709;&#x4E24;&#x79CD;&#xFF0C;&#x5C0F;&#x7AEF;(Little-Endian,LE)&#x5B57;&#x8282;&#x5E8F;&#xFF0C;&#x548C;&#x5927;&#x7AEF;(Big_endian,BE)&#x5B57;&#x8282;&#x5E8F;&#xFF0C;x86&#x4F7F;&#x7528;&#x7684;&#x662F;&#x5C0F;&#x7AEF;&#x5B57;&#x8282;&#x5E8F;&#xFF0C;arm&#x5728;&#x7B2C;&#x4E09;&#x7248;&#x4E4B;&#x524D;&#x662F;&#x5927;&#x7AEF;&#x5B57;&#x8282;&#x5E8F;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x4E4B;&#x540E;&#x53EF;&#x4EE5;&#x8BBE;&#x7F6E;&#x5207;&#x6362;&#x5B57;&#x8282;&#x5E8F;&#x4E86;&#x3002;&#x5728;&#x7A0B;&#x5E8F;&#x72B6;&#x6001;&#x5BC4;&#x5B58;&#x5668;(CPSR)&#x7684;&#x7B2C;9&#x4F4D;E(ndian)&#x4F4D;&#x63A7;&#x5236;.<br> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/E7YWA2T5KHKRX48.jpg" alt="img"> </p>
+<h3 id="2-3-ARM-&#x5BC4;&#x5B58;&#x5668;"><a href="#2-3-ARM-&#x5BC4;&#x5B58;&#x5668;" class="headerlink" title="2.3 ARM &#x5BC4;&#x5B58;&#x5668;"></a>2.3 ARM &#x5BC4;&#x5B58;&#x5668;</h3><p>ARM&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x6570;&#x91CF;&#x53D6;&#x51B3;&#x4E8E;ARM&#x7684;&#x7248;&#x672C;&#xFF0C;&#x6839;&#x636E;ARM&#x53C2;&#x8003;&#x624B;&#x518C;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#xFF0C;&#x6709;30&#x4E2A;32&#x4F4D;&#x7684;&#x901A;&#x7528;&#x5BC4;&#x5B58;&#x5668;(&#x9664;ARMv6-M&#x548C;ARMv7-M&#x7684;&#x5904;&#x7406;&#x5668;&#x4E4B;&#x5916;)&#x3002;&#x5728;&#x8FD9;&#x91CC;&#xFF0C;&#x6211;&#x4EEC;&#x5148;&#x5173;&#x6CE8;&#x5728;&#x4EFB;&#x4F55;&#x6A21;&#x5F0F;&#x4E0B;&#x90FD;&#x80FD;&#x8BBF;&#x95EE;&#x5230;&#x7684;&#x5BC4;&#x5B58;&#x5668;R0-R15&#x3002;&#x8FD9;16&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x53EF;&#x4EE5;&#x88AB;&#x5206;&#x4E3A;&#x4E24;&#x7EC4;&#xFF0C;&#x4E00;&#x79CD;&#x662F;&#x901A;&#x7528;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x4E00;&#x79CD;&#x662F;&#x6709;&#x8FD9;&#x7279;&#x6B8A;&#x7528;&#x9014;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x3002;</p>
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/registers.png.pagespeed.ce.X3aWfmEHDn.png" alt="img"> </p>
+<p>&#x4E0B;&#x9762;&#x8FD9;&#x5F20;&#x56FE;&#x662F;ARM&#x5BC4;&#x5B58;&#x5668;&#x548C;intel&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x5BF9;&#x6BD4;</p>
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/arm-vs-x86.png.pagespeed.ce.i0t9LSiqml.png" alt="img"> </p>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x4ECE;&#x524D;&#x5230;&#x540E;&#xFF0C;&#x4F9D;&#x6B21;&#x662F;&#x7D2F;&#x52A0;&#x5668;&#xFF0C;&#x57FA;&#x5740;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x8BA1;&#x6570;&#x5668;&#xFF0C;&#x6570;&#x636E;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x6808;&#x5E27;&#xFF0C;&#x6808;&#x4F4E;&#xFF0C;IP&#xFF0C;&#x72B6;&#x6001;&#x5BC4;&#x5B58;&#x5668;,&#x5F53;&#x7136;&#xFF0C;&#x8FD9;&#x4E48;&#x5C06;&#x662F;&#x4E3A;&#x4E86;&#x4FBF;&#x4E8E;&#x8BB0;&#x5FC6;&#xFF0C;&#x5230;&#x73B0;&#x5728;&#x597D;&#x50CF;&#x6BCF;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x529F;&#x80FD;&#x5DF2;&#x7ECF;&#x4E0D;&#x518D;&#x552F;&#x4E00;&#x3002;</p>
+<p>R0-R12&#x901A;&#x5E38;&#x5B58;&#x653E;&#x5728;&#x8FD0;&#x7B97;&#x8FC7;&#x7A0B;&#x4E2D;&#x4EA7;&#x751F;&#x7684;&#x4E34;&#x65F6;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x6307;&#x9488;&#x7B49;&#x7B49;&#x3002;&#x6B64;&#x5916;&#xFF0C;&#x5728;ARM&#x7684;&#x8C03;&#x7528;&#x7EA6;&#x5B9A;&#x4E2D;&#x89C4;&#x5B9A;,&#x53C2;&#x6570;&#x7684;&#x524D;4&#x4E2A;&#x5B58;&#x50A8;&#x5728;R0-R3&#x4E2D;&#xFF0C;&#x4E4B;&#x540E;&#x7684;&#x5B58;&#x50A8;&#x5728;&#x6808;&#x4E2D;&#x3002;</p>
+<ul>
+<li><p>R0&#x7528;&#x6765;&#x4F20;&#x9012;&#x8FD4;&#x56DE;&#x503C;&#x3002;</p>
+</li>
+<li><p>FP(R11)&#x7528;&#x6765;&#x5B58;&#x50A8;&#x7CFB;&#x7EDF;&#x51FD;&#x6570;&#x8C03;&#x7528;&#x503C;&#xFF0C;&#x4E5F;&#x76F8;&#x5F53;&#x4E8E;&#x662F;&#x51FD;&#x6570;&#x7684;&#x6808;&#x5E27;</p>
+</li>
+<li><p>SP(R13)&#x5BC4;&#x5B58;&#x5668;&#x5B58;&#x50A8;&#x6808;&#x9876;&#x3002;</p>
+</li>
+<li><p>LR(R14)&#x5BC4;&#x5B58;&#x5668;&#x7528;&#x6765;&#x5B58;&#x50A8;&#x51FD;&#x6570;&#x7684;&#x8FD4;&#x56DE;&#x5730;&#x5740;</p>
+</li>
+<li><p>PC(R15) &#x5BC4;&#x5B58;&#x5668;&#x4F1A;&#x81EA;&#x52A8;&#x589E;&#x52A0;&#x6267;&#x884C;&#x6307;&#x4EE4;&#x7684;&#x5927;&#x5C0F;&#xFF0C;&#x5728;ARM&#x72B6;&#x6001;&#x4E0B;&#x4E00;&#x76F4;&#x90FD;&#x662F;4&#x4E2A;&#x5B57;&#x8282;&#xFF0C;&#x5728;Thumb&#x6A21;&#x5F0F;&#x4E0B;&#xFF0C;&#x5927;&#x5C0F;&#x59CB;&#x7EC8;&#x4E3A;2&#x4E2A;&#x5B57;&#x8282;&#x3002;&#x5F53;&#x6267;&#x884C;&#x5206;&#x652F;&#x8F6C;&#x79FB;&#x6307;&#x4EE4;&#x7684;&#x65F6;&#x5019;&#xFF0C;PC&#x4F1A;&#x4FDD;&#x5B58;&#x76EE;&#x7684;&#x5730;&#x5740;?&#x5728;&#x6267;&#x884C;&#x671F;&#x95F4;&#xFF0C;ARM&#x6A21;&#x5F0F;&#x4E0B;PC&#x5B58;&#x50A8;&#x7684;&#x5F53;&#x524D;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;+8(&#x4E0B;&#x9762;&#x7684;&#x7B2C;&#x4E8C;&#x6761;&#x6307;&#x4EE4;&#x5730;&#x5740;),Thumb&#x6A21;&#x5F0F;&#x4E0B;&#x5B58;&#x50A8;&#x5F53;&#x524D;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;+4,&#x548C;x86&#x7684;PC&#x59CB;&#x7EC8;&#x5B58;&#x50A8;&#x4E0B;&#x4E00;&#x6761;&#x5C06;&#x8981;&#x6267;&#x884C;&#x7684;&#x6307;&#x4EE4;&#x5730;&#x5740;&#x662F;&#x4E0D;&#x4E00;&#x6837;&#x7684;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.section .text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	mov r0, pc</span><br><span class="line">	mov r1, #2</span><br><span class="line">	add r2, r1, r1</span><br><span class="line">	bkpt</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$r0 0x00000000   $r1 0x00000000   $r2 0x00000000   $r3 0x00000000 </span><br><span class="line">$r4 0x00000000   $r5 0x00000000   $r6 0x00000000   $r7 0x00000000 </span><br><span class="line">$r8 0x00000000   $r9 0x00000000   $r10 0x00000000  $r11 0x00000000 </span><br><span class="line">$r12 0x00000000  $sp 0xbefff7e0   $lr 0x00000000   $pc 0x00008054 </span><br><span class="line">$cpsr 0x00000010 </span><br><span class="line"></span><br><span class="line">0x8054 &lt;_start&gt; mov r0, pc     &lt;- $pc</span><br><span class="line">0x8058 &lt;_start+4&gt; mov r0, #2</span><br><span class="line">0x805c &lt;_start+8&gt; add r1, r0, r0</span><br><span class="line">0x8060 &lt;_start+12&gt; bkpt 0x0000</span><br><span class="line">0x8064 andeq r1, r0, r1, asr #10</span><br><span class="line">0x8068 cmnvs r5, r0, lsl #2</span><br><span class="line">0x806c tsteq r0, r2, ror #18</span><br><span class="line">0x8070 andeq r0, r0, r11</span><br><span class="line">0x8074 tsteq r8, r6, lsl #6</span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;&#x6700;&#x5F00;&#x59CB;&#x7684;&#x65F6;&#x5019;&#xFF0C;pc&#x5B58;&#x653E;&#x7684;&#x662F;&#x5F53;&#x524D;&#x5C06;&#x8981;&#x53D6;&#x6307;&#x7684;&#x6307;&#x4EE4;&#x5730;&#x5740; <code>0x8054</code></p>
+<p>&#x5728;&#x8FD0;&#x884C;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x671F;&#x671B;&#x7684;&#x8F93;&#x51FA;&#x5E94;&#x8BE5;&#x662F; <code>0x8054</code>&#xFF0C;&#x4F46;&#x5B9E;&#x9645;&#x4E0A;&#xFF0C;&#x8F93;&#x51FA;&#x7684;&#x662F;<code>0x805c</code>&#x3002;</p>
+<p>&#x7531;&#x4E8E;&#x8001;&#x7248;&#x672C;&#x7684;ARM&#x5904;&#x7406;&#x5668;&#x603B;&#x662F;&#x83B7;&#x53D6;&#x5F53;&#x524D;&#x5DF2;&#x7ECF;&#x6267;&#x884C;&#x7684;&#x6307;&#x4EE4;&#x7684;&#x540E;&#x4E24;&#x6761;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;&#xFF0C;ARM&#x4FDD;&#x7559;&#x8FD9;&#x4E00;&#x7279;&#x6027;&#x7684;&#x539F;&#x56E0;&#x4E5F;&#x662F;&#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;&#x548C;&#x65E9;&#x671F;&#x5904;&#x7406;&#x5668;&#x7684;&#x517C;&#x5BB9;&#x6027;</p>
+</li>
+<li><p>CSPR current program status register &#x5F53;&#x524D;&#x7A0B;&#x5E8F;&#x72B6;&#x6001;&#x5BC4;&#x5B58;&#x5668;</p>
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/1584886176648.png" alt="1584886176648"> </p>
+<p>&#x5BF9;&#x5E94;&#x7684;&#x542B;&#x4E49;&#x5982;&#x4E0B;:</p>
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/1584886209083.png" alt="1584886209083"> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmp r1, r0; 1-2 = -1 N = 1</span><br><span class="line">cmp r1, r0; 2-2 = 0  Z = 1</span><br><span class="line">cmp r1, r0; 4-2 = 2  C = 1 (&#x51CF;&#x6CD5;&#x662F;&#x8865;&#x7801;&#x8BA1;&#x7B97;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x662F; [4]&#x8865; + [-2]&#x8865;,&#x6709;&#x8FDB;&#x4F4D;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>N - &#x8BA1;&#x7B97;&#x7ED3;&#x679C;&#x4E3A;&#x8D1F;&#x6570;</p>
+</li>
+<li><p>Z - &#x8BA1;&#x7B97;&#x7ED3;&#x679C;&#x4E3A;0</p>
+</li>
+<li><p>C - &#x8BA1;&#x7B97;&#x7ED3;&#x679C;&#x6709;&#x8FDB;&#x4F4D;</p>
+<ul>
+<li>&#x5982;&#x679C;&#x8BA1;&#x7B97;&#x52A0;&#x6CD5;&#x7ED3;&#x679C;&#x5927;&#x4E8E;$2^{32}$</li>
+<li>&#x8BA1;&#x7B97;&#x51CF;&#x6CD5;&#x7ED3;&#x679C;&#x4E3A;&#x975E;&#x8D1F;&#x6570;</li>
+<li>&#x5728;&#x8D4B;&#x503C;&#x64CD;&#x4F5C;&#x6216;&#x8005;&#x903B;&#x8F91;&#x6307;&#x4EE4;&#x4E2D;&#xFF0C;&#x8FDB;&#x884C;&#x5185;&#x8054;&#x6876;&#x5F0F;&#x79FB;&#x4F4D;&#x64CD;&#x4F5C;&#x7684;&#x7ED3;&#x679C; </li>
+</ul>
+</li>
+<li><p>V - &#x8BA1;&#x7B97;&#x7ED3;&#x679C;&#x6709;&#x6EA2;&#x51FA;</p>
+<ul>
+<li>&#x5F53;&#x52A0;&#x6CD5;/&#x51CF;&#x6CD5;/&#x6BD4;&#x8F83;&#x6307;&#x4EE4;&#x7ED3;&#x679C;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;$2^{31}$&#x6216;&#x8005;&#x5C0F;&#x4E8E;&#x7B49;&#x4E8E;$-2^{31}$&#x4F1A;&#x6EA2;&#x51FA;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-ARM-&#x6307;&#x4EE4;&#x96C6;"><a href="#3-ARM-&#x6307;&#x4EE4;&#x96C6;" class="headerlink" title="3 ARM &#x6307;&#x4EE4;&#x96C6;"></a>3 ARM &#x6307;&#x4EE4;&#x96C6;</h2><h3 id="3-1-ARM&#x548C;Thumb"><a href="#3-1-ARM&#x548C;Thumb" class="headerlink" title="3.1 ARM&#x548C;Thumb"></a>3.1 ARM&#x548C;Thumb</h3><p>ARM&#x6709;&#x4E24;&#x79CD;&#x4E3B;&#x8981;&#x7684;&#x72B6;&#x6001;&#xFF0C;ARM&#x548C;Thumb&#x6A21;&#x5F0F;&#xFF0C;&#x4E24;&#x79CD;&#x72B6;&#x6001;&#x5728;&#x6240;&#x6709;&#x7684;&#x6743;&#x9650;&#x4E0B;&#x90FD;&#x53EF;&#x4EE5;&#x8FD0;&#x884C;&#x3002;</p>
+<p>&#x5728;ARM&#x72B6;&#x6001;&#x4E0B;&#x6307;&#x4EE4;&#x96C6;&#x90FD;&#x662F;32&#x4F4D;&#x7684;&#xFF0C;&#x800C;Thumb&#x6A21;&#x5F0F;&#x4E0B;&#x662F;16&#x4F4D;&#x6216;&#x8005;32&#x4F4D;&#x7684;&#x3002;&#x9700;&#x8981;&#x77E5;&#x9053;&#x5728;&#x54EA;&#x4E9B;&#x5730;&#x65B9;&#x4F7F;&#x7528;Thumb&#x4EE3;&#x66FF;ARM&#x3002;</p>
+<p>&#x5F15;&#x5165;Thumb&#x589E;&#x5F3A;&#x6307;&#x4EE4;&#x96C6;&#x4E4B;&#x540E;&#xFF0C;&#x8FD8;&#x9700;&#x8981;&#x4E86;&#x89E3;&#x5230;&#x81EA;&#x5DF1;&#x7684;&#x8BBE;&#x5907;&#x652F;&#x6301;&#x7684;&#x662F;&#x54EA;&#x4E00;&#x79CD;&#xFF0C;&#x5E76;&#x8FDB;&#x884C;&#x76F8;&#x5E94;&#x7684;&#x8C03;&#x6574;&#x3002;</p>
+<p>ARM&#x548C;Thumb&#x7684;&#x4E0D;&#x540C;&#xFF1A;</p>
+<ul>
+<li>&#x6761;&#x4EF6;&#x6267;&#x884C;: ARM&#x72B6;&#x6001;&#x4E0B;&#x6240;&#x6709;&#x7684;&#x6307;&#x4EE4;&#x90FD;&#x652F;&#x6301;&#x6761;&#x4EF6;&#x6267;&#x884C;&#xFF0C;&#x67D0;&#x4E9B;ARM&#x5904;&#x7406;&#x5668;&#x7248;&#x672C;&#x5141;&#x8BB8;&#x4F7F;&#x7528;IT&#x6307;&#x4EE4;&#x5728;Thumb&#x4E2D;&#x6709;&#x6761;&#x4EF6;&#x6267;&#x884C; &#xFF0C;&#x6761;&#x4EF6;&#x6267;&#x884C;&#x4F1A;&#x6709;&#x66F4;&#x9AD8;&#x7684;&#x4EE3;&#x7801;&#x5BC6;&#x5EA6;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x51CF;&#x5C11;&#x4E86;&#x8981;&#x6267;&#x884C;&#x7684;&#x6307;&#x4EE4;&#x6570;&#x91CF;&#x5E76;&#x51CF;&#x5C11;&#x4E86;&#x6602;&#x8D35;&#x7684;&#x5206;&#x652F;&#x6307;&#x4EE4;&#x6570;&#x91CF;&#x3002;</li>
+<li>32&#x4F4D;&#x7684;ARM&#x548C;Thumb&#x6307;&#x4EE4;&#x96C6;&#xFF1A;Thumb&#x6307;&#x4EE4;&#x96C6;&#x6709;&#x4E00;&#x4E2A;.w&#x540E;&#x7F00;</li>
+<li>ARM&#x6A21;&#x5F0F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x6876;&#x4F4D;&#x79FB;&#x6307;&#x4EE4;&#xFF1A;&#x5B83;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x5C06;&#x591A;&#x4E2A;&#x6307;&#x4EE4;&#x7F29;&#x5C0F;&#x4E3A;1&#x4E2A;&#xFF0C;&#x4F8B;&#x5982;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4E00;&#x6761;&#x6307;&#x4EE4;<code>mov R1, R0, R0, LSL#1</code>&#x6765;&#x4EE3;&#x66FF;&#x4F7F;&#x7528;&#x4E24;&#x4E2A;&#x6307;&#x4EE4;&#x6267;&#x884C;&#x4E00;&#x6B21;&#x4E58;&#x6CD5;&#xFF08;&#x5C06;&#x5BC4;&#x5B58;&#x5668;&#x91CC;&#x7684;&#x6570;&#x4E58;&#x4EE5;2&#x5E76;&#x5C06;&#x5B83;&#x5B58;&#x50A8;&#x5230;&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;</li>
+</ul>
+<p>&#x5207;&#x6362;&#x5904;&#x7406;&#x5668;&#x7684;&#x6267;&#x884C;&#x72B6;&#x6001;&#x4EE5;&#x4E0B;&#x4E24;&#x4E2A;&#x6761;&#x4EF6;&#x5FC5;&#x987B;&#x6EE1;&#x8DB3;:</p>
+<ol>
+<li><p>&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5206;&#x652F;&#x6307;&#x4EE4;BX&#xFF08;&#x5206;&#x652F;&#x548C;&#x4EA4;&#x6362;&#xFF09;&#x6216;BLX&#xFF08;&#x5206;&#x652F;&#xFF0C;&#x94FE;&#x63A5;&#x548C;&#x4EA4;&#x6362;&#xFF09;&#x5E76;&#x5C06;&#x76EE;&#x6807;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x6700;&#x4F4E;&#x6709;&#x6548;&#x4F4D;&#x8BBE;&#x7F6E;&#x4E3A;1&#x3002;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x6DFB;&#x52A0;1&#x7684;&#x504F;&#x79FB;&#x6765;&#x5B9E;&#x73B0;&#xFF0C;&#x5982;0x5530+ 1&#x3002;&#x8FD9;&#x4E0D;&#x4F1A;&#x56E0;&#x4E3A;&#x6307;&#x4EE4;&#x8981;&#x4E48;&#x662F;2&#x5B57;&#x8282;&#xFF0C;&#x8981;&#x4E48;&#x662F;4&#x5B57;&#x8282;&#x5BF9;&#x9F50;&#x800C;&#x4EA7;&#x751F;&#x5BF9;&#x9F50;&#x95EE;&#x9898;&#x3002;&#x56E0;&#x4E3A;&#x5904;&#x7406;&#x5668;&#x5C06;&#x5FFD;&#x7565;&#x6700;&#x4F4E;&#x6709;&#x6548;&#x4F4D;&#x3002; </p>
+</li>
+<li><p>&#x5982;&#x679C;&#x5F53;&#x524D;&#x7A0B;&#x5E8F;&#x72B6;&#x6001;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x7684;T&#x4F4D;&#x7F6E;1&#xFF0C;&#x5904;&#x4E8E;Thumb&#x6A21;&#x5F0F;&#x3002;</p>
+</li>
+</ol>
+<h3 id="3-2-ARM&#x6307;&#x4EE4;&#x96C6;&#x4ECB;&#x7ECD;"><a href="#3-2-ARM&#x6307;&#x4EE4;&#x96C6;&#x4ECB;&#x7ECD;" class="headerlink" title="3.2 ARM&#x6307;&#x4EE4;&#x96C6;&#x4ECB;&#x7ECD;"></a>3.2 ARM&#x6307;&#x4EE4;&#x96C6;&#x4ECB;&#x7ECD;</h3><p>&#x901A;&#x7528;&#x6A21;&#x677F;&#x5982;&#x4E0B;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">MNEMONIC{S}{condition} {Rd}, Operand1, Operand2</span><br><span class="line"></span><br><span class="line">MNEMONIC     - Short name (mnemonic) of the instruction</span><br><span class="line">                 //&#x6307;&#x4EE4;&#x96C6;&#x7684;&#x77ED;&#x540D;&#x5B57;&#xFF08;&#x52A9;&#x8BB0;&#x7B26;&#xFF09;</span><br><span class="line">{S}          - An optional suffix. If S is specified, the condition flags are updated on the result of the operation</span><br><span class="line">                //&#x4E00;&#x4E2A;&#x53EF;&#x9009;&#x7684;&#x540E;&#x7F00;&#x3002;&#x5982;&#x679C;&#x6307;&#x5B9A;&#x4E86;S&#xFF0C;&#x5219;&#x64CD;&#x4F5C;&#x7ED3;&#x679C;&#x66F4;&#x65B0;&#x6761;&#x4EF6;&#x6807;&#x5FD7;&#x4F4D;S&#x3002;</span><br><span class="line">{condition}  - Condition that is needed to be met in order for the instruction to be executed</span><br><span class="line">                //&#x4E3A;&#x4E86;&#x6267;&#x884C;&#x6307;&#x4EE4;&#x800C;&#x9700;&#x8981;&#x6EE1;&#x8DB3;&#x7684;&#x90A3;&#x4E9B;&#x6761;&#x4EF6;</span><br><span class="line">{Rd}         - Register (destination) for storing the result of the instruction</span><br><span class="line">                //&#x5B58;&#x50A8;&#x8FD0;&#x7B97;&#x7ED3;&#x679C;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#xFF08;&#x76EE;&#x7684;&#x5730;&#xFF09;</span><br><span class="line">Operand1     - First operand. Either a register or an immediate value </span><br><span class="line">                //&#x7B2C;&#x4E00;&#x64CD;&#x4F5C;&#x6570;&#xFF0C;&#x65E2;&#x53EF;&#x4EE5;&#x662F;&#x5BC4;&#x5B58;&#x5668;&#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x7ACB;&#x5373;&#x6570;   </span><br><span class="line">Operand2     - Second (flexible) operand. Can be an immediate value (number) or a register with an optional shift</span><br><span class="line">                //&#x7B2C;&#x4E8C;&#x64CD;&#x4F5C;&#x6570;&#xFF08;&#x53EF;&#x9009;&#x7684;&#xFF09;&#xFF0C;&#x53EF;&#x4EE5;&#x662F;&#x7ACB;&#x5373;&#x6570;&#x6216;&#x5177;&#x6709;&#x53EF;&#x9009;&#x79FB;&#x4F4D;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x3002;</span><br><span class="line">                </span><br><span class="line">#123        - Immediate value (with limited set of values). </span><br><span class="line">Rx          - Register x (like R1, R2, R3 ...)</span><br><span class="line">Rx, ASR n   - Register x with arithmetic shift right by n bits(1=n=32)</span><br><span class="line">Rx, LSL n   - Register x with logical shift left by n bits (0 = n = 31)</span><br><span class="line">Rx, LSR n   - Register x with logical shift right by n bits (1 = n = 32)</span><br><span class="line">Rx, ROR n   - Register x with rotate right by n bits (1 = n = 31)</span><br><span class="line">Rx, RRX     - Register x with rotate right by one bit, with extend</span><br></pre></td></tr></table></figure>
+
+<p>&#x4F8B;&#x5B50;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ADD   R0, R1, R2         </span><br><span class="line">ADD   R0, R1, #2         </span><br><span class="line">MOVLE R0, #5            &#x5F53;LE&#x6761;&#x4EF6;&#x6EE1;&#x8DB3;&#x65F6;R0 = R0 + 5</span><br><span class="line">MOV   R0, R1, LSL #1    R1&#x903B;&#x8F91;&#x5DE6;&#x79FB;1&#xFF0C;&#x7136;&#x540E;&#x5C06;&#x5176;&#x79FB;&#x52A8;&#x5230;R0</span><br></pre></td></tr></table></figure>
+
+<p>&#x903B;&#x8F91;&#x5DE6;&#x79FB;&#x548C;&#x7B97;&#x6570;&#x5DE6;&#x79FB;&#x53F3;&#x8FB9;&#x8865;&#x4F4D;&#x90FD;&#x662F;0&#xFF0C;&#x903B;&#x8F91;&#x53F3;&#x79FB;&#x5DE6;&#x8FB9;&#x6DFB;0&#xFF0C;&#x7B97;&#x6570;&#x53F3;&#x79FB;&#x53F3;&#x8FB9;&#x6DFB;&#x7B26;&#x53F7;&#x4F4D;</p>
+<p>&#x4EE5;&#x4E0B;&#x662F;&#x6700;&#x5E38;&#x7528;&#x7684;&#x6307;&#x4EE4;</p>
+<p>&#x200B;    <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/1584718803127.png" alt="1584718803127"></p>
+<h2 id="4-&#x5185;&#x5B58;&#x6307;&#x4EE4;-&#x52A0;&#x8F7D;&#x548C;&#x5B58;&#x50A8;"><a href="#4-&#x5185;&#x5B58;&#x6307;&#x4EE4;-&#x52A0;&#x8F7D;&#x548C;&#x5B58;&#x50A8;" class="headerlink" title="4 &#x5185;&#x5B58;&#x6307;&#x4EE4;:&#x52A0;&#x8F7D;&#x548C;&#x5B58;&#x50A8;"></a>4 &#x5185;&#x5B58;&#x6307;&#x4EE4;:&#x52A0;&#x8F7D;&#x548C;&#x5B58;&#x50A8;</h2><p>ARM &#x4F7F;&#x7528;&#x4E86;load-store&#x6A21;&#x5757;&#x6765;&#x8FDB;&#x884C;&#x5185;&#x5B58;&#x7684;&#x8BBF;&#x95EE;&#xFF0C;&#x8FD9;&#x5C31;&#x610F;&#x5473;&#x7740;&#xFF0C;&#x53EA;&#x6709;lad/store(LDR &#x548C; STR)&#x6307;&#x4EE4;&#x80FD;&#x591F;&#x8FDB;&#x884C;&#x5185;&#x5B58;&#x8BBF;&#x95EE;&#x3002;&#x800C;&#x5728;x86&#x6307;&#x4EE4;&#x96C6;&#x4E2D;&#xFF0C;&#x5927;&#x591A;&#x6570;&#x7684;&#x6307;&#x4EE4;&#x90FD;&#x662F;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x64CD;&#x4F5C;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x7684;&#x3002;&#x5728;ARM&#x4E2D;&#xFF0C;&#x6570;&#x636E;&#x5728;&#x88AB;&#x64CD;&#x4F5C;&#x4E4B;&#x524D;&#xFF0C;&#x5FC5;&#x987B;&#x9996;&#x5148;&#x4ECE;&#x5185;&#x5B58;&#x79FB;&#x5165;&#x5BC4;&#x5B58;&#x5668;&#x3002;&#x8FD9;&#x5C31;&#x610F;&#x5473;&#x7740;&#xFF0C;&#x5728;ARM&#x4E2D;&#x5982;&#x679C;&#x60F3;&#x8981;&#x4E00;&#x4E2A;&#x7269;&#x7406;&#x5730;&#x5740;&#x4E0A;&#x589E;&#x52A0;&#x4E00;&#x4E2A;32&#x4F4D;&#x7684;&#x6570;&#x636E;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5FC5;&#x987B;&#x4F7F;&#x7528;&#x4E09;&#x79CD;&#x7C7B;&#x578B;&#x7684;&#x6307;&#x4EE4;(load/increment/store)&#xFF0C;&#x9996;&#x5148;&#x5C06;&#x7269;&#x7406;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x52A0;&#x8F7D;&#x8FDB;&#x5165;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x7136;&#x540E;&#x4F7F;&#x7528;&#x5BC4;&#x5B58;&#x5668;&#x8FDB;&#x884C;&#x52A0;&#x6CD5;&#x8FD0;&#x7B97;&#xFF0C;&#x6700;&#x540E;&#x5C06;&#x6570;&#x636E;&#x4ECE;&#x5BC4;&#x5B58;&#x5668;&#x5B58;&#x56DE;&#x5185;&#x5B58;&#x5730;&#x5740;&#x3002;</p>
+<p>&#x4E0B;&#x9762;&#x662F;&#x51E0;&#x4E2A;&#x793A;&#x4F8B;&#xFF0C;&#x4F7F;&#x7528;&#x4E86;&#x4E09;&#x79CD;&#x57FA;&#x672C;&#x504F;&#x79FB;&#x5F62;&#x5F0F;&#xFF0C;&#x6BCF;&#x4E2A;&#x504F;&#x79FB;&#x5F62;&#x5F0F;&#x90FD;&#x7528;&#x4E09;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x5BFB;&#x5740;&#x6A21;&#x5F0F;&#x8868;&#x793A;&#x3002;&#x5BF9;&#x4E8E;&#x6BCF;&#x4E2A;&#x793A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x501F;&#x52A9;&#x4E0D;&#x540C;&#x7684;LDR/STR&#x504F;&#x79FB;&#x5F62;&#x5F0F;&#xFF0C; &#x5E76;&#x4F7F;&#x7528;&#x542B;&#x4E49;&#x76F8;&#x540C;&#x6C47;&#x7F16;&#x4EE3;&#x7801;&#x8BA9;&#x95EE;&#x9898;&#x7B80;&#x5316;&#x3002;</p>
+<p>&#x504F;&#x79FB;&#x5F62;&#x5F0F;&#xFF1A;&#x5C06;&#x7ACB;&#x5373;&#x6570;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;/&#x5C06;&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;/&#x5C06;&#x79FB;&#x4F4D;&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;</p>
+<ul>
+<li><p>&#x5BFB;&#x5740;&#x6A21;&#x5F0F;&#xFF1A;&#x504F;&#x79FB;&#x5BFB;&#x5740;</p>
+</li>
+<li><p>&#x5BFB;&#x5740;&#x6A21;&#x5F0F;&#xFF1A;&#x5148;&#x7D22;&#x5F15;&#x5BFB;&#x5740;</p>
+</li>
+<li><p>&#x5BFB;&#x5740;&#x6A21;&#x5F0F;&#xFF1A;&#x540E;&#x7D22;&#x5F15;&#x5BFB;&#x5740;</p>
+</li>
+</ul>
+<h3 id="4-1-&#x57FA;&#x672C;&#x793A;&#x4F8B;"><a href="#4-1-&#x57FA;&#x672C;&#x793A;&#x4F8B;" class="headerlink" title="4.1 &#x57FA;&#x672C;&#x793A;&#x4F8B;"></a>4.1 &#x57FA;&#x672C;&#x793A;&#x4F8B;</h3><p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/5GUBK76KEGQPC7J.jpg" alt="img"> </p>
+<p>&#x901A;&#x5E38;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x4F7F;&#x7528;LDR&#x5C06;&#x5185;&#x5B58;&#x6570;&#x636E;&#x52A0;&#x8F7D;&#x5230;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#xFF0C;&#x4F7F;&#x7528;STR&#x5C06;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x5B58;&#x50A8;&#x5230;&#x5185;&#x5B58;&#x5730;&#x5740;&#x4E2D;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LDR R2, [R0]	@ [R0] - origin address is the value found in R0.</span><br><span class="line">STR R2, [R1]    @ [R1] - destination address is the value found in R1.</span><br></pre></td></tr></table></figure>
+
+<p>&#x5728;&#x6C47;&#x7F16;&#x7A0B;&#x5E8F;&#x4E2D;&#x662F;&#x8FD9;&#x6837;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.data          /* the .data section is dynamically created and its addresses cannot be easily predicted */</span><br><span class="line">var1: .word 3  /* variable 1 in memory */</span><br><span class="line">var2: .word 4  /* variable 2 in memory */</span><br><span class="line"></span><br><span class="line">.text          /* start of the text (code) section */ </span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    ldr r0, adr_var1  @ load the memory address of var1 via label adr_var1 into R0 </span><br><span class="line">    ldr r1, adr_var2  @ load the memory address of var2 via label adr_var2 into R1 </span><br><span class="line">    ldr r2, [r0]      @ load the value (0x03) at memory address found in R0 to register R2  </span><br><span class="line">    str r2, [r1]      @ store the value found in R2 (0x03) to the memory address found in R1 </span><br><span class="line">    bkpt             </span><br><span class="line"></span><br><span class="line">adr_var1: .word var1  /* address to var1 stored here */</span><br><span class="line">adr_var2: .word var2  /* address to var2 stored here */</span><br></pre></td></tr></table></figure>
+
+<p> &#x4E0B;&#x9762;&#x662F;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;:<img src="https://azeria-labs.com/wp-content/uploads/2017/04/ldr1-gif2.gif" alt="img"> </p>
+<p>&#x5982;&#x679C;&#x4F7F;&#x7528;&#x8C03;&#x8BD5;&#x5668;&#x8C03;&#x8BD5;&#x7684;&#x8BDD;&#xFF0C;&#x4EE3;&#x7801;&#x662F;&#x4E0B;&#x9762;&#x8FD9;&#x6837;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; disassemble _start</span><br><span class="line">Dump of assembler code for function _start:</span><br><span class="line"> 0x00008074 &lt;+0&gt;:      ldr  r0, [pc, #12]   ; 0x8088 &lt;adr_var1&gt;</span><br><span class="line"> 0x00008078 &lt;+4&gt;:      ldr  r1, [pc, #12]   ; 0x808c &lt;adr_var2&gt;</span><br><span class="line"> 0x0000807c &lt;+8&gt;:      ldr  r2, [r0]</span><br><span class="line"> 0x00008080 &lt;+12&gt;:     str  r2, [r1]</span><br><span class="line"> 0x00008084 &lt;+16&gt;:     bx   lr</span><br><span class="line">End of assembler dump.</span><br></pre></td></tr></table></figure>
+
+<p>&#x6700;&#x5F00;&#x59CB;&#x7684;&#x4E24;&#x4E2A;&#x6307;&#x4EE4;&#x88AB;&#x8F6C;&#x6362;&#x6210;&#x4E86;<code>[pc,  #12]</code>&#x3002;&#x8FD9;&#x662F;PC&#x76F8;&#x5BF9;&#x5BFB;&#x5740;&#xFF0C;&#x56E0;&#x4E3A;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4E86;&#x5730;&#x5740;&#x6807;&#x7B7E;&#xFF0C;&#x7F16;&#x8F91;&#x5668;&#x4F1A;&#x81EA;&#x52A8;&#x8BA1;&#x7B97;&#x6587;&#x672C;&#x6C60;&#x4E2D;&#x6307;&#x5B9A;&#x6807;&#x7B7E;&#x7684;&#x4F4D;&#x7F6E;(PC + 12)&#x3002;&#x5728;&#x6211;&#x4EEC;&#x7684;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x6587;&#x672C;&#x6C60;&#x7684;&#x4F4D;&#x7F6E;&#x5728;PC&#x6307;&#x4EE4;&#x7684;&#x4E09;&#x6761;&#x6709;&#x6548;&#x6307;&#x4EE4;&#x4E4B;&#x540E;(PC&#x6307;&#x5411;&#x5F53;&#x524D;&#x6267;&#x884C;&#x6307;&#x4EE4;&#x5730;&#x5740;&#x540E;&#x9762;&#x7684;&#x7B2C;&#x4E8C;&#x4E2A;)&#x3002;</p>
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/pc-relative1-1.png" alt="img"> </p>
+<h4 id="4-1-1-&#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF1A;&#x7ACB;&#x5373;&#x6570;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5BFB;&#x5740;"><a href="#4-1-1-&#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF1A;&#x7ACB;&#x5373;&#x6570;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5BFB;&#x5740;" class="headerlink" title="4.1.1 &#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF1A;&#x7ACB;&#x5373;&#x6570;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5BFB;&#x5740;"></a>4.1.1 &#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF1A;&#x7ACB;&#x5373;&#x6570;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5BFB;&#x5740;</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">STR    Ra, [Rb, imm]</span><br><span class="line">LDR    Ra, [Rc, imm]</span><br></pre></td></tr></table></figure>
+
+<p> &#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x7ACB;&#x5373;&#x6570;&#xFF08;&#x6574;&#x6570;&#xFF09;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x91CF;&#x3002;&#x8FD9;&#x4E2A;&#x503C;&#x901A;&#x8FC7;&#x4E0E;&#x57FA;&#x5740;&#x5BC4;&#x5B58;&#x5668;&#xFF08;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x4E2D;&#x7684;R1&#xFF09;&#x76F8;&#x52A0;&#x6216;&#x76F8;&#x51CF;&#x6765;&#x8BBF;&#x95EE;&#x6570;&#x636E;&#x3002;&#x5B83;&#x5728;&#x7F16;&#x8BD1;&#x65F6;&#x4E3A;&#x5DF2;&#x77E5;&#x7684;&#x504F;&#x79FB;&#x91CF;&#x3002; </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.data</span><br><span class="line">var1: .word 3</span><br><span class="line">var2: .word 4</span><br><span class="line"></span><br><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    ldr r0, adr_var1  @ load the memory address of var1 via label adr_var1 into R0</span><br><span class="line">    ldr r1, adr_var2  @ load the memory address of var2 via label adr_var2 into R1</span><br><span class="line">    ldr r2, [r0]      @ load the value (0x03) at memory address found in R0 to register R2 </span><br><span class="line">    str r2, [r1, #2]  @ address mode: offset. Store the value found in R2 (0x03) to the memory address found in R1 plus 2. Base register (R1) unmodified. </span><br><span class="line">    str r2, [r1, #4]! @ address mode: pre-indexed. Store the value found in R2 (0x03) to the memory address found in R1 plus 4. Base register (R1) modified: R1 = R1+4 </span><br><span class="line">    ldr r3, [r1], #4  @ address mode: post-indexed. Load the value at memory address found in R1 to register R3. Base register (R1) modified: R1 = R1+4 </span><br><span class="line">    bkpt</span><br><span class="line"></span><br><span class="line">adr_var1: .word var1</span><br><span class="line">adr_var2: .word var2</span><br></pre></td></tr></table></figure>
+
+<p>&#x6CE8;&#x610F;&#x57FA;&#x5740;&#x5BC4;&#x5B58;&#x5668;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x53D8;/&#x4E0D;&#x53D8;&#xFF0C;&#x4EE5;&#x53CA;&#x589E;&#x52A0;&#x7684;&#x5927;&#x5C0F;&#x3002;</p>
+<ul>
+<li><p>offset address mod : <code>str r2, [r1, #2]</code>  r1&#x5B58;&#x7684;&#x503C;+2&#x4F5C;&#x4E3A;&#x5730;&#x5740;&#xFF0C;&#x53D6;&#x6570;&#x636E;&#x4F20;&#x9012;&#x7ED9;r2&#xFF0C;r1&#x4E0D;&#x53D8;</p>
+</li>
+<li><p>pre-indexed address mod: <code>str r2, [r1, #4]!</code> r1&#x7684;&#x503C;+4&#x4F5C;&#x4E3A;&#x5730;&#x5740;&#xFF0C;&#x53D6;&#x6570;&#x636E;&#x4F20;&#x9012;&#x7ED9;r2,r1 + 4</p>
+</li>
+<li><p>post-indexed address mod: <code>ldr r3, [r1], #4</code> r1&#x5B58;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x5730;&#x5740;&#xFF0C;&#x53D6;&#x5176;&#x4E2D;&#x7684;&#x6570;&#x4F20;&#x9012;&#x7ED9;r3&#xFF0C;&#x7136;&#x540E;r1+4</p>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/ldr1-1gif2.gif" alt="img"></p>
+</li>
+</ul>
+<h4 id="4-1-2-&#x504F;&#x79FB;&#x6A21;&#x5F0F;-&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5730;&#x5740;"><a href="#4-1-2-&#x504F;&#x79FB;&#x6A21;&#x5F0F;-&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5730;&#x5740;" class="headerlink" title="4.1.2 &#x504F;&#x79FB;&#x6A21;&#x5F0F;: &#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5730;&#x5740;"></a>4.1.2 &#x504F;&#x79FB;&#x6A21;&#x5F0F;: &#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x5730;&#x5740;</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">STR    Ra, [Rb, Rc]</span><br><span class="line">LDR    Ra, [Rb, Rc]</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x79CD;&#x504F;&#x79FB;&#x6A21;&#x5F0F;&#x5C06;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;&#x91CF;&#x3002;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x51C6;&#x5907;&#x8BBF;&#x95EE;&#x4E00;&#x4E2A;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x65F6;&#x8BA1;&#x7B97;&#x7D22;&#x5F15;&#x7684;&#x6570;&#x7EC4;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FD9;&#x79CD;&#x504F;&#x79FB;&#x6A21;&#x5F0F;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.data</span><br><span class="line">var1: .word 3</span><br><span class="line">var2: .word 4</span><br><span class="line"></span><br><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    ldr r0, adr_var1  @ load the memory address of var1 via label adr_var1 to R0 </span><br><span class="line">    ldr r1, adr_var2  @ load the memory address of var2 via label adr_var2 to R1 </span><br><span class="line">    ldr r2, [r0]      @ load the value (0x03) at memory address found in R0 to R2</span><br><span class="line">    str r2, [r1, r2]  @ address mode: offset. Store the value found in R2 (0x03) to the memory address found in R1 with the offset R2 (0x03). Base register unmodified.   </span><br><span class="line">    str r2, [r1, r2]! @ address mode: pre-indexed. Store value found in R2 (0x03) to the memory address found in R1 with the offset R2 (0x03). Base register modified: R1 = R1+R2. </span><br><span class="line">    ldr r3, [r1], r2  @ address mode: post-indexed. Load value at memory address found in R1 to register R3. Then modify base register: R1 = R1+R2.</span><br><span class="line">    bx lr</span><br><span class="line"></span><br><span class="line">adr_var1: .word var1</span><br><span class="line">adr_var2: .word var2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>offset address mode: <code>str r2, [r1, r2]</code> r1&#x5B58;&#x7684;&#x503C;&#x52A0;r2&#x5B58;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x5730;&#x5740;&#xFF0C;&#x5C06;r2&#x4E2D;&#x7684;&#x503C;&#x5B58;&#x8FDB;&#x53BB;,r1&#x503C;&#x4E0D;&#x53D8;</p>
+</li>
+<li><p>pre-indexed address mode: <code>str r2, [r1, r2]!</code>r1&#x5B58;&#x7684;&#x503C;&#x52A0;r2&#x5B58;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x5730;&#x5740;&#xFF0C;&#x5C06;r2&#x4E2D;&#x7684;&#x503C;&#x5B58;&#x8FDB;&#x53BB;,r1 = r1 + r2</p>
+</li>
+<li><p>post-indexed address mode: <code>ldr r3, [r1], r2</code>r1&#x5B58;&#x7684;&#x503C;&#x4F5C;&#x4E3A;&#x5730;&#x5740;&#xFF0C;&#x7136;&#x540E;&#x5C06;r3&#x5B58;&#x5165;,&#x7136;&#x540E;r1 = r1 + r2</p>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/ldr-reg-gif1-1.gif" alt="img"> </p>
+</li>
+</ul>
+<h4 id="4-1-3-&#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF0C;&#x4F7F;&#x7528;&#x79FB;&#x4F4D;&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;"><a href="#4-1-3-&#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF0C;&#x4F7F;&#x7528;&#x79FB;&#x4F4D;&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;" class="headerlink" title="4.1.3 &#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF0C;&#x4F7F;&#x7528;&#x79FB;&#x4F4D;&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;"></a>4.1.3 &#x504F;&#x79FB;&#x6A21;&#x5F0F;&#xFF0C;&#x4F7F;&#x7528;&#x79FB;&#x4F4D;&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x504F;&#x79FB;</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LDR    Ra, [Rb, Rc, &lt;shifter&gt;]</span><br><span class="line">STR    Ra, [Rb, Rc, &lt;shifter&gt;]</span><br></pre></td></tr></table></figure>
+
+<p><code>Rb</code>&#x662F;&#x57FA;&#x5740;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;<code>Rc</code>&#x662F;&#x7ACB;&#x5373;&#x6570;&#x504F;&#x79FB;&#x6216;&#x8005;&#x662F;&#x5BC4;&#x5B58;&#x5668;&#x5B58;&#x50A8;&#x7684;&#x7ACB;&#x5373;&#x6570;&#xFF0C;<code>&lt;shifter&gt;</code>&#x7528;&#x4E8E;&#x5DE6;&#x53F3;&#x79FB;&#x4F4D;&#x3002;&#x5E38;&#x7528;&#x4E8E;&#x5FAA;&#x73AF;&#x904D;&#x5386;&#x6570;&#x7EC4;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.data</span><br><span class="line">var1: .word 3</span><br><span class="line">var2: .word 4</span><br><span class="line"></span><br><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    ldr r0, adr_var1         @ load the memory address of var1 via label adr_var1 to R0</span><br><span class="line">    ldr r1, adr_var2         @ load the memory address of var2 via label adr_var2 to R1</span><br><span class="line">    ldr r2, [r0]             @ load the value (0x03) at memory address found in R0 to R2</span><br><span class="line">    str r2, [r1, r2, LSL#2]  @ address mode: offset. Store the value found in R2 (0x03) to the memory address found in R1 with the offset R2 left-shifted by 2. Base register (R1) unmodified.</span><br><span class="line">    str r2, [r1, r2, LSL#2]! @ address mode: pre-indexed. Store the value found in R2 (0x03) to the memory address found in R1 with the offset R2 left-shifted by 2. Base register modified: R1 = R1 + R2&lt;&lt;2</span><br><span class="line">    ldr r3, [r1], r2, LSL#2  @ address mode: post-indexed. Load value at memory address found in R1 to the register R3. Then modifiy base register: R1 = R1 + R2&lt;&lt;2</span><br><span class="line">    bkpt</span><br><span class="line"></span><br><span class="line">adr_var1: .word var1</span><br><span class="line">adr_var2: .word var2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>offset address mode:<code>str r2, [r1, r2, LSL#2]</code>r2&#x5B58;&#x7684;&#x503C;&#x5B58;&#x5165;r1 + r2 * 4&#xFF0C;&#x4E0B;&#x56FE;&#x662F;&#x5B8C;&#x6574;&#x7684;&#x793A;&#x4F8B;:</p>
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/ldr-shift1.png" alt="img"> </p>
+</li>
+<li><p>pre-indexed address mode: <code>str r2, [r1, r2, LSL#2]!</code>r2&#x5B58;&#x7684;&#x503C;&#x5B58;&#x5165;r1 + r2 * 4,<strong>&#x7136;&#x540E;r1&#x7684;&#x503C;&#x66F4;&#x65B0;&#x4E3A;r1 + (r2 &lt;&lt; 2)</strong></p>
+</li>
+<li><p>post-indexed address mode: ldr r3, [r1], r2, LSL#2 r1&#x503C;&#x4F5C;&#x4E3A;&#x5730;&#x5740;&#xFF0C;&#x53D6;&#x503C;&#x5B58;&#x653E;&#x5728;r3,<strong>&#x7136;&#x540E;r1&#x7684;&#x503C;&#x66F4;&#x65B0;&#x4E3A;r1 + (r2 &lt;&lt; 2)</strong></p>
+</li>
+</ul>
+<h4 id="4-1-4-&#x603B;&#x7ED3;"><a href="#4-1-4-&#x603B;&#x7ED3;" class="headerlink" title="4.1.4 &#x603B;&#x7ED3;"></a>4.1.4 &#x603B;&#x7ED3;</h4><p><strong>&#x8BB0;&#x4F4F;LDR/STR&#x7528;&#x5230;&#x7684;&#x4E09;&#x79CD;&#x504F;&#x79FB;&#x6A21;&#x5F0F;</strong></p>
+<ol>
+<li>offset mode uses an immediate as offset <code>ldr  r3, [r1, #4]</code></li>
+<li>offset mode uses a register as offset  <code>ldr  r3, [r1, r2]</code></li>
+<li>offset mode uses a scaled register as offset  <code>ldr  r3, [r1, r2, LSL#2]</code></li>
+</ol>
+<p><strong>&#x8BB0;&#x4F4F;LDR/STR&#x4E2D;&#x4E0D;&#x540C;&#x7684;&#x5BFB;&#x5740;&#x6A21;&#x5F0F;</strong></p>
+<ol>
+<li><p>If there is a <code>!</code>, it&#x2019;s prefix address mode </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ldr   r3, [r1, #4]!</span><br><span class="line">ldr   r3, [r1, r2]!</span><br><span class="line">ldr   r3, [r1, r2, LSL#2]!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>If the base register is in brackets by itself, it&#x2019;s postfix address mode </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ldr   r3, [r1], #4</span><br><span class="line">ldr   r3, [r1], r2</span><br><span class="line">ldr   r3, [r1], r2, LSL#2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Anything else is offset address mode. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ldr   r3, [r1, #4]</span><br><span class="line">ldr   r3, [r1, r2]</span><br><span class="line">ldr   r3, [r1, r2, LSL#2]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="4-2-LDR-&#x7528;&#x4E8E;PC&#x76F8;&#x5BF9;&#x5BFB;&#x5740;"><a href="#4-2-LDR-&#x7528;&#x4E8E;PC&#x76F8;&#x5BF9;&#x5BFB;&#x5740;" class="headerlink" title="4.2 LDR &#x7528;&#x4E8E;PC&#x76F8;&#x5BF9;&#x5BFB;&#x5740;"></a>4.2 LDR &#x7528;&#x4E8E;PC&#x76F8;&#x5BF9;&#x5BFB;&#x5740;</h3><p>LDR &#x662F;&#x552F;&#x4E00;&#x4E00;&#x4E2A;&#x7528;&#x4E8E;&#x5C06;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x8F7D;&#x5165;&#x5BC4;&#x5B58;&#x5668;(load data to register)&#x7684;&#x6307;&#x4EE4;&#x3002;&#x800C;&#x6709;&#x65F6;&#x5019;&#x4F1A;&#x770B;&#x5230;&#x4EE5;&#x4E0B;&#x8BED;&#x6CD5;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.section .text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">   ldr r0, =jump        /* load the address of the function label jump into R0 */</span><br><span class="line">   ldr r1, =0x68DB00AD  /* load the value 0x68DB00AD into R1 */</span><br><span class="line">jump:</span><br><span class="line">   ldr r2, =511         /* load the value 511 into R2 */ </span><br><span class="line">   bkpt</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x4E9B;&#x6307;&#x4EE4;&#x88AB;&#x79F0;&#x4E3A;&#x4F2A;&#x6307;&#x4EE4;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FD9;&#x8BED;&#x6CD5;&#x6765;&#x5F15;&#x7528; &#x6587;&#x672C; &#x6C60;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x3002;&#x6587;&#x672C;&#x6C60;&#x548C;&#x4EE3;&#x7801;&#x6BB5;&#x4F4D;&#x4E8E;&#x540C;&#x4E00;&#x6BB5;&#x5185;&#x5B58;&#x533A;&#x57DF;(&#x56E0;&#x4E3A;&#x6587;&#x672C;&#x6C60;&#x4E5F;&#x662F;&#x4EE3;&#x7801;&#x6BB5;&#x7684;&#x4E00;&#x90E8;&#x5206;)&#xFF0C;&#x5E38;&#x7528;&#x4E8E;&#x5B58;&#x50A8;&#x5E38;&#x91CF;&#xFF0C;&#x5B57;&#x7B26;&#x4E32;&#x6216;&#x8005;&#x504F;&#x79FB;&#x91CF;&#xFF0C;&#x5728;&#x4E0A;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x4F7F;&#x7528;&#x4E86;&#x4F2A;&#x6307;&#x4EE4;&#x6765;&#x5F15;&#x7528;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x504F;&#x79FB;&#x91CF;&#xFF0C; &#x5E76;&#x7528;&#x4E00;&#x4E2A;&#x6307;&#x4EE4;&#x5C06;&#x4E00;&#x4E2A;32&#x4F4D;&#x5E38;&#x91CF;&#x79FB;&#x5230;&#x4E00;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x3002; &#x4E3A;&#x4EC0;&#x4E48;&#x6211;&#x4EEC;&#x6709;&#x65F6;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x8FD9;&#x79CD;&#x8BED;&#x6CD5;&#x6765;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x6307;&#x4EE4;&#x5C06;32&#x4F4D;&#x5E38;&#x91CF;&#x79FB;&#x5230;&#x4E00;&#x4E2A;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x5462;&#xFF0C;&#x8FD9;&#x662F;&#x56E0;&#x4E3A;ARM&#x4E00;&#x6B21; &#x53EA;&#x80FD;&#x52A0;&#x8F7D;&#x4E00;&#x4E2A;8&#x4F4D;&#x7684;&#x503C;&#x3002;&#x4EC0;&#x4E48;&#xFF1F;&#x8981;&#x7406;&#x89E3;&#x4E3A;&#x4EC0;&#x4E48;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x77E5;&#x9053;ARM&#x4E0A;&#x7684;&#x7ACB;&#x5373;&#x6570;&#x662F;&#x5982;&#x4F55;&#x5904;&#x7406;&#x7684;&#x3002; </p>
+<h3 id="4-3-ARM&#x4E2D;&#x7ACB;&#x5373;&#x6570;&#x7684;&#x4F7F;&#x7528;"><a href="#4-3-ARM&#x4E2D;&#x7ACB;&#x5373;&#x6570;&#x7684;&#x4F7F;&#x7528;" class="headerlink" title="4.3  ARM&#x4E2D;&#x7ACB;&#x5373;&#x6570;&#x7684;&#x4F7F;&#x7528;"></a>4.3  ARM&#x4E2D;&#x7ACB;&#x5373;&#x6570;&#x7684;&#x4F7F;&#x7528;</h3><p> &#x5C06;&#x7ACB;&#x5373;&#x6570;&#x8F7D;&#x5165;ARM&#x5BC4;&#x5B58;&#x5668;&#x4E0D;&#x50CF;&#x5728;x86&#x4E0A;&#x90A3;&#x6837;&#x7B80;&#x5355;&#x3002;&#x6211;&#x4EEC;&#x80FD;&#x4F7F;&#x7528;&#x7684;&#x7ACB;&#x5373;&#x6570;&#x662F;&#x6709;&#x9650;&#x5236;&#x7684;&#x3002;  &#x53E6;&#x5916;&#x8FD8;&#x6709;&#x4E00;&#x4E9B;&#x7A8D;&#x95E8;&#x53EF;&#x4EE5;&#x7528;&#x6765;&#x7ED5;&#x8FC7;&#x8FD9;&#x4E9B;&#x9650;&#x5236;&#x3002;</p>
+<p> &#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;&#x6BCF;&#x4E00;&#x6761;ARM&#x6307;&#x4EE4;&#x90FD;&#x662F;32&#x4F4D;&#xFF0C;&#x6240;&#x6709;&#x7684;&#x6307;&#x4EE4;&#x90FD;&#x662F;&#x53EF;&#x4EE5;&#x6309;&#x7167;&#x6240;&#x9009;&#x62E9;&#x7684;&#x6761;&#x4EF6;&#x7801;&#x6761;&#x4EF6;&#x6267;&#x884C;&#x7684;&#x3002;&#x4E00;&#x5171;&#x6709;16&#x79CD;&#x53EF;&#x4F9B;&#x9009;&#x62E9;&#x7684;&#x6761;&#x4EF6;&#x7801; &#xFF0C;&#x4E00;&#x4E2A;&#x6761;&#x4EF6;&#x7801;&#x5360;4&#x4F4D;&#xFF0C;&#x7136;&#x540E;&#x6211;&#x4EEC;&#x9700;&#x8981;2&#x4F4D;&#x7528;&#x4E8E;&#x8868;&#x793A;&#x76EE;&#x6807;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;2&#x4F4D;&#x7528;&#x4E8E;&#x8868;&#x793A;&#x7B2C;&#x4E00;&#x64CD;&#x4F5C;&#x6570;&#xFF0C;1&#x4F4D;&#x7528;&#x4E8E;&#x8BBE;&#x7F6E;&#x72B6;&#x6001;&#x6807;&#x5FD7;&#x4F4D;&#xFF0C;&#x518D;&#x52A0;&#x4E0A;&#x5176;&#x4ED6;&#x60C5;&#x51B5;&#x4E0B;&#x6211;&#x4EEC;&#x53EF;&#x80FD;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x7684;&#x5404;&#x79CD;&#x4F4D;&#x6570;&#xFF08;&#x4F8B;&#x5982;&#x5B9E;&#x9645;&#x64CD;&#x4F5C;&#x7801;)&#x3002;&#x5173;&#x952E;&#x70B9;&#x5728;&#x4E8E;&#xFF1A;&#x5728;&#x5C06;&#x5730;&#x5740;&#x5206;&#x914D;&#x7ED9;&#x6307;&#x4EE4;&#x7C7B;&#x578B;&#xFF0C;&#x5BC4;&#x5B58;&#x5668;&#x548C;&#x5176;&#x4ED6;&#x5B57;&#x6BB5;&#x4E4B;&#x540E;&#xFF0C;&#x7ACB;&#x5373;&#x503C;&#x53EA;&#x5269;&#x4E0B;12&#x4F4D;&#xFF0C;&#x53EA;&#x80FD;&#x8868;&#x793A;4096&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x6570;&#x3002;</p>
+<p>&#x4F46;&#x662F;&#x66F4;&#x591A;&#x7684;&#x662F;&#xFF0C;&#x8FD9;12&#x4F4D;&#x5E76;&#x4E0D;&#x662F;&#x5168;&#x90FD;&#x7528;&#x6765;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x6574;&#x6570;&#xFF0C;&#x800C;&#x662F;&#x5C06;&#x5B83;&#x5206;&#x51FA;8&#x4F4D;&#x7528;&#x4E8E;&#x8868;&#x793A;&#x4EFB;&#x4F55;8&#x4F4D;&#x7684;&#x6570;(n)&#xFF0C;&#x8303;&#x56F4;&#x662F;0-255&#xFF0C;&#x4EE5;&#x53CA;&#x4E00;&#x4E2A;&#x7528;&#x4E8E;&#x5FAA;&#x73AF;&#x4F4D;&#x7684;4&#x4F4D;&#x6570;(r),&#x5728;0&#x5230;30&#x4E4B;&#x95F4;&#x4EE5;2&#x4E3A;&#x6B65;&#x957F;&#xFF0C;&#x8FD9;&#x4EE5;&#x4E3A;&#x7740;&#x4E00;&#x4E2A;&#x7ACB;&#x5373;&#x6570;&#x7531;&#x4EE5;&#x4E0B;&#x516C;&#x5F0F;&#x7ED9;&#x51FA;$v = n\ ror\ 2*r$ &#x7528;&#x53E6;&#x4E00;&#x53E5;&#x8BDD;&#x8BF4;&#x552F;&#x4E00;&#x6709;&#x6548;&#x7684;&#x7ACB;&#x5373;&#x6570;&#x662F;&#x5FAA;&#x73AF;&#x4F4D;&#x79FB;&#x7684;&#x4F4D;(&#x53EF;&#x4EE5;&#x51CF;&#x5C11;&#x4EE5;&#x5076;&#x6570;&#x65CB;&#x8F6C;&#x7684;&#x5B57;&#x8282;&#x7684;&#x503C;)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Valid values:</span><br><span class="line">#256        // 1 ror 24 --&gt; 256   ror 1, 2*#12   &#x8FD9;&#x91CC;&#x4E00;&#x4E2A;&#x6570;4&#x4E2A;&#x5B57;&#x8282; = 1 &lt;&lt; 8</span><br><span class="line">#384        // 6 ror 26 --&gt; 384   6 &lt;&lt; 6</span><br><span class="line">#484        // 121 ror 30 --&gt; 484</span><br><span class="line">#16384      // 1 ror 18 --&gt; 16384</span><br><span class="line">#2030043136 // 121 ror 8 --&gt; 2030043136</span><br><span class="line">#0x06000000 // 6 ror 8 --&gt; 100663296 (0x06000000 in hex)</span><br><span class="line"></span><br><span class="line">Invalid values:</span><br><span class="line">#370        // 185 ror 31 --&gt; 31 is not in range (0 &#x2013; 30)</span><br><span class="line">#511        // 1 1111 1111 --&gt; bit-pattern can&#x2019;t fit into one byte</span><br><span class="line">#0x06010000 // 1 1000 0001.. --&gt; bit-pattern can&#x2019;t fit into one byte</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x6837;&#x7684;&#x7ED3;&#x679C;&#x5C31;&#x662F;&#x4E0D;&#x53EF;&#x80FD;&#x4E00;&#x6B21;&#x52A0;&#x8F7D;&#x5B8C;&#x5B8C;&#x6574;&#x7684;32&#x4F4D;&#x5730;&#x5740;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x9009;&#x62E9;&#x4EE5;&#x4E0B;&#x4E24;&#x4E2A;&#x9009;&#x9879;&#x6765;&#x7ED5;&#x8FC7;&#x8FD9;&#x4E2A;&#x9650;&#x5236;:</p>
+<ol>
+<li>&#x7528;&#x8F83;&#x5C0F;&#x7684;&#x6570;&#x6765;&#x6784;&#x9020;&#x6BD4;&#x8F83;&#x5927;&#x7684;&#x6570;<ol>
+<li>&#x4E0D;&#x4F7F;&#x7528; <code>MOV r0, #511</code></li>
+<li>&#x5C06;511&#x62C6;&#x6210;&#x4E24;&#x90E8;&#x5206; <code>MOV r0, #256</code> &#x548C; <code>ADD r0, #255</code></li>
+</ol>
+</li>
+<li>&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x52A0;&#x8F7D;&#x7684;&#x6784;&#x9020;&#x5F62;&#x5F0F;<code>ldr r1, =value</code>&#xFF0C;&#x6C47;&#x7F16;&#x7A0B;&#x5E8F;&#x4F1A;&#x5F88;&#x4E50;&#x610F;&#x8F6C;&#x6362;&#x4E3A; <code>MOV</code>&#x6216;&#x8005;&#x662F;&#x4E00;&#x4E2A;PC&#x76F8;&#x5BF9;&#x5730;&#x5740;&#x7684;<code>load</code>&#x6307;&#x4EE4;(&#x5728;&#x4E0D;&#x80FD;&#x8F6C;&#x6362;&#x4E3A;mov&#x7684;&#x65F6;&#x5019;)<ol>
+<li>LDR r1,  =511</li>
+</ol>
+</li>
+</ol>
+<p>&#x5728;&#x6211;&#x4EEC;&#x4F7F;&#x7528;<code>load</code>&#x52A0;&#x8F7D;&#x4E00;&#x4E2A;&#x65E0;&#x6548;&#x7684;&#x7ACB;&#x5373;&#x6570;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6C47;&#x7F16;&#x5668;&#x4F1A;&#x62A5;&#x9519;&#x3002;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x60F3;&#x8981;&#x5C06;511&#x52A0;&#x8F7D;&#x5230;r0&#x4E2D;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.section .text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	mov ro, #511  /*Error: invalid constant (1ff) after fixup*/</span><br><span class="line">	bkpt</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">.section .text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	mov r0, #256</span><br><span class="line">	add ro, #255</span><br><span class="line">	ldr r1, =511    /* load 511 from the literal pool using LDR */</span><br><span class="line">	bkpt</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-&#x8F7D;&#x5165;-&#x5B58;&#x50A8;&#x591A;&#x4E2A;&#x503C;"><a href="#5-&#x8F7D;&#x5165;-&#x5B58;&#x50A8;&#x591A;&#x4E2A;&#x503C;" class="headerlink" title="5 &#x8F7D;&#x5165;/&#x5B58;&#x50A8;&#x591A;&#x4E2A;&#x503C;"></a>5 &#x8F7D;&#x5165;/&#x5B58;&#x50A8;&#x591A;&#x4E2A;&#x503C;</h2><p>&#x6709;&#x65F6;&#x5019;&#x4E00;&#x6B21;&#x52A0;&#x8F7D;&#x6216;&#x8005;&#x5B58;&#x50A8;&#x591A;&#x4E2A;&#x503C;&#x4F1A;&#x66F4;&#x6709;&#x6548;&#x7387;&#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x4F1A;&#x4F7F;&#x7528;<code>LDM</code>&#xFF08;load multiple)&#x6307;&#x4EE4;&#x548C;STM(store multiple)&#x6307;&#x4EE4;&#xFF0C;&#x8FD9;&#x4E9B;&#x6307;&#x4EE4;&#x6709;&#x4E00;&#x4E9B;&#x5728;&#x8BBF;&#x95EE;&#x521D;&#x59CB;&#x5730;&#x5740;&#x65B9;&#x5F0F;&#x4E0A;&#x6709;&#x6240;&#x4E0D;&#x540C;&#x3002;&#x4E0B;&#x9762;&#x662F;&#x6211;&#x4EEC;&#x5728;&#x672C;&#x8282;&#x4E2D;&#x5C06;&#x4F1A;&#x4F7F;&#x7528;&#x7684;&#x4EE3;&#x7801;.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">.data</span><br><span class="line"></span><br><span class="line">array_buff:</span><br><span class="line"> .word 0x00000000             /* array_buff[0] */</span><br><span class="line"> .word 0x00000000             /* array_buff[1] */</span><br><span class="line"> .word 0x00000000             /* array_buff[2]. This element has a relative address of array_buff+8 */</span><br><span class="line"> .word 0x00000000             /* array_buff[3] */</span><br><span class="line"> .word 0x00000000             /* array_buff[4] */</span><br><span class="line"></span><br><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"> adr r0, words+12             /* address of words[3] -&gt; r0 */</span><br><span class="line"> ldr r1, array_buff_bridge    /* address of array_buff[0] -&gt; r1 */</span><br><span class="line"> ldr r2, array_buff_bridge+4  /* address of array_buff[2] -&gt; r2 */</span><br><span class="line"> ldm r0, {r4,r5}              /* words[3] -&gt; r4 = 0x03; words[4] -&gt; r5 = 0x04 */</span><br><span class="line"> stm r1, {r4,r5}              /* r4 -&gt; array_buff[0] = 0x03; r5 -&gt; array_buff[1] = 0x04 */</span><br><span class="line"> ldmia r0, {r4-r6}            /* words[3] -&gt; r4 = 0x03, words[4] -&gt; r5 = 0x04; words[5] -&gt; r6 = 0x05; */</span><br><span class="line"> stmia r1, {r4-r6}            /* r4 -&gt; array_buff[0] = 0x03; r5 -&gt; array_buff[1] = 0x04; r6 -&gt; array_buff[2] = 0x05 */</span><br><span class="line"> ldmib r0, {r4-r6}            /* words[4] -&gt; r4 = 0x04; words[5] -&gt; r5 = 0x05; words[6] -&gt; r6 = 0x06 */</span><br><span class="line"> stmib r1, {r4-r6}            /* r4 -&gt; array_buff[1] = 0x04; r5 -&gt; array_buff[2] = 0x05; r6 -&gt; array_buff[3] = 0x06 */</span><br><span class="line"> ldmda r0, {r4-r6}            /* words[3] -&gt; r6 = 0x03; words[2] -&gt; r5 = 0x02; words[1] -&gt; r4 = 0x01 */</span><br><span class="line"> ldmdb r0, {r4-r6}            /* words[2] -&gt; r6 = 0x02; words[1] -&gt; r5 = 0x01; words[0] -&gt; r4 = 0x00 */</span><br><span class="line"> stmda r2, {r4-r6}            /* r6 -&gt; array_buff[2] = 0x02; r5 -&gt; array_buff[1] = 0x01; r4 -&gt; array_buff[0] = 0x00 */</span><br><span class="line"> stmdb r2, {r4-r5}            /* r5 -&gt; array_buff[1] = 0x01; r4 -&gt; array_buff[0] = 0x00; */</span><br><span class="line"> bx lr</span><br><span class="line"></span><br><span class="line">words:</span><br><span class="line"> .word 0x00000000             /* words[0] */</span><br><span class="line"> .word 0x00000001             /* words[1] */</span><br><span class="line"> .word 0x00000002             /* words[2] */</span><br><span class="line"> .word 0x00000003             /* words[3] */</span><br><span class="line"> .word 0x00000004             /* words[4] */</span><br><span class="line"> .word 0x00000005             /* words[5] */</span><br><span class="line"> .word 0x00000006             /* words[6] */</span><br><span class="line"></span><br><span class="line">array_buff_bridge:</span><br><span class="line"> .word array_buff             /* address of array_buff, or in other words - array_buff[0] */</span><br><span class="line"> .word array_buff+8           /* address of array_buff[2] */</span><br></pre></td></tr></table></figure>
+
+<p>&#x5F00;&#x59CB;&#x524D;&#xFF0C;&#x8BF7;&#x8BB0;&#x4F4F;.word&#x6307;&#x5411;&#x4E86;&#x4E00;&#x4E2A;32&#x4F4D;&#x5171;&#x8BA1;4&#x5B57;&#x8282;&#x7684;&#x6570;&#x636E;&#xFF08;&#x5185;&#x5B58;&#xFF09;&#x533A;&#x5757;&#xFF0C;&#x8FD9;&#x5BF9;&#x4E8E;&#x7406;&#x89E3;&#x4EE3;&#x7801;&#x4E2D;&#x7684;&#x504F;&#x79FB;&#x5F88;&#x91CD;&#x8981;&#x3002;&#x7A0B;&#x5E8F;&#x4E2D;&#x5305;&#x542B;&#x4E86;<code>.data</code>&#x533A;&#x6BB5;&#xFF0C;&#x5728;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x5F00;&#x8F9F;&#x4E86;&#x4E00;&#x4E2A;&#x6709;5&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x7A7A;&#x6570;&#x7EC4;array_buffer&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x4F7F;&#x7528;&#x5B83;&#x4F5C;&#x4E3A;&#x53EF;&#x5199;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;&#x6765;&#x5B58;&#x50A8;&#x6570;&#x636E; &#x3002;<code>.text</code>&#x6BB5;&#x5305;&#x542B;&#x4E86;&#x7531;&#x5185;&#x5B58;&#x64CD;&#x4F5C;&#x6307;&#x4EE4;&#x6784;&#x6210;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x548C;&#x4E00;&#x4E2A;&#x5305;&#x542B;&#x4E86;&#x4E24;&#x4E2A;&#x6807;&#x7B7E;&#x7684;&#x53EA;&#x8BFB;&#x6570;&#x636E;&#x6C60;&#xFF0C;&#x5176;&#x4E2D;&#x4E00;&#x4E2A;&#x6807;&#x7B7E;&#x89C4;&#x5B9A;&#x4E86;&#x4E00;&#x4E2A;&#x5177;&#x6709;7&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x6570;&#x7EC4;&#xFF0C;&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x94FE;&#x63A5;&#x7740;.text&#x533A;&#x6BB5;&#x548C;.data&#x533A;&#x6BB5;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x7528;&#x5B83;&#x8BBF;&#x95EE;.data&#x533A;&#x6BB5;&#x7684;array_buffer&#x3002; </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adr r0, words+12             /* address of words[3] -&gt; r0 */</span><br></pre></td></tr></table></figure>
+
+<p>&#x6211;&#x4EEC;&#x4F7F;&#x7528;adr&#x6307;&#x4EE4;(&#x548C;ldr&#x53D6;&#x7269;&#x7406;&#x5730;&#x5740;&#x4E0D;&#x540C;&#xFF0C;adr&#x53D6;&#x6307;&#x4EE4;&#x53D6;&#x7684;&#x662F;&#x57FA;&#x4E8E;PC&#x6307;&#x4EE4;&#x7684;&#x76F8;&#x5BF9;&#x504F;&#x79FB;&#xFF0C;&#x4F4D;&#x7F6E;&#x65E0;&#x5173;)&#x6765;&#x83B7;&#x53D6;&#x7B2C;&#x56DB;&#x4E2A;(words[3])&#x6570;&#x636E;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x7136;&#x540E;&#x5B58;&#x5165;R0&#xFF0C;&#x6211;&#x4EEC;&#x6307;&#x5411;&#x6570;&#x7EC4;&#x7684;&#x4E2D;&#x95F4;&#x662F;&#x56E0;&#x4E3A;&#x6211;&#x4EEC;&#x5C06;&#x4ECE;&#x90A3;&#x5411;&#x524D;&#x6216;&#x8005;&#x5411;&#x540E;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x3002;</p>
+<p>r0&#x73B0;&#x5728;&#x5B58;&#x50A8;&#x7740;word[3]&#x7684;&#x5730;&#x5740;&#xFF0C;&#x5047;&#x8BBE;&#x5B83;&#x662F;<code>0x80B8</code>&#xFF0C;&#x8FD9;&#x5C31;&#x610F;&#x5473;&#x7740;&#xFF0C;&#x6211;&#x4EEC;&#x6570;&#x7EC4;&#x7684;&#x5F00;&#x59CB;word[0]&#x7684;&#x5730;&#x5740;&#x662F; <code>0x80AC(0x80B8 - 0xC)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; x/7w 0x00080AC</span><br><span class="line">0x80ac &lt;words&gt;: 0x00000000 0x00000001 0x00000002 0x00000003</span><br><span class="line">0x80bc &lt;words+16&gt;: 0x00000004 0x00000005 0x00000006</span><br></pre></td></tr></table></figure>
+
+<p> &#x6211;&#x4EEC;&#x7528; array_buff&#x6570;&#x7EC4;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#xFF08; (array_buff[0] &#xFF09;&#x548C;&#x7B2C;&#x4E09;&#x4E2A;&#x5143;&#x7D20;&#xFF08; array_buff[2] &#xFF09;&#x7684;&#x5730;&#x5740;&#x6765;&#x5206;&#x522B;&#x586B;&#x5145;R1&#x548C;R2&#x3002;&#x4E00;&#x65E6;&#x5730;&#x5740;&#x88AB;&#x83B7;&#x53D6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x80FD;&#x64CD;&#x4F5C;&#x4ED6;&#x4EEC;&#x4E86; </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ldr r1, array_buff_bridge    /* address of array_buff[0] -&gt; r1 */</span><br><span class="line">ldr r2, array_buff_bridge+4  /* address of array_buff[2] -&gt; r2 */</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; info register r1 r2   //&#x7528;&#x4E8E;&#x83B7;&#x53D6;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;</span><br><span class="line">r1      0x100d0     65744</span><br><span class="line">r2      0x100d8     65752</span><br></pre></td></tr></table></figure>
+
+<p>&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x4F7F;&#x7528;<code>LDM</code>&#x4ECE;r0&#x6307;&#x5411;&#x7684;&#x5185;&#x5B58;&#x4E2D;&#x53D6;&#x4E24;&#x4E2A;&#x5B57;&#x7684;&#x6570;&#x636E;&#x653E;&#x5165;&#x5BC4;&#x5B58;&#x5668;&#x3002;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x65E9;&#x5C31;&#x5C06;R0&#x6307;&#x5411;word[3]&#xFF0C;&#x56E0;&#x6B64;word[3]&#x7684;&#x503C;&#x4F1A;&#x88AB;&#x5B58;&#x5165;R4&#xFF0C;word[4]&#x7684;&#x503C;&#x4F1A;&#x88AB;&#x5B58;&#x5165;R[5]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldm r0, {r4,r5}      /* words[3] -&gt; r4 = 0x03; words[4] -&gt; r5 = 0x04 */</span><br></pre></td></tr></table></figure>
+
+<p>&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4E86;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x52A0;&#x8F7D;&#x4E86;&#x591A;&#x4E2A;&#xFF08;2&#x4E2A;&#x6570;&#x636E;&#x5757;)&#xFF0C;&#x4F7F;&#x5F97; r4 = 0x03, r5 = 0x04,<strong>&#x6CE8;&#x610F;LDM&#x7684;&#x6E90;/&#x76EE;&#x7684;&#x548C;LDR&#x662F;&#x4E0D;&#x4E00;&#x6837;&#x7684;&#xFF0C;<code>LDM src,dest</code></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; info registers r4 r5</span><br><span class="line">r4      0x3      3</span><br><span class="line">r5      0x4      4</span><br></pre></td></tr></table></figure>
+
+<p>&#x4E0B;&#x9762;&#x662F;&#x4F7F;&#x7528;STM&#x5C06;&#x591A;&#x4E2A;&#x503C;&#x5199;&#x5165;&#x5185;&#x5B58;&#x3002;STM&#x6307;&#x4EE4;&#x5C06;R4, R5&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;0x3&#x548C;0x4&#x5B58;&#x5165;R1&#x6307;&#x5411;&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x4E2D;&#x3002;&#x7531;&#x4E8E;&#x4E4B;&#x524D;R1&#x6307;&#x5411;&#x7684;&#x662F;<code>array_buf</code>&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x5143;&#x7D20;&#xFF0C;&#x6240;&#x4EE5;&#x73B0;&#x5728;<code>array_buff[0] = 0x00000003</code> <code>array_buff[1] = 0x00000004.</code>,&#x9664;&#x7279;&#x6B8A;&#x60C5;&#x51B5;&#x5916;&#xFF0C;LDM&#x548C;STM&#x64CD;&#x4F5C;&#x6B65;&#x957F;&#x4E3A;4&#x4E2A;&#x5B57;&#x8282;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stm r1, {r4, r5}</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; x/2w 0x000100D0</span><br><span class="line">0x100d0 &lt;array_buff&gt;:  0x3   0x4</span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x524D;&#x9762;&#x8BF4;&#x8FF0;&#xFF0C;<code>LDM</code>&#x548C;<code>STM</code>&#x6709;&#x591A;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x4F7F;&#x7528;&#x5F62;&#x5F0F;&#x3002;&#x800C;&#x5177;&#x4F53;&#x4F7F;&#x7528;&#x54EA;&#x4E00;&#x79CD;&#x5F62;&#x5F0F;&#x662F;&#x7531;&#x6307;&#x4EE4;&#x7684;&#x540E;&#x7F00;&#x6307;&#x5B9A;&#x7684;&#x3002;&#x8FD9;&#x4E2A;&#x793A;&#x4F8B;&#x5217;&#x51FA;&#x4E86;&#x540E;&#x7F00; &#x7684;&#x51E0;&#x79CD;&#x4E0D;&#x540C;&#x7684;&#x5F62;&#x5F0F;&#xFF1A;<code>-IA</code>( increase after ) <code>-IB</code>( increase before),<code>-DA</code>( decrease after )<code>-DB</code>( decrease before ),&#x8FD9;&#x51E0;&#x79CD;&#x5F62;&#x5F0F;&#x4E0D;&#x540C;&#x4E4B;&#x5904;&#x5728;&#x4E8E;&#x4ED6;&#x4EEC;&#x8BBF;&#x95EE;&#x7B2C;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x6570;&#x7684;&#x65F6;&#x5019;&#x6307;&#x5B9A;&#x5185;&#x5B58;&#x7684;&#x65B9;&#x5F0F;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;<code>LDM</code>&#x548C;<code>LDMIA</code>&#x76F8;&#x540C;&#xFF0C;&#x6BCF;&#x4E00;&#x6B21;&#x52A0;&#x8F7D;&#x4E4B;&#x540E;&#xFF0C;&#x5730;&#x5740;&#x6307;&#x9488;&#x90FD;&#x4F1A;&#x81EA;&#x5DF1;&#x589E;&#x52A0;&#x4ECE;&#x800C;&#x6307;&#x5411;&#x4E0B;&#x4E00;&#x4E2A;&#x5C06;&#x8981;&#x88AB;&#x8F7D;&#x5165;&#x7684;&#x5143;&#x7D20;&#x3002;&#x7528;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x6211;&#x4E48;&#x80FD;&#x4ECE;&#x7B2C;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x6570;(&#x5B58;&#x50A8;&#x6E90;&#x5730;&#x5740;&#x7684;&#x5BC4;&#x5B58;&#x5668;)&#x6307;&#x5B9A;&#x7684;&#x5185;&#x5B58;&#x5730;&#x5740;&#x4E2D;&#x83B7;&#x53D6;&#x4E86;&#x987A;&#x5E8F;(&#x6B63;&#x5411;)&#x6570;&#x636E;&#x52A0;&#x8F7D;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ldmia r0, {r4-r6} /* words[3] -&gt; r4 = 0x03, words[4] -&gt; r5 = 0x04; words[5] -&gt; r6 = 0x05; */ </span><br><span class="line">stmia r1, {r4-r6} /* r4 -&gt; array_buff[0] = 0x03; r5 -&gt; array_buff[1] = 0x04; r6 -&gt; array_buff[2] = 0x05 */</span><br></pre></td></tr></table></figure>
+
+<p><code>LDMIB</code>&#x9996;&#x76F8;&#x5C06;&#x6E90;&#x5730;&#x5740;&#x589E;&#x52A0;&#x56DB;&#x4E2A;&#x5B57;&#x8282;&#x7136;&#x540E;&#x6267;&#x884C;&#x7B2C;&#x4E00;&#x6B21;&#x52A0;&#x8F7D;&#xFF0C;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x4E0B;&#xFF0C;&#x6211;&#x4EEC;&#x4ECD;&#x7136;&#x53EF;&#x4EE5;&#x987A;&#x5E8F;&#x52A0;&#x8F7D;&#x6570;&#x636E;&#xFF0C;&#x4F46;&#x662F;&#x7B2C;&#x4E00;&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x5730;&#x5740;&#x4E0E;&#x6E90;&#x5730;&#x5740;&#x6709;4&#x4E2A;&#x5B57;&#x8282;&#x7684;&#x504F;&#x79FB;&#x3002;&#x8FD9;&#x5C31;&#x662F;&#x4E3A;&#x4EC0;&#x4E48;&#x5728;&#x5B9E;&#x4F8B;&#x4E2D;&#xFF0C;&#x8981;&#x901A;&#x8FC7;<code>LDMIB</code>&#x6307;&#x4EE4;&#x4ECE;&#x5185;&#x5B58;&#x4E2D;&#x52A0;&#x8F7D;&#x5230;R4&#x4E2D;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x5143;&#x7D20;&#x662F;words[4]&#x800C;&#x4E0D;&#x662F;R0&#x6307;&#x5411;&#x7684;words[3]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ldmib r0, {r4-r6}            /* words[4] -&gt; r4 = 0x04; words[5] -&gt; r5 = 0x05; words[6] -&gt; r6 = 0x06 */</span><br><span class="line">stmib r1, {r4-r6}            /* r4 -&gt; array_buff[1] = 0x04; r5 -&gt; array_buff[2] = 0x05; r6 -&gt; array_buff[3] = 0x06 */</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; x/3w 0x100D4</span><br><span class="line">0x100d4 &lt;array_buff+4&gt;: 0x00000004  0x00000005  0x00000006</span><br><span class="line">gef&gt; info register r4 r5 r6</span><br><span class="line">r4     0x4    4</span><br><span class="line">r5     0x5    5</span><br><span class="line">r6     0x6    6</span><br></pre></td></tr></table></figure>
+
+<p>&#x5F53;&#x6211;&#x4EEC;&#x4F7F;&#x7528;<code>LDMDA</code>&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6240;&#x6709;&#x7684;&#x64CD;&#x4F5C;&#x90FD;&#x662F;&#x5411;&#x540E;&#x8FDB;&#x884C;&#x7684;&#x3002;R0&#x6307;&#x5411;words[3]&#xFF0C;&#x5F53;&#x52A0;&#x8F7D;&#x5F00;&#x59CB;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x5411;&#x540E;&#x79FB;&#x52A8;&#xFF0C;&#x7136;&#x540E;&#x5C06;word[3].word[2],word[1]&#x52A0;&#x8F7D;&#x5230;r6,r5,r4&#x4E4B;&#x4E2D;&#x3002;&#x5BC4;&#x5B58;&#x5668;&#x540C;&#x6837;&#x4E5F;&#x662F;&#x5411;&#x540E;&#x52A0;&#x8F7D;&#x7684;,&#x6240;&#x4EE5;&#x5F53;&#x6307;&#x4EE4;&#x5B8C;&#x6210;&#x7684;&#x65F6;&#x5019;&#x6709;: R6 = 0x00000003, R5 = 0x00000002, R4 = 0x00000001. &#x4E4B;&#x6240;&#x4EE5;&#x662F;&#x8FD9;&#x6837;&#xFF0C;&#x662F;&#x56E0;&#x4E3A;&#x5728;&#x6BCF;&#x6B21;&#x52A0;&#x8F7D;&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x90FD;&#x4F1A;&#x51CF;&#x5C0F;&#x6E90;&#x5730;&#x5740;&#x3002;&#x5BC4;&#x5B58;&#x5668;&#x53CD;&#x5411;&#x8F7D;&#x5165;&#x5219;&#x662F;&#x7531;&#x4E8E;&#x6211;&#x4EEC;&#x51CF;&#x5C11;&#x4E86;&#x5185;&#x5B58;&#x5730;&#x5740;&#x4E4B;&#x540E;&#xFF0C;&#x6240;&#x5BF9;&#x5E94;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x7F16;&#x53F7;&#x503C;&#x4E5F;&#x8DDF;&#x7740;&#x4E0B;&#x964D;&#x4E86;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x9700;&#x8981;&#x9075;&#x5B88;&#x66F4;&#x9AD8;&#x7684;&#x5730;&#x5740;&#x4F7F;&#x7528;&#x66F4;&#x9AD8;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x7F16;&#x53F7;&#x8FD9;&#x4E00;&#x7EA6;&#x5B9A;&#xFF0C;&#x67E5;&#x770B;<code>LDMIA</code>&#x7684;&#x793A;&#x4F8B;&#xFF0C;&#x6211;&#x4EEC;&#x9996;&#x5148;&#x52A0;&#x8F7D;&#x8F83;&#x4F4E;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x7136;&#x540E;&#x518D;&#x52A0;&#x8F7D;&#x8F83;&#x9AD8;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x7684;&#x6E90;&#x5730;&#x5740;&#x589E;&#x52A0;&#x4E86;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldmda r0, {r4-r6} /* words[3] -&gt; r6 = 0x03; words[2] -&gt; r5 = 0x02; words[1] -&gt; r4 = 0x01 */</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; info register r4 r5 r6</span><br><span class="line">r4     0x1    1</span><br><span class="line">r5     0x2    2</span><br><span class="line">r6     0x3    3</span><br></pre></td></tr></table></figure>
+
+<p>&#x5148;&#x964D;&#x4F4E;&#x5730;&#x5740;&#xFF0C;&#x7136;&#x540E;&#x8F7D;&#x5165;&#x591A;&#x4E2A;&#x503C;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldmdb r0, {r4-r6} /* words[2] -&gt; r6 = 0x02; words[1] -&gt; r5 = 0x01; words[0] -&gt; r4 = 0x00 */</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; info register r4 r5 r6</span><br><span class="line">r4 0x0 0</span><br><span class="line">r5 0x1 1</span><br><span class="line">r6 0x2 2</span><br></pre></td></tr></table></figure>
+
+<p>&#x5B58;&#x50A8;&#x503C;&#x7136;&#x540E;&#x964D;&#x4F4E;&#x5730;&#x5740;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stmda r2, {r4-r6} /* r6 -&gt; array_buff[2] = 0x02; r5 -&gt; array_buff[1] = 0x01; r4 -&gt; array_buff[0] = 0x00 */</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; x/3w 0x100D0</span><br><span class="line">0x100d0 &lt;array_buff&gt;: 0x00000000 0x00000001 0x00000002</span><br></pre></td></tr></table></figure>
+
+<p>&#x964D;&#x4F4E;&#x5730;&#x5740;&#xFF0C;&#x7136;&#x540E;&#x5B58;&#x50A8;&#x503C;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stmdb r2, {r4-r5} /* r5 -&gt; array_buff[1] = 0x01; r4 -&gt; array_buff[0] = 0x00; */</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gef&gt; x/2w 0x100D0</span><br><span class="line">0x100d0 &lt;array_buff&gt;: 0x00000000 0x00000001</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-&#x51FA;&#x6808;&#x548C;&#x5165;&#x6808;"><a href="#6-&#x51FA;&#x6808;&#x548C;&#x5165;&#x6808;" class="headerlink" title="6 &#x51FA;&#x6808;&#x548C;&#x5165;&#x6808;"></a>6 &#x51FA;&#x6808;&#x548C;&#x5165;&#x6808;</h2><p>&#x8FDB;&#x7A0B;&#x4E2D;&#x6709;&#x4E00;&#x5757;&#x4F7F;&#x7528;&#x7740;&#x7684;&#x5185;&#x5B58;&#x533A;&#x57DF;&#x53EB;&#x505A;&#x6808;&#xFF0C;&#x6808;&#x6307;&#x9488;(sp)&#x662F;&#x4E00;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x518D;&#x6B63;&#x5E38;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5B83;&#x603B;&#x662F;&#x6307;&#x5411;&#x5185;&#x5B58;&#x533A;&#x57DF;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#x3002;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x901A;&#x5E38;&#x4F7F;&#x7528;&#x6808;&#x4F5C;&#x4E3A;&#x4E34;&#x65F6;&#x7684;&#x6570;&#x636E;&#x5B58;&#x50A8;&#x533A;&#x57DF;&#xFF0C;&#x5728;x86&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;push&#x548C;pop&#x4ECE;&#x6808;&#x4E2D;&#x52A0;&#x8F7D;&#x548C;&#x5B58;&#x50A8;&#xFF0C;&#x800C;&#x5728;ARM&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FD9;&#x4E24;&#x4E2A;&#x6307;&#x4EE4;&#x3002;</p>
+<p>&#x5F53;&#x6211;&#x4EEC;PUSH&#x6570;&#x636E;&#x5230;&#x4E00;&#x4E2A;&#x4E0B;&#x964D;&#x6808;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4F1A;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x64CD;&#x4F5C;&#xFF1A;</p>
+<ol>
+<li>SP&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x5B58;&#x50A8;&#x7684;&#x5730;&#x5740;-4</li>
+<li>&#x6570;&#x636E;&#x4F1A;&#x5B58;&#x50A8;&#x5230;sp&#x6240;&#x6307;&#x5411;&#x7684;&#x65B0;&#x5730;&#x5740;</li>
+</ol>
+<p>&#x5F53;&#x4ECE;&#x6808;&#x4E2D;POP&#x6570;&#x636E;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4F1A;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x64CD;&#x4F5C;&#xFF1A;</p>
+<ol>
+<li>&#x4ECE;&#x5F53;&#x524D;SP&#x6240;&#x6307;&#x5411;&#x7684;&#x5185;&#x5B58;&#x4E2D;&#x53D6;&#x51FA;&#x6570;&#x636E;&#xFF0C;&#x7136;&#x540E;&#x4F20;&#x9012;&#x7ED9;&#x4E00;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;</li>
+<li>SP&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x5B58;&#x50A8;&#x7684;&#x5730;&#x5740;+4</li>
+</ol>
+<p>&#x5728;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x4F1A;&#x4F7F;&#x7528;PUSH/POP &#x4EE5;&#x53CA; LDMIA/STMDB</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.text</span><br><span class="line">.globa _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">	mov r0, #3</span><br><span class="line">	mov r1. #4</span><br><span class="line">	push {r0, r1}</span><br><span class="line">	pop {r2, r3}</span><br><span class="line">	stmdb sp!, {r0, r1}</span><br><span class="line">	ldmia sp!, {r4, r5}</span><br></pre></td></tr></table></figure>
+
+<p>&#x53CD;&#x6C47;&#x7F16;&#x4E4B;&#x540E;:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">00008054 &lt;_start&gt;:</span><br><span class="line"> 8054: e3a00003 mov r0, <span class="comment">#3</span></span><br><span class="line"> 8058: e3a01004 mov r1, <span class="comment">#4</span></span><br><span class="line"> 805c: e92d0003 push {r0, r1}      <span class="comment"># &#x6309; r1,r0&#x7684;&#x987A;&#x5E8F;&#x5165;&#x6808;</span></span><br><span class="line"> 8060: e8bd000c pop {r2, r3}       <span class="comment"># &#x6309; r2,r3&#x7684;&#x987A;&#x5E8F;&#x51FA;&#x6808;</span></span><br><span class="line"> 8064: e92d0003 push {r0, r1}</span><br><span class="line"> 8068: e8bd0030 pop {r4, r5}</span><br><span class="line"> 806c: e1200070 bkpt 0x0000</span><br></pre></td></tr></table></figure>
+
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;LDMIA&#x6307;&#x4EE4;&#x548C;STMDB&#x6307;&#x4EE4;&#x4E5F;&#x88AB;&#x8F6C;&#x6362;&#x4E3A;PUSH&#x548C;POP&#x6307;&#x4EE4;&#x4E86;&#x3002;&#x8FD9;&#x662F;&#x56E0;&#x4E3A; <code>PUSH</code> &#x662F;<code>STMDB sp!</code>&#x7684;&#x540C;&#x4E49;&#x8BCD;&#xFF0C;&#x800C;<code>POP</code>&#x5219;&#x662F;<code>LDMIA sp!</code>&#x7684;&#x540C;&#x4E49;&#x8BCD;</p>
+<h2 id="7-ARM-&#x6761;&#x4EF6;&#x6267;&#x884C;&#x6307;&#x4EE4;-amp-amp-Thumb&#x6A21;&#x5F0F;&#x4E0B;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C;-amp-amp-&#x5206;&#x652F;&#x6307;&#x4EE4;"><a href="#7-ARM-&#x6761;&#x4EF6;&#x6267;&#x884C;&#x6307;&#x4EE4;-amp-amp-Thumb&#x6A21;&#x5F0F;&#x4E0B;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C;-amp-amp-&#x5206;&#x652F;&#x6307;&#x4EE4;" class="headerlink" title="7 ARM &#x6761;&#x4EF6;&#x6267;&#x884C;&#x6307;&#x4EE4; &amp;&amp; Thumb&#x6A21;&#x5F0F;&#x4E0B;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C; &amp;&amp; &#x5206;&#x652F;&#x6307;&#x4EE4;"></a>7 ARM &#x6761;&#x4EF6;&#x6267;&#x884C;&#x6307;&#x4EE4; &amp;&amp; Thumb&#x6A21;&#x5F0F;&#x4E0B;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C; &amp;&amp; &#x5206;&#x652F;&#x6307;&#x4EE4;</h2><p>&#x5728;&#x8BA8;&#x8BBA;CPSR&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6211;&#x4EEC;&#x5DF2;&#x7ECF;&#x7B80;&#x8981;&#x7684;&#x63D0;&#x5230;&#x4E86;&#x4EE5;&#x4E0B;&#x6709;&#x5173;&#x6761;&#x4EF6;&#x6267;&#x884C;&#x76F8;&#x5173;&#x7684;&#x77E5;&#x8BC6;&#x3002;&#x6211;&#x4E48;&#x80FD;&#x4F7F;&#x7528;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#x6765;&#x63A7;&#x5236;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x65F6;&#x7684;&#x6D41;&#x7A0B;&#xFF0C;&#x4E00;&#x822C;&#x6761;&#x4EF6;&#x4E0B;&#x662F;&#x901A;&#x8FC7;&#x8DF3;&#x8F6C;&#xFF08;&#x5206;&#x652F;&#xFF09;&#x6216;&#x8005;&#x4EC5;&#x4EC5;&#x5728;&#x6EE1;&#x8DB3;&#x67D0;&#x4E9B;&#x6761;&#x4EF6;&#x7684;&#x65F6;&#x5019;&#x6267;&#x884C;&#x67D0;&#x4E9B;&#x6307;&#x4EE4;&#x6765;&#x63A7;&#x5236;&#x7A0B;&#x5E8F;&#x7684;&#x6D41;&#x7A0B;&#xFF0C;&#x8BE5;&#x6761;&#x4EF6;&#x88AB;&#x63CF;&#x8FF0;&#x4E3A;CPSR&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x7279;&#x5B9A;&#x7684;&#x72B6;&#x6001;&#x4F4D;&#x3002;&#x8FD9;&#x4E9B;&#x72B6;&#x6001;&#x4F4D;&#x4F1A;&#x6839;&#x636E;&#x67D0;&#x4E9B;&#x6307;&#x4EE4;&#x7684;&#x7ED3;&#x679C;&#x4E0D;&#x65AD;&#x7684;&#x66F4;&#x6539;&#xFF0C;&#x4F8B;&#x5982;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x5728;&#x6BD4;&#x8F83;&#x4E24;&#x4E2A;&#x6570;&#x7684;&#x5927;&#x5C0F;&#xFF0C;&#x5E76;&#x4E14;&#x4ED6;&#x4EEC;&#x4E24;&#x4E2A;&#x7684;&#x5927;&#x5C0F;&#x76F8;&#x7B49;&#xFF0C;&#x6211;&#x4EEC;&#x89E6;&#x53D1;&#x4E86; ZERO bit (Z = 1)&#xFF0C;&#x56E0;&#x4E3A;&#x5728;&#x5E95;&#x5C42;&#x6325;&#x53D1;&#x751F;b - a = 0&#xFF0C;&#x5728;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x6211;&#x4EEC;&#x4F1A;&#x4F7F;&#x7528;EQual&#x6307;&#x4EE4;&#x3002;&#x5982;&#x679C;&#x7B2C;&#x4E00;&#x4E2A;&#x6570;&#x5B57;&#x66F4;&#x5927;&#xFF0C;&#x6211;&#x4E48;&#x90A3;&#x4F1A;&#x6709;&#x4E00;&#x4E2A;&#xFF08;Great Than)&#x7684;&#x6761;&#x4EF6;&#xFF0C;&#x76F8;&#x5BF9;&#x7ACB;&#x7684;&#x6709;Low Than&#x3002;&#x4E0B;&#x9762;&#x5217;&#x51FA;&#x4E86;&#x5E38;&#x7528;&#x7684;&#x6761;&#x4EF6;&#xFF0C;&#x4EE5;&#x53CA;&#x4ED6;&#x4EEC;&#x5F71;&#x54CD;&#x7684;CPSR&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x6761;&#x4EF6;&#x4F4D;:</p>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/1584860897620.png" alt="1584860897620"></p>
+<p>&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x7684;&#x4F8B;&#x5B50;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.global main</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">        mov     r0, #2     /* setting up initial variable */</span><br><span class="line">        cmp     r0, #3     /* comparing r0 to number 3. Negative bit get&apos;s set to 1 */</span><br><span class="line">        addlt   r0, r0, #1 /* increasing r0 IF it was determined that it is smaller (lower than) number 3 */</span><br><span class="line">        cmp     r0, #3     /* comparing r0 to number 3 again. Zero bit gets set to 1. Negative bit is set to 0 */</span><br><span class="line">        addlt   r0, r0, #1 /* increasing r0 IF it was determined that it is smaller (lower than) number 3 */</span><br><span class="line">        bx      lr</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-1-Thumb-&#x4E2D;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C;"><a href="#7-1-Thumb-&#x4E2D;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C;" class="headerlink" title="7.1 Thumb &#x4E2D;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C;"></a>7.1 Thumb &#x4E2D;&#x7684;&#x6761;&#x4EF6;&#x6267;&#x884C;</h3><p>&#x5728;&#x524D;&#x9762;&#x6211;&#x4EEC;&#x8BF4;&#x8FC7;&#x5B58;&#x5728;&#x4E0D;&#x540C;&#x7248;&#x672C;&#x7684;Thumb&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x5177;&#x4F53;&#x6765;&#x8BF4;&#xFF0C;&#x6709;&#x5141;&#x8BB8;&#x6761;&#x4EF6;&#x6267;&#x884C;&#x7684;Thumb&#x7248;&#x672C;(Thumb-2)&#x3002;&#x67D0;&#x4E9B;ARM&#x5904;&#x7406;&#x5668;&#x7684;&#x7248;&#x672C;&#x652F;&#x6301;IT&#x6307;&#x4EE4;&#xFF0C;&#x8BE5;&#x6307;&#x4EE4;&#x6700;&#x591A;&#x53EF;&#x4EE5;&#x5728;Thumb&#x72B6;&#x6001;&#x4E0B;&#x6709;&#x6761;&#x4EF6;&#x7684;&#x6267;&#x884C;4&#x6761;&#x6307;&#x4EE4;&#x3002;</p>
+<p>&#x8BED;&#x6CD5;:<code>IT {x {y {z}}} cond</code></p>
+<ul>
+<li><p><code>cond</code>&#x89C4;&#x5B9A;&#x4E86;&#x6267;&#x884C;IT&#x8BED;&#x53E5;&#x5757;&#x91CC;&#x7684;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x9700;&#x8981;&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6; </p>
+</li>
+<li><p><code>x</code>&#x89C4;&#x5B9A;&#x4E86;&#x6267;&#x884C;&#x7684;IT&#x8BED;&#x53E5;&#x5757;&#x4E2D;&#x7B2C;&#x4E8C;&#x6761;&#x6307;&#x4EE4;&#x9700;&#x8981;&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6; </p>
+</li>
+<li><p><code>y</code>&#x89C4;&#x5B9A;&#x4E86;&#x6267;&#x884C;IT&#x8BED;&#x53E5;&#x5757;&#x91CC;&#x7684;&#x7B2C;&#x4E09;&#x6761;&#x6307;&#x4EE4;&#x9700;&#x8981;&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6; </p>
+</li>
+<li><p><code>z</code> &#x89C4;&#x5B9A;&#x4E86;&#x6267;&#x884C;IT&#x8BED;&#x53E5;&#x5757;&#x91CC;&#x7684;&#x7B2C;&#x56DB;&#x6761;&#x6307;&#x4EE4;&#x9700;&#x8981;&#x6EE1;&#x8DB3;&#x7684;&#x6761;&#x4EF6; </p>
+<p>IT&#x6307;&#x4EE4;&#x96C6;&#x7684;&#x7ED3;&#x6784;&#x662F;&#xFF1A; &#x201C;IF-Then-(Else)&#x201D;&#xFF0C;&#x5B83;&#x7684;&#x8BED;&#x6CD5;&#x7ED3;&#x6784;&#x7531;&#x4E24;&#x4E2A;&#x5B57;&#x6BCD;&#x6784;&#x6210;&#xFF1A; </p>
+</li>
+<li><p>IT&#x4EE3;&#x8868;If-Then&#xFF08;&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x662F;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#xFF09; </p>
+</li>
+<li><p>TT&#x4EE3;&#x8868;If-Then-Then&#xFF08;&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x4E24;&#x6761;&#x6307;&#x4EE4;&#x662F;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#xFF09; </p>
+</li>
+<li><p>ITE&#x4EE3;&#x8868; If-Then-Else&#xFF08;&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x4E24;&#x6761;&#x6307;&#x4EE4;&#x662F;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#xFF09;</p>
+</li>
+<li><p>ITTE&#x4EE3;&#x8868; If-Then-Then-Else &#xFF08;&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x4E09;&#x6761;&#x6307;&#x4EE4;&#x662F;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#xFF09; </p>
+</li>
+<li><p>ITTEE&#x4EE3;&#x8868; If-Then-Then-Else-Else &#xFF08;&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x56DB;&#x6761;&#x6307;&#x4EE4;&#x662F;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#xFF09; </p>
+<p>IT&#x5757;&#x4E2D;&#x7684;&#x6BCF;&#x6761;&#x6307;&#x4EE4;&#x5FC5;&#x987B;&#x6307;&#x5B9A;&#x4E00;&#x4E2A;&#x6761;&#x4EF6;&#x540E;&#x7F00;&#xFF0C;&#x8BE5;&#x6761;&#x4EF6;&#x540E;&#x7F00;&#x53EF;&#x4EE5;&#x662F;&#x76F8;&#x540C;&#x7684;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x5728;&#x903B;&#x8F91;&#x76F8;&#x53CD;&#x7684;&#x3002;  &#x8FD9;&#x610F;&#x5473;&#x7740;&#xFF0C;&#x5982;&#x679C;&#x4F7F;&#x7528;&#x4E86;ITE&#xFF0C;&#x7B2C;&#x4E00;&#x548C;&#x7B2C;&#x4E8C;&#x6307;&#x4EE4;&#xFF08;If-Then&#xFF09;&#x5FC5;&#x987B;&#x5177;&#x6709;&#x76F8;&#x540C;&#x7684;&#x6761;&#x4EF6;&#x540E;&#x7F00;&#xFF0C;&#x800C;&#x7B2C;&#x4E09;&#x6761;&#x6307;&#x4EE4;&#xFF08;else&#x8BED;&#x53E5;&#xFF09;&#x5FC5;&#x987B;&#x548C;&#x524D;&#x9762;&#x4E24;&#x6761;&#x8BED;&#x53E5;&#x903B;&#x8F91;&#x76F8;&#x53CD;&#x3002; </p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ITTE   NE           ; Next 3 instructions are conditional</span><br><span class="line">ANDNE  R0, R0, R1   ; ANDNE does not update condition flags</span><br><span class="line">ADDSNE R2, R2, #1   ; ADDSNE updates condition flags</span><br><span class="line">MOVEQ  R2, R3       ; Conditional move</span><br><span class="line"></span><br><span class="line">ITE    GT           ; Next 2 instructions are conditional</span><br><span class="line">ADDGT  R1, R0, #55  ; Conditional addition in case the GT is true</span><br><span class="line">ADDLE  R1, R0, #48  ; Conditional addition in case the GT is not true</span><br><span class="line"></span><br><span class="line">ITTEE  EQ           ; Next 4 instructions are conditional</span><br><span class="line">MOVEQ  R0, R1       ; Conditional MOV</span><br><span class="line">ADDEQ  R2, R2, #10  ; Conditional ADD</span><br><span class="line">ANDNE  R3, R3, #1   ; Conditional AND</span><br><span class="line">BNE.W  dloop        ; Branch instruction can only be used in the last instruction of an IT block</span><br></pre></td></tr></table></figure>
+
+<p>&#x4E0B;&#x9762;&#x662F;&#x4E0E;&#x6761;&#x4EF6;&#x4EE3;&#x7801;&#x76F8;&#x53CD;&#x7684;&#x5185;&#x5BB9;</p>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/1584861973432.png" alt="1584861973432"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">.syntax unified    @ this is important!</span><br><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">    .code 32</span><br><span class="line">    add r3, pc, #1   @ increase value of PC by 1 and add it to R3</span><br><span class="line">    bx r3            @ branch + exchange to the address in R3 -&gt; switch to Thumb state because LSB = 1</span><br><span class="line"></span><br><span class="line">    .code 16         @ Thumb state</span><br><span class="line">    cmp r0, #10      </span><br><span class="line">    ite eq           @ if R0 is equal 10...</span><br><span class="line">    addeq r1, #2     @ ... then R1 = R1 + 2</span><br><span class="line">    addne r1, #3     @ ... else R1 = R1 + 3</span><br><span class="line">    bkpt</span><br></pre></td></tr></table></figure>
+
+<p> <strong>.code32</strong></p>
+<p>&#x793A;&#x4F8B;&#x4EE3;&#x7801;&#x4EE5;arm&#x72B6;&#x6001;&#x5F00;&#x59CB;&#xFF0C; &#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x5C06;PC&#x52A0;1&#x4E2D;&#x6307;&#x5B9A;&#x7684;&#x5730;&#x5740;&#x6DFB;&#x52A0;&#x5230;R3&#xFF0C;&#x7136;&#x540E;&#x8DF3;&#x8F6C;&#x5230;R3&#x4E2D;&#x7684;&#x5730;&#x5740;&#x3002;  &#x8FD9;&#x5C06;&#x5BFC;&#x81F4;&#x5207;&#x6362;&#x5230;Thumb&#x72B6;&#x6001;&#xFF0C;&#x56E0;&#x4E3A;LSB&#xFF08;&#x6700;&#x4F4E;&#x6709;&#x6548;&#x4F4D;&#xFF09;&#x4E3A;1&#xFF0C;&#x56E0;&#x6B64;&#x6CA1;&#x6709;4&#x5B57;&#x8282;&#x5BF9;&#x9F50;&#x3002; </p>
+<p><strong>.code 16</strong></p>
+<p>&#x5728;Thumb&#x72B6;&#x6001;&#x4E0B;&#xFF0C;&#x6211;&#x4EEC;&#x9996;&#x5148;&#x5C06;R0&#x548C; #10&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#xFF0C;&#x7ED3;&#x679C;&#x662F; N = 1,&#x7136;&#x540E;&#x6211;&#x4EEC;&#x4F7F;&#x7528;if-Than-else&#x5757;&#xFF0C;&#x8FD9;&#x4E2A;&#x5757;&#x4F1A;&#x8DF3;&#x8FC7; <code>addeq</code>&#x6307;&#x4EE4;&#xFF0C;&#x56E0;&#x4E3A;Z&#x4F4D;&#x5E76;&#x6CA1;&#x6709;&#x88AB;&#x8BBE;&#x7F6E;&#xFF0C;&#x800C;<code>addne</code>&#x5C06;&#x88AB;&#x6267;&#x884C;&#xFF0C;&#x56E0;&#x4E3A;&#x7ED3;&#x679C;&#x4E0D;&#x7B49;&#x4E8E; 10</p>
+<h3 id="7-2-&#x5206;&#x652F;&#x6267;&#x884C;"><a href="#7-2-&#x5206;&#x652F;&#x6267;&#x884C;" class="headerlink" title="7.2 &#x5206;&#x652F;&#x6267;&#x884C;"></a>7.2 &#x5206;&#x652F;&#x6267;&#x884C;</h3><p>&#x5206;&#x652F; &#x53C8;&#x79F0;&#x4E3A;&#x8DF3;&#x8F6C;&#xFF0C;&#x4F7F;&#x5F97;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8DF3;&#x8F6C;&#x5230;&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x4EE3;&#x7801;&#x6BB5;&#x3002;&#x5F53;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x8DF3;&#x8FC7;&#x6216;&#x8005;&#x91CD;&#x590D;&#x4EE3;&#x7801;&#x5757;&#xFF0C;&#x5230;&#x7279;&#x5B9A;&#x7684;&#x4F4D;&#x7F6E;&#x7684;&#x65B9;&#x6CD5;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x8FD9;&#x5C06;&#x975E;&#x5E38;&#x6709;&#x7528;&#x3002;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x6700;&#x597D;&#x7684;&#x793A;&#x4F8B;&#x662F;IF&#x8BED;&#x53E5;&#x6216;&#x8005;&#x4E00;&#x4E2A;&#x5FAA;&#x73AF;&#xFF0C;&#x6240;&#x4EE5;&#xFF0C;&#x9996;&#x5148;&#x6765;&#x770B;&#x4E00;&#x4E0B;IF&#x8BED;&#x53E5;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.global main</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">        mov     r1, #2     /* setting up initial variable a */</span><br><span class="line">        mov     r2, #3     /* setting up initial variable b */</span><br><span class="line">        cmp     r1, r2     /* comparing variables to determine which is bigger */</span><br><span class="line">        blt     r1_lower   /* jump to r1_lower in case r2 is bigger (N==1) */</span><br><span class="line">        mov     r0, r1     /* if branching/jumping did not occur, r1 is bigger (or the same) so store r1 into r0 */</span><br><span class="line">        b       end        /* proceed to the end */</span><br><span class="line">r1_lower:</span><br><span class="line">        mov r0, r2         /* We ended up here because r1 was smaller than r2, so move r2 into r0 */</span><br><span class="line">        b end              /* proceed to the end */</span><br><span class="line">end:</span><br><span class="line">        bx lr              /* THE END */</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x5224;&#x65AD;&#x54EA;&#x4E00;&#x4E2A;&#x6570;&#x5B57;&#x66F4;&#x5927;&#xFF0C; &#x7136;&#x540E;&#x5C06;&#x5B83;&#x4F5C;&#x4E3A;&#x8FD4;&#x56DE;&#x503C;&#xFF0C;&#x4F2A;C&#x4EE3;&#x7801;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">if</span> (a &lt; b) {</span><br><span class="line">        max = b;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        max = a;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x73B0;&#x5728;&#x4F7F;&#x7528;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#x548C;&#x4E0D;&#x4F7F;&#x7528;&#x6761;&#x4EF6;&#x6307;&#x4EE4;&#x4E0B;&#x7684;&#x5FAA;&#x73AF;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.global main</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">        mov     r0, #0     /* setting up initial variable a */</span><br><span class="line">loop:</span><br><span class="line">        cmp     r0, #4     /* checking if a==4 */</span><br><span class="line">        beq     end        /* proceeding to the end if a==4 */</span><br><span class="line">        add     r0, r0, #1 /* increasing a by 1 if the jump to the end did not occur */</span><br><span class="line">        b loop             /* repeating the loop */</span><br><span class="line">end:</span><br><span class="line">        bx lr              /* THE END */</span><br></pre></td></tr></table></figure>
+
+<p>&#x4F2A;C&#x4EE3;&#x7801;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(a &lt; <span class="number">4</span>) {</span><br><span class="line">        a += <span class="number">1</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">}</span><br><span class="line">--------------------</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i&lt; <span class="number">4</span>;i++); </span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-B-BX-BLX"><a href="#7-3-B-BX-BLX" class="headerlink" title="7.3 B/BX/BLX"></a>7.3 B/BX/BLX</h3><p>&#x6709;&#x4E09;&#x79CD;&#x7C7B;&#x578B;&#x7684;&#x5206;&#x652F;&#x6307;&#x4EE4;:</p>
+<ul>
+<li><p>Branch(<strong>B</strong>)</p>
+<ul>
+<li>&#x7B80;&#x5355;&#x7684;&#x8DF3;&#x8F6C;&#x8FDB;&#x5165;&#x4E00;&#x4E2A;&#x51FD;&#x6570;</li>
+</ul>
+</li>
+<li><p>Vramch link (<strong>BL</strong>)</p>
+<ul>
+<li>&#x4FDD;&#x5B58;&#x8FD4;&#x56DE;&#x5730;&#x5740;(PC+4)&#x5230;LR&#xFF0C;&#x7136;&#x540E;&#x8DF3;&#x8F6C;&#x8FDB;&#x51FD;&#x6570;<ul>
+<li>TIPS:ARM&#x6267;&#x884C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x6709;&#x4E09;&#x4E2A;&#x6B65;&#x9AA4;&#xFF0C;&#x53D6;&#x5740;&#xFF0C;&#x8BD1;&#x7801;&#xFF0C;&#x6267;&#x884C;&#xFF0C;&#x4E14;&#x5F53;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x53D6;&#x5740;&#x5B8C;&#x6210;&#x4E4B;&#x540E;&#xFF0C;&#x9A6C;&#x4E0A;&#x5F00;&#x59CB;&#x7B2C;&#x4E8C;&#x6761;&#x6307;&#x4EE4;&#x53D6;&#x5740;&#xFF0C;&#x6240;&#x4EE5;&#xFF0C;&#x5F53;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x6267;&#x884C;&#x7684;&#x65F6;&#x5019;&#xFF0C;PC&#x5DF2;&#x7ECF;&#x6307;&#x5411;&#x4E86;&#x7B2C;&#x4E09;&#x6761;&#x6307;&#x4EE4;</li>
+<li>&#x5982;&#x679C;&#x662F;&#x4F7F;&#x7528;&#x4E86;BL&#x6267;&#x884C;&#x4E86;&#x6B63;&#x5E38;&#x7684;&#x8DF3;&#x8F6C;&#xFF0C;&#x90A3;&#x4E48;CPU&#x4F1A;&#x5C06;&#x8FD4;&#x56DE;&#x5730;&#x5740;&#x5B58;&#x5165;LR&#x4E2D;&#xFF0C;&#x5373;&#x5F53;&#x524D;&#x6307;&#x4EE4;&#x5730;&#x5740;+4</li>
+<li>IRQ&#x5F02;&#x5E38;&#x53D1;&#x751F;&#xFF1A;&#x5F02;&#x5E38;&#x53D1;&#x751F;&#x5728;&#x6307;&#x4EE4;&#x6267;&#x884C;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6B64;&#x65F6;PC&#x6307;&#x5411;&#x5F53;&#x524D;&#x6267;&#x884C;&#x6307;&#x4EE4;+8&#xFF0C;&#x7136;&#x540E;&#x5C06;&#x5B83;&#x5B58;&#x5165;LR&#x4E2D;&#xFF0C;&#x6240;&#x4EE5;&#x6062;&#x590D;&#x7684;&#x65F6;&#x5019;&#x9700;&#x8981;-4&#x4EE5;&#x6267;&#x884C;&#x4E0B;&#x9762;&#x4E00;&#x6761;&#x6307;&#x4EE4;</li>
+<li>&#x672A;&#x5B9A;&#x4E49;&#x6307;&#x4EE4;&#x5F02;&#x5E38;&#xFF1A;&#x53D1;&#x751F;&#x5728;&#x8BD1;&#x7801;&#x9636;&#x6BB5;&#xFF0C;&#x6B64;&#x65F6;PC&#x6307;&#x5411;&#x5F53;&#x524D;&#x6267;&#x884C;&#x6307;&#x4EE4;+4&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x8FD4;&#x56DE;&#x65F6;&#x4E0D;&#x7528;&#x8BA1;&#x7B97;</li>
+<li>&#x9884;&#x53D6;&#x5740;&#x6307;&#x4EE4;&#xFF1A;&#x5728;&#x6267;&#x884C;&#x9636;&#x6BB5;&#x8FDB;&#x5165;&#x5F02;&#x5E38;&#xFF0C;&#x6240;&#x4EE5;PC&#x6307;&#x5411;&#x5F53;&#x524D;&#x6267;&#x884C;&#x6307;&#x4EE4;&#x5730;&#x5740;+8&#xFF0C;&#x8FD4;&#x56DE;&#x65F6;&#x9700;&#x8981;-4</li>
+<li>&#x6570;&#x636E;&#x7EC8;&#x6B62;&#x5F02;&#x5E38;&#xFF0C;&#x5728;&#x6307;&#x4EE4;&#x6267;&#x884C;&#x5B8C;&#x6BD5;&#x4E4B;&#x540E;&#x4EA7;&#x751F;&#xFF0C;PC&#x6307;&#x5411;&#x5F53;&#x524D;&#x6267;&#x884C;&#x6307;&#x4EE4;&#x5730;&#x5740;+12&#xFF0C;&#x6062;&#x590D;&#x7684;&#x65F6;&#x5019;&#x9700;&#x8981;-8</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Branch exchange (<strong>BX</strong>) and Branch link exchange (<strong>BLX</strong>) </p>
+<ul>
+<li>&#x548C;B/BL+&#x4EA4;&#x6362;&#x6307;&#x4EE4;&#x96C6;&#x76F8;&#x540C;&#xFF08; ARM &lt;-&gt; Thumb &#xFF09; </li>
+<li>&#x9700;&#x8981;&#x7528;&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x7B2C;&#x4E00;&#x64CD;&#x4F5C;&#x6570;&#xFF1A;BX/BLX+&#x5177;&#x4F53;&#x7684;&#x5BC4;&#x5B58;&#x5668; </li>
+</ul>
+<p>BX/BLX&#x7528;&#x6765;&#x4ECE;ARM&#x6307;&#x4EE4;&#x96C6;&#x5207;&#x6362;&#x5230;Thumb&#x6307;&#x4EE4;&#x96C6; </p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line">     .code 32         @ ARM mode</span><br><span class="line">     add r2, pc, #1   @ put PC+1 into R2</span><br><span class="line">     bx r2            @ branch + exchange to R2</span><br><span class="line"></span><br><span class="line">    .code 16          @ Thumb mode</span><br><span class="line">     mov r0, #1</span><br></pre></td></tr></table></figure>
+
+<p>&#x8FD9;&#x91CC;&#x7684;&#x6280;&#x5DE7;&#x65F6;&#x83B7;&#x53D6;&#x5F53;&#x524D;PC&#x7684;&#x503C;&#xFF0C;&#x7136;&#x540E;&#x52A0;1&#xFF0C;&#x5C06;&#x5B83;&#x5B58;&#x5165;&#x4E00;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x7136;&#x540E; &#x5206;&#x652F;&#xFF08;+&#x4EA4;&#x6362;&#xFF09;&#x5230;&#x8FD9;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x3002;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x52A0;&#x6CD5;&#x6307;&#x4EE4;&#x7B80;&#x5355;&#x7684;&#x83B7;&#x53D6;&#x6709;&#x6548;&#x7684;PC&#x5730;&#x5740;&#xFF08;PC+8&#xFF09;&#x7136;&#x540E;&#x52A0;1&#x3002;&#x63A5;&#x4E0B;&#x6765;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x5206;&#x652F;&#x6307;&#x4EE4;&#x540E;&#x9762;&#x5730;&#x5740;&#x7684;&#x6700;&#x4F4E;&#x6709;&#x6548;&#x4F4D;(LSB)&#x662F;1 &#x7684;&#x65F6;&#x5019;&#xFF0C;&#x610F;&#x5473;&#x7740;&#x5730;&#x5740;&#x4E0D;&#x662F;4&#x5B57;&#x8282;&#x5BF9;&#x9F50;&#x7684;&#xFF0C;&#x5C06;&#x4F1A;&#x53D1;&#x751F;&#x72B6;&#x6001;&#x8F6C;&#x6362;&#x3002;</p>
+<h3 id="7-4-&#x6761;&#x4EF6;&#x5206;&#x652F;&#x6307;&#x4EE4;"><a href="#7-4-&#x6761;&#x4EF6;&#x5206;&#x652F;&#x6307;&#x4EE4;" class="headerlink" title="7.4 &#x6761;&#x4EF6;&#x5206;&#x652F;&#x6307;&#x4EE4;"></a>7.4 &#x6761;&#x4EF6;&#x5206;&#x652F;&#x6307;&#x4EE4;</h3><p>&#x5206;&#x652F;&#x8FD8;&#x53EF;&#x4EE5;&#x6709;&#x6761;&#x4EF6;&#x7684;&#x6267;&#x884C;&#xFF0C;&#x5982;&#x679C;&#x6EE1;&#x8DB3;&#x7279;&#x5B9A;&#x7684;&#x6761;&#x4EF6;&#xFF0C;&#x5219;&#x8DF3;&#x5230;&#x67D0;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"> </span><br><span class="line">_start:</span><br><span class="line">   mov r0, #2</span><br><span class="line">   mov r1, #2</span><br><span class="line">   add r0, r0, r1</span><br><span class="line">   cmp r0, #4</span><br><span class="line">   beq func1</span><br><span class="line">   add r1, #5</span><br><span class="line">   b func2</span><br><span class="line">func1:</span><br><span class="line">   mov r1, r0</span><br><span class="line">   bx  lr</span><br><span class="line">func2:</span><br><span class="line">   mov r0, r1</span><br><span class="line">   bx  lr</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/1584865450580.png" alt="1584865450580"></p>
+<h2 id="8-&#x6808;&#x548C;&#x51FD;&#x6570;"><a href="#8-&#x6808;&#x548C;&#x51FD;&#x6570;" class="headerlink" title="8 &#x6808;&#x548C;&#x51FD;&#x6570;"></a>8 &#x6808;&#x548C;&#x51FD;&#x6570;</h2><p>&#x5728;&#x8FD9;&#x4E00;&#x90E8;&#x5206;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;&#x7814;&#x7A76;&#x6808;&#x7684;&#x8FDB;&#x7A0B;&#x7684;&#x7279;&#x6B8A;&#x5B58;&#x50A8;&#x533A;&#x57DF; </p>
+<h3 id="8-1-&#x6808;"><a href="#8-1-&#x6808;" class="headerlink" title="8.1 &#x6808;"></a>8.1 &#x6808;</h3><p>&#x4E00;&#x822C;&#x6765;&#x8BF4;&#xFF0C;&#x6808;&#x5F0F;&#x7A0B;&#x5E8F;&#xFF0C;&#x8FDB;&#x7A0B;&#x5185;&#x7684;&#x5185;&#x5B58;&#x533A;&#x57DF;&#x3002;&#x521B;&#x5EFA;&#x8FDB;&#x7A0B;&#x7684;&#x65F6;&#x5019;&#x8FD9;&#x90E8;&#x5206;&#x7684;&#x5185;&#x5B58;&#x4F1A;&#x88AB;&#x5206;&#x914D;&#x3002;&#x6211;&#x4E48;&#x80FD;&#x4F7F;&#x7528;&#x6808;&#x6765;&#x5B58;&#x50A8;&#x4E34;&#x65F6;&#x6570;&#x636E;&#xFF0C;&#x4F8B;&#x5982;&#x67D0;&#x4E9B;&#x51FD;&#x6570;&#x7684;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#xFF0C;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x7B49;&#xFF0C;&#x8FD9;&#x4E9B;&#x53D8;&#x91CF;&#x53EF;&#x4EE5;&#x5E2E;&#x52A9;&#x6211;&#x4EEC;&#x5728;&#x51FD;&#x6570;&#x4E4B;&#x95F4;&#x5207;&#x6362;&#x3002;&#x6211;&#x4EEC;&#x4F7F;&#x7528;<code>PUSH</code>,<code>POP</code>&#x7B49;&#x6307;&#x4EE4;&#x6765;&#x548C;&#x6808;&#x4EA4;&#x4E92;&#xFF0C;PUSH&#x548C;POP&#x662F;&#x4E00;&#x7CFB;&#x5217;&#x5176;&#x4ED6;&#x7684;&#x5185;&#x5B58;&#x76F8;&#x5173;&#x6307;&#x4EE4;&#x7684;&#x603B;&#x79F0;&#x7684;&#x522B;&#x540D;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x5B9E;&#x9645;&#x6307;&#x4EE4;&#xFF0C;&#x4F46;&#x4E3A;&#x4E86;&#x8BA9;&#x4E8B;&#x60C5;&#x53D8;&#x5F97;&#x7B80;&#x5355;&#xFF0C;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4E86;PUSH&#x548C;POP&#x3002;  </p>
+<p>&#x6808;&#x5F0F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x65B9;&#x5F0F;&#x6765;&#x5B9E;&#x73B0;&#x7684;&#xFF0C;&#x9996;&#x5148;&#xFF0C;&#x5F53;&#x6211;&#x4EEC;&#x8BF4;&#x4E00;&#x4E2A;&#x6808;&#x589E;&#x957F;&#x4E86;&#xFF0C;&#x662F;&#x6307;&#x5C06;&#x4E00;&#x9879;(32&#x4F4D;)&#x6570;&#x636E;&#x653E;&#x5165;&#x4E86;&#x6808;&#x4E2D;&#xFF0C;&#x6808;&#x53EF;&#x80FD;&#x662F;&#x4ECE;&#x5927;&#x5230;&#x5C0F;&#x9012;&#x51CF;&#xFF0C;&#x4E5F;&#x53EF;&#x80FD;&#x662F;&#x4ECE;&#x5C0F;&#x5230;&#x5927;&#x9012;&#x589E;&#x3002;&#x4E0B;&#x4E00;&#x4E2A;&#x6570;&#x636E;&#x653E;&#x5728;&#x90A3;&#x4E2A;&#x4F4D;&#x7F6E;&#x5B9E;&#x9645;&#x4E0A;&#x662F;&#x7531;SP&#x6307;&#x9488;&#x6240;&#x5B9A;&#x4E49;&#xFF0C;&#x786E;&#x5207;&#x7684;&#x8BF4;&#xFF0C;&#x5C31;&#x662F;&#x5B58;&#x50A8;&#x5728;SP&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x7684;&#x5185;&#x5B58;&#x5730;&#x5740;&#x3002;&#x7136;&#x540E;SP&#x53EF;&#x80FD;&#x6307;&#x5411;&#x5F53;&#x524D;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#xFF0C;&#x4E5F;&#x53EF;&#x80FD;&#x6307;&#x5411;&#x4E0B;&#x4E00;&#x4E2A;&#x5373;&#x5C06;&#x4F7F;&#x7528;&#x7684;&#x5730;&#x5740;&#x3002; &#x5982;&#x679C;SP&#x5F53;&#x524D;&#x6307;&#x5411;&#x5806;&#x6808;&#x4E2D;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x9879;&#x76EE;&#xFF08;&#x5B8C;&#x6574;&#x5806;&#x6808;&#x5B9E;&#x73B0;&#xFF09;&#xFF0C;SP&#x5C06;&#x5148;&#x51CF;&#x5C11;&#xFF08;&#x5728;&#x5806;&#x6808;&#x964D;&#x5E8F;&#x6392;&#x5217;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF09;&#x6216;&#x589E;&#x52A0;&#xFF08;&#x5728;&#x6808;&#x5347;&#x5E8F;&#x6392;&#x5217;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF09;&#xFF0C;&#x5E76;&#x4E14;&#x53EA;&#x6709;&#x8FD9;&#x4E48;&#x505A;&#x540E;&#xFF0C;&#x9879;&#x76EE;&#x624D;&#x80FD;&#x88AB;&#x653E;&#x7F6E;&#x5728;&#x5806;&#x6808;&#x4E2D;&#x3002;&#x5982;&#x679C;SP&#x5F53;&#x524D;&#x6307;&#x5411;&#x6808;&#x4E2D;&#x7684;&#x4E0B;&#x4E00;&#x4E2A;&#x7A7A;&#x767D;&#x5185;&#x5B58;&#x69FD;&#xFF0C;&#x5219;&#x6570;&#x636E;&#x5C06;&#x9996;&#x5148;&#x88AB;&#x653E;&#x7F6E;&#x5728;&#x8FD9;&#x91CC;&#xFF0C;&#x5E76;&#x4E14;SP&#x5C06;&#x88AB;&#x51CF;&#x5C11;&#xFF08;&#x964D;&#x5E8F;&#x5806;&#x6808;&#xFF09;&#x6216;&#x589E;&#x52A0;&#xFF08;&#x5347;&#x5E8F;&#x5806;&#x6808;&#xFF09;&#x3002; </p>
+<ul>
+<li>&#x5411;&#x4E0A;&#x751F;&#x957F;&#xFF1A;&#x9012;&#x589E;&#x6808;<ul>
+<li>&#x6808;&#x9876;&#x6307;&#x9488;&#x6307;&#x5411;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x6709;&#x6548;&#x6570;&#x636E;&#x9879;&#xFF1A;&#x6EE1;&#x6808;        &#x6EE1;&#x9012;&#x589E;&#x6808;&#xFF0C;&#x4F7F;&#x7528;LDMFA&#xFF0C;STMFA&#x7B49;</li>
+<li>&#x6808;&#x9876;&#x6307;&#x9488;&#x6307;&#x5411;&#x4E0B;&#x4E00;&#x4E2A;&#x5C06;&#x8981;&#x4F7F;&#x7528;&#x7684;&#x7A7A;&#x95F4;&#xFF1A;&#x7A7A;&#x6808;    &#x7A7A;&#x9012;&#x589E;&#x6808;&#xFF0C;&#x4F7F;&#x7528;LDMEA&#xFF0C;STMEA&#x7B49;</li>
+</ul>
+</li>
+<li>&#x5411;&#x4E0B;&#x751F;&#x957F;&#xFF1A;&#x9012;&#x51CF;&#x6808;<ul>
+<li>&#x6808;&#x9876;&#x6307;&#x9488;&#x6307;&#x5411;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x6709;&#x6548;&#x6570;&#x636E;&#x9879;&#xFF1A;&#x6EE1;&#x6808;        &#x6EE1;&#x9012;&#x51CF;&#x6808;&#xFF0C;&#x4F7F;&#x7528;LDMFD&#xFF0C;STMFD&#x7B49;</li>
+<li>&#x6808;&#x9876;&#x6307;&#x9488;&#x6307;&#x5411;&#x4E0B;&#x4E00;&#x4E2A;&#x5C06;&#x8981;&#x4F7F;&#x7528;&#x7684;&#x7A7A;&#x95F4;&#xFF1A;&#x7A7A;&#x6808;    &#x7A7A;&#x9012;&#x51CF;&#x6808;&#xFF0C;&#x4F7F;&#x7528;LDMED&#xFF0C;STMED&#x7B49;</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/803510_N6X3C3SQ8BUNYNN.gif" alt="img"> </p>
+<p> &#x4EE5;&#x4E0B;&#x603B;&#x7ED3;&#x4E86;&#x4E0D;&#x540C;&#x5806;&#x6808;&#x5B9E;&#x73B0;&#x65B9;&#x5F0F;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4E0B;&#x8868;&#x6765;&#x63CF;&#x8FF0;&#x5728;&#x4E0D;&#x540C;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5B58;&#x50A8;&#x591A;&#x4E2A;&#x6307;&#x4EE4;&#x548C;&#x8F7D;&#x5165;&#x591A;&#x4E2A;&#x6307;&#x4EE4;&#x5728;&#x4E0D;&#x540C;&#x60C5;&#x5F62;&#x4E0B;&#x662F;&#x5982;&#x4F55;&#x4F7F;&#x7528;&#x7684;&#x3002; </p>
+<p>&#x5F53;Rn == SP&#x65F6;&#x4F7F;&#x7528;&#x5916;&#x9762;&#x7684;&#xFF0C;&#x5426;&#x5219;&#x4F7F;&#x7528;&#x62EC;&#x53F7;&#x91CC;&#x9762;&#x7684;</p>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/Users/82540/AppData/Roaming/Typora/typora-user-images/1584866523726.png" alt="1584866523726"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.global main</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">     mov   r0, #2  /* set up r0 */</span><br><span class="line">     push  {r0}    /* save r0 onto the stack */</span><br><span class="line">     mov   r0, #3  /* overwrite r0 */</span><br><span class="line">     pop   {r0}    /* restore r0 to it&apos;s initial state */</span><br><span class="line">     bx    lr      /* finish the program */</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/stack2-2-gif.gif.pagespeed.ce.6o3j450o2l.gif" alt="img"> </p>
+<p>&#x6211;&#x4EEC;&#x5C06;&#x770B;&#x5230;&#xFF0C;&#x51FD;&#x6570;&#x5229;&#x7528;&#x5806;&#x6808;&#x6765;&#x4FDD;&#x5B58;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#xFF0C;&#x4FDD;&#x7559;&#x5BC4;&#x5B58;&#x5668;&#x72B6;&#x6001;&#x7B49;&#x7B49;&#x3002;</p>
+<p>&#x4E3A;&#x4E86;&#x4F7F;&#x5F97;&#x6240;&#x6709;&#x7684;&#x5185;&#x5BB9;&#x90FD;&#x4E95;&#x4E95;&#x6709;&#x6761;&#xFF0C;&#x51FD;&#x6570;&#x4F7F;&#x7528;&#x6808;&#x5E27;&#xFF0C;&#x6808;&#x4E2D;&#x7684;&#x4E00;&#x7247;&#x672C;&#x5730;&#x5316;&#x5185;&#x5B58;&#x533A;&#x57DF;&#xFF0C;&#x4E13;&#x7528;&#x4E8E;&#x7279;&#x5B9A;&#x7684;&#x51FD;&#x6570;&#x3002;&#x6808;&#x5E27;&#x662F;&#x5728;&#x51FD;&#x6570;&#x5E8F;&#x8A00;&#xFF08;&#x51FD;&#x6570;&#x5F00;&#x59CB;&#x7684;&#x8FC7;&#x7A0B;)&#x4E0B;&#x521B;&#x5EFA;&#x7684;&#xFF0C;&#x5C06;&#x5E27;&#x6307;&#x9488;FP &#x8BBE;&#x5B9A;&#x5230;&#x6808;&#x7684;&#x5E95;&#x90E8;&#xFF0C;&#x7136;&#x540E;&#x4E3A;&#x6808;&#x5206;&#x914D;&#x7A7A;&#x95F4;&#x3002;&#x4E00;&#x822C;&#x51FD;&#x6570;&#x7684;&#x6808;&#x4F1A;&#x5305;&#x62EC;:&#x51FD;&#x6570;&#x7684;&#x8FD4;&#x56DE;&#x5730;&#x5740;&#xFF0C; &#x4E4B;&#x524D;&#x7684;&#x5E27;&#x6307;&#x9488; &#xFF0C; &#x9700;&#x8981;&#x4FDD;&#x5B58;&#x7684;&#x4EFB;&#x4F55;&#x5BC4;&#x5B58;&#x5668; &#xFF0C; &#x51FD;&#x6570;&#x53C2;&#x6570;&#xFF08;&#x5982;&#x679C;&#x53C2;&#x6570;&#x4E2A;&#x6570;&#x5927;&#x4E8E;4&#xFF09;&#xFF0C;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x7B49;&#x3002;&#x867D;&#x7136;&#x6808;&#x7684;&#x5BA4;&#x5185;&#x5B58;&#x50A8;&#x5185;&#x5BB9;&#x53EF;&#x80FD;&#x6709;&#x6240;&#x4E0D;&#x540C;&#xFF0C;&#x4F46;&#x662F;&#x4E0A;&#x8FF0;&#x5185;&#x5BB9;&#x662F;&#x6700;&#x5E38;&#x89C1;&#x7684;&#xFF0C;&#x7136;&#x540E;&#xFF0C;&#x6808;&#x4F1A;&#x5728;&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x5230;&#x7ED3;&#x5C3E;&#x7684;&#x65F6;&#x5019;&#x88AB;&#x7834;&#x574F;&#x3002;</p>
+<p><img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/Users/82540/AppData/Roaming/Typora/typora-user-images/1584867505560.png" alt="1584867505560"></p>
+<h3 id="8-2-&#x51FD;&#x6570;"><a href="#8-2-&#x51FD;&#x6570;" class="headerlink" title="8.2 &#x51FD;&#x6570;"></a>8.2 &#x51FD;&#x6570;</h3><p>&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x53EF;&#x4EE5;&#x5206;&#x4E3A;&#x4E09;&#x4E2A;&#x90E8;&#x5206;&#xFF1A;</p>
+<ol>
+<li><p>Prologue &#x5E8F;&#x8A00;</p>
+</li>
+<li><p>Body &#x51FD;&#x6570;&#x4E3B;&#x4F53;</p>
+</li>
+<li><p>Epilogue &#x5C3E;&#x58F0;</p>
+<p>&#xFF08;&#x5E8F;&#x8A00;&#xFF09;&#x7684;&#x76EE;&#x7684;&#x662F;&#x4FDD;&#x5B58;&#x7A0B;&#x5E8F;&#x7684;&#x5148;&#x524D;&#x72B6;&#x6001;&#xFF08;&#x901A;&#x8FC7;&#x5C06;LR&#x548C;R11&#x7684;&#x503C;&#x5B58;&#x50A8;&#x5230;&#x5806;&#x6808;&#x4E0A;&#xFF09;&#x5E76;&#x4E3A;&#x51FD;&#x6570;&#x7684;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x5F00;&#x8F9F;&#x5806;&#x6808;&#x7A7A;&#x95F4;&#x3002;&#x867D;&#x7136;&#x5E8F;&#x8A00;&#x7684;&#x5B9E;&#x73B0;&#x53EF;&#x80FD;&#x53D6;&#x51B3;&#x4E8E;&#x6240;&#x4F7F;&#x7528;&#x7684;&#x7F16;&#x8BD1;&#x5668;&#xFF0C;&#x4F46;&#x901A;&#x5E38;&#x901A;&#x8FC7;&#x4F7F;&#x7528;PUSH/ADD/SUB&#x6307;&#x4EE4;&#x6765;&#x5B8C;&#x6210;&#x3002;&#x6709;&#x8FD9;&#x6837;&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#xFF1A; </p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">push   {r11, lr}    /* Start of the prologue. Saving Frame Pointer and LR onto the stack */</span><br><span class="line">add    r11, sp, #0  /* Setting up the bottom of the stack frame */</span><br><span class="line">sub    sp, sp, #16  /* End of the prologue. Allocating some buffer on the stack. This also allocates space for the Stack Frame */</span><br></pre></td></tr></table></figure>
+
+<p> &#x51FD;&#x6570;&#x7684;&#x4E3B;&#x4F53;&#x90E8;&#x5206;&#x901A;&#x5E38;&#x8D1F;&#x8D23;&#x6267;&#x884C;&#x67D0;&#x79CD;&#x7279;&#x6B8A;&#x7684;&#x548C;&#x7279;&#x5B9A;&#x7684;&#x4EFB;&#x52A1;&#x3002;&#x51FD;&#x6570;&#x7684;&#x8FD9;&#x4E00;&#x90E8;&#x5206;&#x53EF;&#x4EE5;&#x5305;&#x542B;&#x591A;&#x79CD;&#x6307;&#x4EE4;&#x3001;&#x5206;&#x652F;&#xFF08;&#x8DF3;&#x8F6C;&#xFF09;&#x5230;&#x5176;&#x4ED6;&#x51FD;&#x6570;&#x7B49;&#x3002;&#x51FD;&#x6570;&#x7684;&#x51FD;&#x6570;&#x4E3B;&#x4F53;&#x90E8;&#x5206;&#x7684;&#x793A;&#x4F8B;&#x53EF;&#x4EE5;&#x4E0E;&#x4EE5;&#x4E0B;&#x51E0;&#x4E2A;&#x6307;&#x4EE4;&#x4E00;&#x6837;&#x7B80;&#x5355;&#xFF1A; </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov    r0, #1       /* setting up local variables (a=1). This also serves as setting up the first parameter for the function max */</span><br><span class="line">mov    r1, #2       /* setting up local variables (b=2). This also serves as setting up the second parameter for the function max */</span><br><span class="line">bl     max          /* Calling/branching to function max */</span><br></pre></td></tr></table></figure>
+
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;&#x4E5F;&#x662F;&#x901A;&#x8FC7;&#x5BC4;&#x5B58;&#x5668;&#x4F20;&#x9012;&#x7684;&#xFF0C;&#x5728;&#x67D0;&#x4E9B;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x8981;&#x4F20;&#x9012;&#x7684;&#x53C2;&#x6570;&#x5927;&#x4E8E;4&#x4E2A; &#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5C06;&#x4F1A;&#x4F7F;&#x7528;&#x6808;&#x6765;&#x5B58;&#x50A8;&#x5176;&#x4F59;&#x7684;&#x53C2;&#x6570;&#x3002;&#x51FD;&#x6570;&#x7684;&#x7ED3;&#x679C;&#x5C06;&#x901A;&#x8FC7;r0&#x8FD4;&#x56DE;&#xFF0C;&#x56E0;&#x6B64;&#x65E0;&#x8BBA;&#x51FD;&#x6570;max&#x7684;&#x6700;&#x5927;&#x7ED3;&#x679C;&#x662F;&#x4EC0;&#x4E48;&#xFF0C;&#x6211;&#x4EEC;&#x5E94;&#x8BE5;&#x5728;&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x4E4B;&#x540E;&#x7ACB;&#x5373;&#x4ECE;r0&#x4E2D;&#x53D6;&#x51FA;&#x5B83;&#xFF0C;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;&#x5728;&#x67D0;&#x4E9B;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x7ED3;&#x679C;&#x53EF;&#x80FD;&#x662F;64&#x4F4D;&#xFF0C;&#x800C;&#x5BC4;&#x5B58;&#x5668;&#x5927;&#x5C0F;&#x662F;32&#x4F4D;&#xFF0C;&#x8FD9;&#x4E2A;&#x65F6;&#x5019;&#x5C31;&#x9700;&#x8981;R0&#x548C;R1&#x4E00;&#x8D77;&#x4F7F;&#x7528;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;64&#x4F4D;&#x7684;&#x7ED3;&#x679C;&#x3002;</p>
+<p> &#x51FD;&#x6570;&#x7684;&#x6700;&#x540E;&#x4E00;&#x90E8;&#x5206;&#xFF0C;&#x5C3E;&#x58F0;&#xFF08;epilogue&#xFF09;&#xFF0C;&#x7528;&#x6765;&#x5C06;&#x7A0B;&#x5E8F;&#x6062;&#x590D;&#x5230;&#x521D;&#x59CB;&#x72B6;&#x6001;&#xFF08;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x4E4B;&#x524D;&#x7684;&#x72B6;&#x6001;&#xFF09;&#xFF0C; &#x4F7F;&#x5F97;&#x5B83;&#x53EF;&#x4EE5;&#x4ECE;&#x51FD;&#x6570;&#x79BB;&#x5F00;&#x7684;&#x4F4D;&#x7F6E;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x91CD;&#x65B0;&#x8C03;&#x6574;&#x6808;&#x6307;&#x9488;&#xFF0C; &#x901A;&#x8FC7;&#x4F7F;&#x7528;&#x5E27;&#x6307;&#x9488;&#x5BC4;&#x5B58;&#x5668;&#xFF08;R11&#xFF09;&#x4F5C;&#x4E3A;&#x53C2;&#x8003;&#x5E76;&#x6267;&#x884C;&#x52A0;&#x6CD5;&#x6216;&#x5B50;&#x8FD0;&#x7B97;&#x6765;&#x5B8C;&#x6210;&#x6B64;&#x64CD;&#x4F5C;&#x3002;  &#x4E00;&#x65E6;&#x6211;&#x4EEC;&#x91CD;&#x65B0;&#x8C03;&#x6574;&#x4E86;&#x5806;&#x6808;&#x6307;&#x9488;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5C06;&#x5B83;&#x4EEC;&#x4ECE;&#x5806;&#x6808;&#x4E2D;&#x5F39;&#x51FA;&#x5230;&#x5404;&#x81EA;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x6765;&#x6062;&#x590D;&#x5148;&#x524D;&#x4FDD;&#x5B58;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x503C;&#x3002; POP&#x6307;&#x4EE4;&#x53EF;&#x80FD;&#x662F;&#x7ED3;&#x5C3E;&#x90E8;&#x5206;&#x7684;&#x6700;&#x540E;&#x6307;&#x4EE4;&#xFF0C;&#x8FD9;&#x53D6;&#x51B3;&#x4E8E;&#x51FD;&#x6570;&#x7684;&#x7C7B;&#x578B; &#x3002;&#x4F46;&#x662F;&#xFF0C;&#x5728;&#x6062;&#x590D;&#x5BC4;&#x5B58;&#x5668;&#x503C;&#x4E4B;&#x540E;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x80FD;&#x4F1A;&#x4F7F;&#x7528;BX&#x6307;&#x4EE4;&#x6765;&#x79BB;&#x5F00;&#x51FD;&#x6570;&#x3002;&#x5C3E;&#x58F0;&#xFF08;Epilogue&#xFF09;&#x7684;&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#x662F;&#x8FD9;&#x6837;&#x7684;&#xFF1A; </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sub    sp, r11, #0  /* Start of the epilogue. Readjusting the Stack Pointer */</span><br><span class="line">pop    {r11, pc}    /* End of the epilogue. Restoring Frame Pointer from the Stack, jumping to previously saved LR via direct load into PC. The Stack Frame of a function is finally destroyed at this step. */</span><br></pre></td></tr></table></figure>
+
+<p>&#x73B0;&#x5728;&#x53EF;&#x4EE5;&#x77E5;&#x9053;</p>
+<ol>
+<li>&#x51FD;&#x6570;&#x5E8F;&#x8A00;&#x90E8;&#x5206;&#x6784;&#x5EFA;&#x4E86;&#x51FD;&#x6570;&#x7684;&#x8FD0;&#x884C;&#x73AF;&#x5883; </li>
+<li>&#x51FD;&#x6570;&#x4E3B;&#x4F53;&#x90E8;&#x5206;&#x5B9E;&#x73B0;&#x51FD;&#x6570;&#x7684;&#x903B;&#x8F91;&#x5E76;&#x5C06;&#x8FD4;&#x56DE;&#x503C;&#x5B58;&#x50A8;&#x8FDB;R0 </li>
+<li>&#x5C3E;&#x58F0;&#x90E8;&#x5206;&#x6062;&#x590D;&#x4E86;&#x51FD;&#x6570;&#x88AB;&#x8C03;&#x7528;&#x4E4B;&#x524D;&#x7684;&#x72B6;&#x6001;&#x5E76;&#x7EE7;&#x7EED;&#x8FD0;&#x884C;</li>
+</ol>
+<p>&#x53E6;&#x4E00;&#x4E2A;&#x5173;&#x952E;&#x7406;&#x89E3;&#x51FD;&#x6570;&#x7684;&#x5173;&#x952E;&#x70B9;&#x662F;&#x4ED6;&#x4EEC;&#x7684;&#x7C7B;&#x578B;:&#x53F6;&#x548C;&#x975E;&#x53F6;: </p>
+<ul>
+<li><p>&#x53F6;&#x5B50;&#x51FD;&#x6570;&#x662F;&#x4E00;&#x79CD;&#x4E0D;&#x4F1A;&#x4ECE;&#x81EA;&#x8EAB;&#x8C03;&#x7528;/&#x5206;&#x652F;&#x5230;&#x53E6;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x51FD;&#x6570;&#x3002; </p>
+</li>
+<li><p>&#x975E;&#x53F6;&#x5B50;&#x51FD;&#x6570;&#x662F;&#x4E00;&#x79CD;&#x51FD;&#x6570;&#xFF0C;&#x9664;&#x4E86;&#x81EA;&#x8EAB;&#x7684;&#x903B;&#x8F91;&#x4E4B;&#x5916;&#xFF0C;&#x5B83;&#x8FD8;&#x4F1A;&#x8C03;&#x7528;/&#x5206;&#x652F;&#x5230;&#x53E6;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x3002; </p>
+</li>
+</ul>
+<p>&#x8FD9;&#x4E24;&#x79CD;&#x51FD;&#x6570;&#x7684;&#x529F;&#x80FD;&#x662F;&#x7C7B;&#x4F3C;&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x8FD8;&#x662F;&#x53C8;&#x4E00;&#x4E9B;&#x533A;&#x522B;&#x7684;&#xFF0C;&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x4EE3;&#x7801;&#x5206;&#x6790;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">.global main</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">	push   {r11, lr}    /* Start of the prologue. Saving Frame Pointer and LR onto the stack */</span><br><span class="line">	add    r11, sp, #0  /* Setting up the bottom of the stack frame */</span><br><span class="line">	sub    sp, sp, #16  /* End of the prologue. Allocating some buffer on the stack */</span><br><span class="line">	mov    r0, #1       /* setting up local variables (a=1). This also serves as setting up the first parameter for the max function */</span><br><span class="line">	mov    r1, #2       /* setting up local variables (b=2). This also serves as setting up the second parameter for the max function */</span><br><span class="line">	bl     max          /* Calling/branching to function max */</span><br><span class="line">	sub    sp, r11, #0  /* Start of the epilogue. Readjusting the Stack Pointer */</span><br><span class="line">	pop    {r11, pc}    /* End of the epilogue. Restoring Frame pointer from the stack, jumping to previously saved LR via direct load into PC */</span><br><span class="line"></span><br><span class="line">max:</span><br><span class="line">	push   {r11}        /* Start of the prologue. Saving Frame Pointer onto the stack */</span><br><span class="line">	add    r11, sp, #0  /* Setting up the bottom of the stack frame */</span><br><span class="line">	sub    sp, sp, #12  /* End of the prologue. Allocating some buffer on the stack */</span><br><span class="line">	cmp    r0, r1       /* Implementation of if(a&lt;b) */</span><br><span class="line">	movlt  r0, r1       /* if r0 was lower than r1, store r1 into r0 */</span><br><span class="line">	add    sp, r11, #0  /* Start of the epilogue. Readjusting the Stack Pointer */</span><br><span class="line">	pop    {r11}        /* restoring frame pointer */</span><br><span class="line">	bx     lr           /* End of the epilogue. Jumping back to main via LR register */</span><br></pre></td></tr></table></figure>
+
+<p>main &#x51FD;&#x6570;&#x8C03;&#x7528;&#x7684;max&#x51FD;&#x6570;&#xFF0C;&#x800C;max&#x51FD;&#x6570;&#x6CA1;&#x6709;&#x8C03;&#x7528;&#x5176;&#x4ED6;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x6240;&#x4EE5;main&#x51FD;&#x6570;&#x662F;&#x4E00;&#x4E2A;&#x975E;&#x53F6;&#x51FD;&#x6570;&#x800C;max&#x51FD;&#x6570;&#x662F;&#x4E00;&#x4E2A;&#x53F6;&#x51FD;&#x6570;&#x3002;</p>
+<p>&#x53F6;&#x51FD;&#x6570;&#x548C;&#x975E;&#x53F6;&#x51FD;&#x6570;&#x5E8F;&#x8A00;&#x548C;&#x5C3E;&#x58F0;&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x5F0F;&#x4E0D;&#x540C;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/* A prologue of a non-leaf function */</span><br><span class="line">push   {r11, lr}    /* Start of the prologue. Saving Frame Pointer and LR onto the stack */</span><br><span class="line">add    r11, sp, #0  /* Setting up the bottom of the stack frame */</span><br><span class="line">sub    sp, sp, #16  /* End of the prologue. Allocating some buffer on the stack */</span><br><span class="line"></span><br><span class="line">/* A prologue of a leaf function */</span><br><span class="line">push   {r11}        /* Start of the prologue. Saving Frame Pointer onto the stack */</span><br><span class="line">add    r11, sp, #0  /* Setting up the bottom of the stack frame */</span><br><span class="line">sub    sp, sp, #12  /* End of the prologue. Allocating some buffer on the stack */</span><br></pre></td></tr></table></figure>
+
+<p> &#x975E;&#x53F6;&#x51FD;&#x6570;&#x7684;&#x5E8F;&#x8A00;&#x9700;&#x8981;&#x5C06;&#x66F4;&#x591A;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x4FDD;&#x5B58;&#x5728;&#x5806;&#x6808;&#x91CC;&#x3002;&#x80CC;&#x540E;&#x7684;&#x539F;&#x56E0;&#x5728;&#x4E8E;&#xFF0C;&#x7531;&#x4E8E;&#x975E;&#x53F6;&#x51FD;&#x6570;&#x7684;&#x5929;&#x7136;&#x5C5E;&#x6027;&#xFF0C;&#x5728;&#x6267;&#x884C;&#x8FD9;&#x6837;&#x7684;&#x51FD;&#x6570;&#x671F;&#x95F4;LR&#x88AB;&#x4FEE;&#x6539;&#x4E86;&#xFF0C;&#x56E0;&#x6B64;&#x9700;&#x8981;&#x4FDD;&#x5B58;&#x8BE5;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#xFF0C;&#x4EE5;&#x4FBF;&#x4EE5;&#x540E;&#x80FD;&#x591F;&#x6062;&#x590D;&#x3002;&#x4E00;&#x822C;&#x6765;&#x8BF4;&#xFF0C;&#x5982;&#x679C;&#x5FC5;&#x8981;&#x7684;&#x8BDD;&#xFF0C;&#x5E8F;&#x8A00;&#x53EF;&#x4EE5;&#x4FDD;&#x5B58;&#x66F4;&#x591A;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#x3002; </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> /* An epilogue of a leaf function */</span><br><span class="line">add    sp, r11, #0  /* Start of the epilogue. Readjusting the Stack Pointer */</span><br><span class="line">pop    {r11}        /* restoring frame pointer */</span><br><span class="line">bx     lr           /* End of the epilogue. Jumping back to main via LR register */</span><br><span class="line"></span><br><span class="line">/* An epilogue of a non-leaf function */</span><br><span class="line">sub    sp, r11, #0  /* Start of the epilogue. Readjusting the Stack Pointer */</span><br><span class="line">pop    {r11, pc}    /* End of the epilogue. Restoring Frame pointer from the stack, jumping to previously saved LR via direct load into PC */</span><br></pre></td></tr></table></figure>
+
+<p> &#x53F6;&#x51FD;&#x6570;&#x4F1A;&#x8DF3;&#x8F6C;&#x5230;&#x5B58;&#x50A8;&#x5728;LR&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x800C;&#x975E;&#x53F6;&#x51FD;&#x6570;&#x76F4;&#x63A5;POP&#x5730;&#x5740;&#x5230;&#x7684;PC&#x5BC4;&#x5B58;&#x5668;&#x3002; </p>
+<p>&#x6700;&#x540E;&#x9700;&#x8981;&#x7406;&#x89E3;&#x7684;&#x662F;BL&#x548C;BXL&#x6307;&#x4EE4;&#x7684;&#x4F7F;&#x7528;&#xFF0C; &#x6211;&#x4EEC;&#x4F7F;&#x7528;BL&#x6307;&#x4EE4;&#x5206;&#x652F;&#x5230;&#x53F6;&#x51FD;&#x6570;&#x3002;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x51FD;&#x6570;&#x7684;&#x6807;&#x7B7E;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#x6765;&#x542F;&#x52A8;&#x5206;&#x652F;&#x3002;&#x5728;&#x7F16;&#x8BD1;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x6807;&#x7B7E;&#x88AB;&#x66FF;&#x6362;&#x4E3A;&#x5185;&#x5B58;&#x5730;&#x5740;&#x3002;&#x5728;&#x8DF3;&#x8F6C;&#x5230;&#x8BE5;&#x4F4D;&#x7F6E;&#x4E4B;&#x524D;&#xFF0C;&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;&#x88AB;&#x4FDD;&#x5B58;&#xFF08;&#x94FE;&#x63A5;&#xFF09;&#x5230;LR&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x8FD9;&#x6837;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x8FD4;&#x56DE;&#x5230;&#x51FD;&#x6570;max&#x7ED3;&#x675F;&#x65F6;&#x79BB;&#x5F00;&#x7684;&#x4F4D;&#x7F6E;&#x3002; </p>
+<p>BX&#x6307;&#x4EE4;&#x7528;&#x4E8E;&#x4ECE;&#x53F6;&#x51FD;&#x6570;&#x9000;&#x51FA;&#xFF0C;&#x4EE5;LR&#x5BC4;&#x5B58;&#x5668;&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF0C;&#x5728;&#x4E4B;&#x524D;&#x63D0;&#x5230;&#x8FC7;&#xFF0C;&#x5728;&#x8DF3;&#x8F6C;&#x5230;&#x51FD;&#x6570;max&#x4E4B;&#x524D;&#xFF0C;BL&#x6307;&#x4EE4;&#x5C06;&#x51FD;&#x6570;main&#x7684;&#x4E0B;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;&#x4FDD;&#x5B58;&#x5230;LR&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x3002; &#x56E0;&#x4E3A;&#x4E0D;&#x5E0C;&#x671B;&#x53F6;&#x5B50;&#x51FD;&#x6570;&#x5728;&#x6267;&#x884C;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#x66F4;&#x6539;&#x4E86;LR&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x503C;&#x3002;&#x8FD9;&#x4E2A;&#x5BC4;&#x5B58;&#x5668;&#x95F2;&#x6742;&#x88AB;&#x7528;&#x6765;&#x8FD4;&#x56DE;main&#x51FD;&#x6570;&#x3002;&#x5728;&#x4E0A;&#x4E00;&#x7AE0;&#x91CC;&#x9762;&#x8BF4;&#x8FC7;&#xFF0C; BX&#x6307;&#x4EE4;&#x53EF;&#x4EE5;&#x5728;ARM / Thumb&#x6A21;&#x5F0F;&#x4E4B;&#x95F4;&#x8FDB;&#x884C;&#x5207;&#x6362;&#x3002;  &#x5728;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x68C0;&#x67E5;LR&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x6700;&#x540E;&#x4E00;&#x4F4D;&#x6765;&#x5B8C;&#x6210;&#xFF1A;&#x5982;&#x679C;&#x8BE5;&#x4F4D;&#x8BBE;&#x7F6E;&#x4E3A;1&#xFF0C;CPU&#x4F1A;&#x5C06;&#x6A21;&#x5F0F;&#x66F4;&#x6539;&#xFF08;&#x6216;&#x4FDD;&#x6301;&#xFF09;&#x4E3A;Thumb&#x6A21;&#x5F0F;&#xFF0C;  &#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E3A;0&#xFF0C;&#x5219;&#x6A21;&#x5F0F;&#x5C06;&#x66F4;&#x6539;&#xFF08;&#x6216;&#x4FDD;&#x7559;&#x4E3A;ARM&#xFF09;&#x3002;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x5F88;&#x597D;&#x7684;&#x8BBE;&#x8BA1;&#x529F;&#x80FD;&#xFF0C;&#x5B83;&#x5141;&#x8BB8;&#x4ECE;&#x4E0D;&#x540C;&#x7684;&#x6A21;&#x5F0F;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x3002; </p>
+<p> <img src="/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/nonleaf-func-gif5-3.gif.pagespeed.ce.I2bb_3KRnx.gif" alt="img"> </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag"># 逆向</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/17/DEX文件解析/" rel="next" title="DEX文件解析">
+                <i class="fa fa-chevron-left"></i> DEX文件解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ARM-汇编语言学习"><span class="nav-number">1.</span> <span class="nav-text">ARM 汇编语言学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ARM-汇编语言简介"><span class="nav-number">1.1.</span> <span class="nav-text">1 ARM 汇编语言简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ARM数据类型和寄存器"><span class="nav-number">1.2.</span> <span class="nav-text">2 ARM数据类型和寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-数据类型"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-字节序"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 字节序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-ARM-寄存器"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 ARM 寄存器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-ARM-指令集"><span class="nav-number">1.3.</span> <span class="nav-text">3 ARM 指令集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-ARM和Thumb"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 ARM和Thumb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-ARM指令集介绍"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 ARM指令集介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-内存指令-加载和存储"><span class="nav-number">1.4.</span> <span class="nav-text">4 内存指令:加载和存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-基本示例"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 基本示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-1-偏移模式：立即数作为偏移寻址"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">4.1.1 偏移模式：立即数作为偏移寻址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-2-偏移模式-寄存器的值作为偏移地址"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">4.1.2 偏移模式: 寄存器的值作为偏移地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-3-偏移模式，使用移位寄存器作为偏移"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">4.1.3 偏移模式，使用移位寄存器作为偏移</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-4-总结"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">4.1.4 总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-LDR-用于PC相对寻址"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 LDR 用于PC相对寻址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-ARM中立即数的使用"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3  ARM中立即数的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-载入-存储多个值"><span class="nav-number">1.5.</span> <span class="nav-text">5 载入/存储多个值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-出栈和入栈"><span class="nav-number">1.6.</span> <span class="nav-text">6 出栈和入栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-ARM-条件执行指令-amp-amp-Thumb模式下的条件执行-amp-amp-分支指令"><span class="nav-number">1.7.</span> <span class="nav-text">7 ARM 条件执行指令 &amp;&amp; Thumb模式下的条件执行 &amp;&amp; 分支指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-Thumb-中的条件执行"><span class="nav-number">1.7.1.</span> <span class="nav-text">7.1 Thumb 中的条件执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-分支执行"><span class="nav-number">1.7.2.</span> <span class="nav-text">7.2 分支执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-B-BX-BLX"><span class="nav-number">1.7.3.</span> <span class="nav-text">7.3 B/BX/BLX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-条件分支指令"><span class="nav-number">1.7.4.</span> <span class="nav-text">7.4 条件分支指令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-栈和函数"><span class="nav-number">1.8.</span> <span class="nav-text">8 栈和函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-栈"><span class="nav-number">1.8.1.</span> <span class="nav-text">8.1 栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-函数"><span class="nav-number">1.8.2.</span> <span class="nav-text">8.2 函数</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/20/arm汇编语言学习笔记/';
+          this.page.identifier = '2020/03/20/arm汇编语言学习笔记/';
+          this.page.title = 'arm汇编语言学习笔记';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
