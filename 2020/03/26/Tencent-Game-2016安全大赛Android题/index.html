@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,安全,逆向">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="2016年腾讯游戏安全大赛第一轮题解">
+<meta name="keywords" content="android,安全,逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tencent Game 2016安全大赛Android基础题">
+<meta property="og:url" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="2016年腾讯游戏安全大赛第一轮题解">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585227544224.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585227810870.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585227861492.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585227885077.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585228159692.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/Users/82540/AppData/Roaming/Typora/typora-user-images/1585232005384.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585229111101.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585229819096.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585471557738.png">
+<meta property="og:updated_time" content="2020-04-05T07:08:02.241Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tencent Game 2016安全大赛Android基础题">
+<meta name="twitter:description" content="2016年腾讯游戏安全大赛第一轮题解">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/1585227544224.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/">
+
+
+
+
+
+  <title>Tencent Game 2016安全大赛Android基础题 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Tencent Game 2016安全大赛Android基础题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-26T20:54:42+08:00">
+                2020-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/crackme/" itemprop="url" rel="index">
+                    <span itemprop="name">crackme</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/26/Tencent-Game-2016安全大赛Android题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/26/Tencent-Game-2016安全大赛Android题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/03/26/Tencent-Game-2016安全大赛Android题/" class="leancloud_visitors" data-flag-title="Tencent Game 2016安全大赛Android基础题">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  2016年腾讯游戏安全大赛第一轮题解
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x57FA;&#x7840;&#x9898;"><a href="#Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x57FA;&#x7840;&#x9898;" class="headerlink" title="Tencent Game 2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x57FA;&#x7840;&#x9898;"></a>Tencent Game 2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x57FA;&#x7840;&#x9898;</h1><h2 id="1-&#x6536;&#x96C6;&#x4FE1;&#x606F;"><a href="#1-&#x6536;&#x96C6;&#x4FE1;&#x606F;" class="headerlink" title="1 &#x6536;&#x96C6;&#x4FE1;&#x606F;"></a>1 &#x6536;&#x96C6;&#x4FE1;&#x606F;</h2><p>&#x5C06;<code>apk</code>&#x5B89;&#x88C5;&#xFF0C;&#x67E5;&#x770B;&#x754C;&#x9762;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ adb install Tencent2016A.apk</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585227544224.png" style="zoom:50%;">
+
+<p>&#x8F93;&#x5165;&#x7528;&#x6237;&#x540D;&#x548C;code&#xFF0C;&#x7136;&#x540E;&#x8FDB;&#x884C;&#x6821;&#x9A8C;</p>
+<h2 id="2-&#x5206;&#x6790;"><a href="#2-&#x5206;&#x6790;" class="headerlink" title="2 &#x5206;&#x6790;"></a>2 &#x5206;&#x6790;</h2><p>&#x62D6;&#x5165;JEB&#xFF0C;&#x627E;&#x5230;&#x5173;&#x952E;&#x4FE1;&#x606F;</p>
+<p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585227810870.png" alt="1585227810870"></p>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x4F7F;&#x7528;&#x7684;&#x662F;NDK&#x8FDB;&#x884C;name&#x548C;code&#x7684;&#x6821;&#x9A8C;&#xFF0C;&#x65B9;&#x6CD5;&#x5728;:</p>
+<p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585227861492.png" alt="1585227861492"></p>
+<p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585227885077.png" alt="1585227885077"></p>
+<p>&#x5C06;<code>libCheckRegister.so</code>&#x62D6;&#x5165;IDA&#x5206;&#x6790;</p>
+<h2 id="3-IDA&#x5206;&#x6790;libCheckRegister-so"><a href="#3-IDA&#x5206;&#x6790;libCheckRegister-so" class="headerlink" title="3 IDA&#x5206;&#x6790;libCheckRegister.so"></a>3 IDA&#x5206;&#x6790;libCheckRegister.so</h2><p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585228159692.png" alt="1585228159692"></p>
+<p>&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x7684;&#x65B9;&#x6CD5;,f5,&#x53CD;&#x6C47;&#x7F16;</p>
+<p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/Users/82540/AppData/Roaming/Typora/typora-user-images/1585232005384.png" alt="1585232005384"></p>
+<p>&#x4FEE;&#x6539;&#x4E4B;&#x540E;&#x7684;checkRegister&#x65B9;&#x6CD5;,&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x65B9;&#x6CD5;&#x8C03;&#x7528;<code>sub_1634()</code>&#x662F;&#x6211;&#x4EEC;&#x5904;&#x7406;&#x7684;&#x5173;&#x952E;&#x65B9;&#x6CD5;,&#x53CC;&#x51FB;&#x8FDB;&#x5165;,&#x5206;&#x6790;&#x5982;&#x4E0B;:</p>
+<p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585229111101.png" alt="1585229111101"></p>
+<p>&#x9996;&#x5148;&#x5224;&#x65AD;<code>name</code>&#x5B57;&#x6BB5;&#x957F;&#x5EA6;,&#x5982;&#x679C;&#x5C0F;&#x4E8E;6&#x6216;&#x8005;&#x5927;&#x4E8E;20,&#x9000;&#x51FA;&#x3002;</p>
+<p>&#x63A5;&#x4E0B;&#x6765;&#x5BF9;name&#x8FDB;&#x884C;&#x5904;&#x7406;:</p>
+<p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585229819096.png" alt="1585229819096"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *v6; <span class="comment">// r7</span></span><br><span class="line"><span class="keyword">int</span> v7; <span class="comment">// r3</span></span><br><span class="line"><span class="keyword">char</span> arr[<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line">j_memset((<span class="keyword">int</span>)arr, <span class="number">0</span>, <span class="number">20</span>);                    <span class="comment">// arr[20]</span></span><br><span class="line">i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">do</span> {</span><br><span class="line">    v6 = &amp;arr[i];</span><br><span class="line">    <span class="comment">//LDRB </span></span><br><span class="line">    v7 = *(<span class="keyword">unsigned</span> __int8 *)(current_name + i % name_length) * (i + <span class="number">20160126</span>) * name_length;</span><br><span class="line">    ++i;</span><br><span class="line">    *(_DWORD *)v6 += v7;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>v6&#x53D6;&#x5F53;&#x524D;&#x6570;&#x7EC4;&#x5730;&#x5740;&#xFF0C; <code>v7 = (name[i%name_length]) * (i + 20160126)* name_length</code></p>
+<p>&#x7136;&#x540E;i++;</p>
+<p><code>*(_DWORD *)v6 += v7</code>&#x8FD9;&#x4E00;&#x6761;&#x6307;&#x5B9A;&#x4E2D; <code>v6</code>&#x662F;&#x4E00;&#x4E2A;char&#x6307;&#x9488;&#xFF0C;&#x800C;&#x6307;&#x9488;<code>*(_DWORD *)</code>&#x5927;&#x5C0F;&#x4E3A;4&#x4E2A;&#x5B57;&#x8282;&#xFF0C;&#x8FD9;&#x91CC;&#x5C31;&#x662F;&#x4ECE;v6&#x7684;&#x4F4D;&#x7F6E;&#x5F00;&#x59CB;&#x8BFB;4&#x4E2A;&#x5B57;&#x8282;&#x5927;&#x5C0F;&#x7684;&#x5185;&#x5B58;&#xFF0C;&#x800C;&#x8FD9;&#x56DB;&#x4E2A;&#x5927;&#x5C0F;&#x7684;&#x5185;&#x5B58;&#x5C31;&#x662F;&#x4E0A;&#x4E00;&#x6B21;&#x8BA1;&#x7B97;&#x7684;&#x9AD8;&#x4E09;&#x4E2A;&#x5B57;&#x8282;(&#x5C0F;&#x7AEF;&#x5E8F;)+&#x4E00;&#x4E2A;0&#x3002;<code>v7</code>&#x7C7B;&#x578B;&#x4F4D;int&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x4E2A;&#x7684;&#x610F;&#x601D;&#x662F;&#xFF0C;&#x5F53;&#x524D;&#x8BA1;&#x7B97;&#x7684;v7+&#x4E0A;&#x4E00;&#x6B65;&#x8BA1;&#x7B97;&#x7ED3;&#x679C;&#x7684;&#x9AD8;&#x4E09;&#x4E2A;&#x5B57;&#x8282;&#x3002;</p>
+<p>&#x518D;&#x4E4B;&#x540E;&#x662F;&#x8C03;&#x7528;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x5BF9;code&#x8FDB;&#x884C;&#x5224;&#x65AD;&#xFF0C;&#x89C2;&#x5BDF;&#x5230;&#x6CA1;&#x6709;&#x548C;name&#x4EA7;&#x751F;&#x4EC0;&#x4E48;&#x8054;&#x7CFB;&#xFF0C;&#x6682;&#x65F6;&#x4E0D;&#x770B;&#xFF0C;&#x7EE7;&#x7EED;&#x5F80;&#x4E0B;&#x770B;&#xFF0C;&#x53C8;&#x662F;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#xFF0C;&#x53D1;&#x73B0;&#x662F;base64&#x89E3;&#x7801;&#x51FD;&#x6570;</p>
+<p><img src="/2020/03/26/Tencent-Game-2016&#x5B89;&#x5168;&#x5927;&#x8D5B;Android&#x9898;/1585471557738.png" alt="1585471557738"></p>
+<p>&#x89E3;&#x7801;&#x4E4B;&#x540E;&#x5B58;&#x5728;str&#x4E2D;&#x3002;&#x4E4B;&#x540E;&#x89E3;&#x7801;&#x4E4B;&#x540E;&#x7684;code&#x548C;&#x53D8;&#x5316;&#x4E4B;&#x540E;&#x7684;name&#x6EE1;&#x8DB3;&#x4E00;&#x5B9A;&#x7684;&#x5173;&#x7CFB;&#xFF0C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">{</span><br><span class="line">  v10 = str[j];                               <span class="comment">// &#x89E3;&#x7801;&#x540E;&#x7684;&#x6570;&#x7EC4;</span></span><br><span class="line">  name_change_2[j] = name_change_1[j] / <span class="number">10</span>;</span><br><span class="line">  check_str[j] = v10;</span><br><span class="line">  ++j;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">while</span> ( j != <span class="number">5</span> );</span><br><span class="line">result = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">if</span> ( check_str[<span class="number">4</span>] + name_change_2[<span class="number">0</span>] == check_str[<span class="number">2</span>]</span><br><span class="line">  &amp;&amp; check_str[<span class="number">4</span>] + name_change_2[<span class="number">0</span>] + name_change_2[<span class="number">1</span>] == <span class="number">2</span> * check_str[<span class="number">4</span>]</span><br><span class="line">  &amp;&amp; name_change_2[<span class="number">2</span>] + check_str[<span class="number">3</span>] == check_str[<span class="number">0</span>]</span><br><span class="line">  &amp;&amp; name_change_2[<span class="number">2</span>] + check_str[<span class="number">3</span>] + name_change_2[<span class="number">3</span>] == <span class="number">2</span> * check_str[<span class="number">3</span>] )</span><br><span class="line">{</span><br><span class="line">  result = (<span class="keyword">unsigned</span> <span class="keyword">int</span>)(name_change_2[<span class="number">4</span>] + check_str[<span class="number">1</span>] - <span class="number">3</span> * name_change_2[<span class="number">2</span>]) &lt;= <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x68B3;&#x7406;&#x4E00;&#x4E0B;&#x601D;&#x8DEF;&#xFF1A;</p>
+<ol>
+<li><p>&#x5BF9;name &#x8FDB;&#x884C;&#x5904;&#x7406;&#xFF0C;&#x5F97;&#x5230;<code>name_change_1</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">{</span><br><span class="line"> v6 = (<span class="keyword">char</span> *)s + v5;                      </span><br><span class="line"> v7 = v11[v5 % v3] * (v5 + <span class="number">20160126</span>) * v3; </span><br><span class="line"> ++v5;                                     </span><br><span class="line"> *(_DWORD *)v6 += v7;                     </span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&#x5BF9;code&#x8FDB;&#x884C;base64&#x89E3;&#x7801;&#xFF0C;&#x5F97;&#x5230;&#x4E00;&#x4E2A;<code>str</code></p>
+</li>
+<li><p>&#x5BF9;name&#x518D;&#x8FDB;&#x884C;&#x4E00;&#x6B21;&#x5904;&#x7406;&#x5F97;&#x5230;<code>name_change_2</code></p>
+</li>
+<li><p>&#x4ECE;<code>str</code>&#x5F97;&#x5230;<code>check_str</code></p>
+</li>
+<li><p><code>check_str</code>&#x548C;<code>name</code>&#x6EE1;&#x8DB3;&#x4E00;&#x5B9A;&#x7684;&#x5173;&#x7CFB;&#xFF0C;&#x8FD4;&#x56DE;result(true or false)</p>
+</li>
+</ol>
+<h2 id="4-&#x6CE8;&#x518C;&#x673A;"><a href="#4-&#x6CE8;&#x518C;&#x673A;" class="headerlink" title="4 &#x6CE8;&#x518C;&#x673A;"></a>4 &#x6CE8;&#x518C;&#x673A;</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;base64.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> name[<span class="number">20</span>] = {<span class="number">0</span>};</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">char</span> *v2; <span class="comment">// r6@1</span></span><br><span class="line">    <span class="keyword">signed</span> <span class="keyword">int</span> v3; <span class="comment">// r5@1</span></span><br><span class="line">    <span class="keyword">int</span> result; <span class="comment">// r0@2</span></span><br><span class="line">    <span class="keyword">signed</span> <span class="keyword">int</span> v5; <span class="comment">// r4@3</span></span><br><span class="line">    <span class="keyword">char</span> *v6; <span class="comment">// r7@4</span></span><br><span class="line">    <span class="keyword">int</span> v7; <span class="comment">// r3@4</span></span><br><span class="line">    <span class="keyword">int</span> v8; <span class="comment">// r4@6</span></span><br><span class="line">    <span class="keyword">int</span> j; <span class="comment">// r4@7</span></span><br><span class="line">    <span class="keyword">int</span> v10; <span class="comment">// r1@8</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> *v11; <span class="comment">// [sp+Ch] [bp-464h]@1</span></span><br><span class="line">    <span class="keyword">int</span> v12[<span class="number">5</span>] = {<span class="number">0</span>}; <span class="comment">// [sp+18h] [bp-458h]@7</span></span><br><span class="line">    <span class="keyword">int</span> v13[<span class="number">5</span>] = {<span class="number">0</span>}; <span class="comment">// [sp+2Ch] [bp-444h]@7</span></span><br><span class="line">    <span class="keyword">int</span> s[<span class="number">5</span>] = {<span class="number">0</span>}; <span class="comment">// [sp+40h] [bp-430h]@3</span></span><br><span class="line">    <span class="keyword">int</span> v15[<span class="number">234</span>] = {<span class="number">0</span>}; <span class="comment">// [sp+54h] [bp-41Ch]@5</span></span><br><span class="line"> </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;&#x8BF7;&#x8F93;&#x5165;name:&quot;</span>);</span><br><span class="line">    scanf_s(<span class="string">&quot;%s&quot;</span>, name, <span class="number">20</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// name-&gt;s</span></span><br><span class="line"> </span><br><span class="line">    v11 = name;</span><br><span class="line">    v5 = <span class="number">0</span>;</span><br><span class="line">    v3 = <span class="built_in">strlen</span>((<span class="keyword">const</span> <span class="keyword">char</span>*)name);</span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">    {</span><br><span class="line">        v6 = (<span class="keyword">char</span> *)s + v5;                       </span><br><span class="line">        v7 = v11[v5 % v3] * (v5 + <span class="number">20160126</span>) * v3;  </span><br><span class="line">        ++v5;                                      </span><br><span class="line">        *(DWORD *)v6 += v7;                       </span><br><span class="line">    } <span class="keyword">while</span> (v5 != <span class="number">16</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// s-&gt;v12</span></span><br><span class="line">    j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">    {                                                              </span><br><span class="line">        v12[j] = s[j] / <span class="number">10</span>;                  </span><br><span class="line">        ++j;                                 </span><br><span class="line">    } <span class="keyword">while</span> (j != <span class="number">5</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// v12-&gt;v13</span></span><br><span class="line">    v13[<span class="number">0</span>] = <span class="number">2</span> * v12[<span class="number">2</span>] + v12[<span class="number">3</span>];</span><br><span class="line">    v13[<span class="number">1</span>] = <span class="number">3</span> * v12[<span class="number">2</span>] - v12[<span class="number">4</span>];</span><br><span class="line">    v13[<span class="number">2</span>] = <span class="number">2</span> * v12[<span class="number">0</span>] + v12[<span class="number">1</span>];</span><br><span class="line">    v13[<span class="number">3</span>] = v12[<span class="number">2</span>] + v12[<span class="number">3</span>];</span><br><span class="line">    v13[<span class="number">4</span>] = v12[<span class="number">0</span>] + v12[<span class="number">1</span>];</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// v13-&gt;v15</span></span><br><span class="line">    j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">    {                                                          </span><br><span class="line">        v15[j] = v13[j];</span><br><span class="line">        ++j;                                   </span><br><span class="line">    } <span class="keyword">while</span> (j != <span class="number">5</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// v15-&gt;pwd</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> encodeStr = base64_encode((<span class="keyword">unsigned</span> <span class="keyword">char</span>*)v15, <span class="number">20</span>);</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* pwd = encodeStr.c_str();</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;&#x5BC6;&#x7801;&#x662F;&#xFF1A;%s&quot;</span>,pwd);</span><br><span class="line">    system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>base64.h</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">base64_encode</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> <span class="keyword">const</span>*, <span class="keyword">unsigned</span> <span class="keyword">int</span> len)</span></span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">base64_decode</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> <span class="keyword">const</span>&amp; s)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>base64.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;base64.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> base64_chars =</span><br><span class="line"><span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span></span><br><span class="line"><span class="string">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span></span><br><span class="line"><span class="string">&quot;0123456789+/&quot;</span>;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">is_base64</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> c)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> (<span class="built_in">isalnum</span>(c) || (c == <span class="string">&apos;+&apos;</span>) || (c == <span class="string">&apos;/&apos;</span>));</span><br><span class="line">}</span><br><span class="line"> </span><br><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">base64_encode</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> <span class="keyword">const</span>* bytes_to_encode, <span class="keyword">unsigned</span> <span class="keyword">int</span> in_len)</span> </span>{</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> ret;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> char_array_3[<span class="number">3</span>];</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> char_array_4[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">while</span> (in_len--) {</span><br><span class="line">        char_array_3[i++] = *(bytes_to_encode++);</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">3</span>) {</span><br><span class="line">            char_array_4[<span class="number">0</span>] = (char_array_3[<span class="number">0</span>] &amp; <span class="number">0xfc</span>) &gt;&gt; <span class="number">2</span>;</span><br><span class="line">            char_array_4[<span class="number">1</span>] = ((char_array_3[<span class="number">0</span>] &amp; <span class="number">0x03</span>) &lt;&lt; <span class="number">4</span>) + ((char_array_3[<span class="number">1</span>] &amp; <span class="number">0xf0</span>) &gt;&gt; <span class="number">4</span>);</span><br><span class="line">            char_array_4[<span class="number">2</span>] = ((char_array_3[<span class="number">1</span>] &amp; <span class="number">0x0f</span>) &lt;&lt; <span class="number">2</span>) + ((char_array_3[<span class="number">2</span>] &amp; <span class="number">0xc0</span>) &gt;&gt; <span class="number">6</span>);</span><br><span class="line">            char_array_4[<span class="number">3</span>] = char_array_3[<span class="number">2</span>] &amp; <span class="number">0x3f</span>;</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">0</span>; (i &lt; <span class="number">4</span>); i++)</span><br><span class="line">                ret += base64_chars[char_array_4[i]];</span><br><span class="line">            i = <span class="number">0</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (i)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">for</span> (j = i; j &lt; <span class="number">3</span>; j++)</span><br><span class="line">            char_array_3[j] = <span class="string">&apos;\0&apos;</span>;</span><br><span class="line">        char_array_4[<span class="number">0</span>] = (char_array_3[<span class="number">0</span>] &amp; <span class="number">0xfc</span>) &gt;&gt; <span class="number">2</span>;</span><br><span class="line">        char_array_4[<span class="number">1</span>] = ((char_array_3[<span class="number">0</span>] &amp; <span class="number">0x03</span>) &lt;&lt; <span class="number">4</span>) + ((char_array_3[<span class="number">1</span>] &amp; <span class="number">0xf0</span>) &gt;&gt; <span class="number">4</span>);</span><br><span class="line">        char_array_4[<span class="number">2</span>] = ((char_array_3[<span class="number">1</span>] &amp; <span class="number">0x0f</span>) &lt;&lt; <span class="number">2</span>) + ((char_array_3[<span class="number">2</span>] &amp; <span class="number">0xc0</span>) &gt;&gt; <span class="number">6</span>);</span><br><span class="line">        char_array_4[<span class="number">3</span>] = char_array_3[<span class="number">2</span>] &amp; <span class="number">0x3f</span>;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; (j &lt; i + <span class="number">1</span>); j++)</span><br><span class="line">            ret += base64_chars[char_array_4[j]];</span><br><span class="line">        <span class="keyword">while</span> ((i++ &lt; <span class="number">3</span>))</span><br><span class="line">            ret += <span class="string">&apos;=&apos;</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br><span class="line"> </span><br><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">base64_decode</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> <span class="keyword">const</span>&amp; encoded_string)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> in_len = encoded_string.size();</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> in_ = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> char_array_4[<span class="number">4</span>], char_array_3[<span class="number">3</span>];</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> ret;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> (in_len-- &amp;&amp; (encoded_string[in_] != <span class="string">&apos;=&apos;</span>) &amp;&amp; is_base64(encoded_string[in_])) {</span><br><span class="line">        char_array_4[i++] = encoded_string[in_]; in_++;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">4</span>) {</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++)</span><br><span class="line">                char_array_4[i] = base64_chars.find(char_array_4[i]);</span><br><span class="line">            char_array_3[<span class="number">0</span>] = (char_array_4[<span class="number">0</span>] &lt;&lt; <span class="number">2</span>) + ((char_array_4[<span class="number">1</span>] &amp; <span class="number">0x30</span>) &gt;&gt; <span class="number">4</span>);</span><br><span class="line">            char_array_3[<span class="number">1</span>] = ((char_array_4[<span class="number">1</span>] &amp; <span class="number">0xf</span>) &lt;&lt; <span class="number">4</span>) + ((char_array_4[<span class="number">2</span>] &amp; <span class="number">0x3c</span>) &gt;&gt; <span class="number">2</span>);</span><br><span class="line">            char_array_3[<span class="number">2</span>] = ((char_array_4[<span class="number">2</span>] &amp; <span class="number">0x3</span>) &lt;&lt; <span class="number">6</span>) + char_array_4[<span class="number">3</span>];</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">0</span>; (i &lt; <span class="number">3</span>); i++)</span><br><span class="line">                ret += char_array_3[i];</span><br><span class="line">            i = <span class="number">0</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (i) {</span><br><span class="line">        <span class="keyword">for</span> (j = i; j &lt; <span class="number">4</span>; j++)</span><br><span class="line">            char_array_4[j] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">4</span>; j++)</span><br><span class="line">            char_array_4[j] = base64_chars.find(char_array_4[j]);</span><br><span class="line">        char_array_3[<span class="number">0</span>] = (char_array_4[<span class="number">0</span>] &lt;&lt; <span class="number">2</span>) + ((char_array_4[<span class="number">1</span>] &amp; <span class="number">0x30</span>) &gt;&gt; <span class="number">4</span>);</span><br><span class="line">        char_array_3[<span class="number">1</span>] = ((char_array_4[<span class="number">1</span>] &amp; <span class="number">0xf</span>) &lt;&lt; <span class="number">4</span>) + ((char_array_4[<span class="number">2</span>] &amp; <span class="number">0x3c</span>) &gt;&gt; <span class="number">2</span>);</span><br><span class="line">        char_array_3[<span class="number">2</span>] = ((char_array_4[<span class="number">2</span>] &amp; <span class="number">0x3</span>) &lt;&lt; <span class="number">6</span>) + char_array_4[<span class="number">3</span>];</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; (j &lt; i - <span class="number">1</span>); j++) ret += char_array_3[j];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="5-&#x603B;&#x7ED3;"><a href="#5-&#x603B;&#x7ED3;" class="headerlink" title="5 &#x603B;&#x7ED3;"></a>5 &#x603B;&#x7ED3;</h2><p>&#x7B2C;&#x4E00;&#x6B21;&#x5206;&#x6790;&#xFF0C;&#x800C;&#x4E14;&#x8FD8;&#x5BF9;&#x7740;writeup&#x770B;&#xFF0C;&#x8FD8;&#x662F;&#x78D5;&#x78D5;&#x78B0;&#x78B0;&#x7684;&#xFF0C;&#x8BB0;&#x5F55;&#x4E00;&#x4E0B;&#x4E0D;&#x8DB3;&#x5427;</p>
+<ol>
+<li>&#x5728;IDA&#x5206;&#x6790;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6025;&#x4E8E;&#x4E00;&#x53E3;&#x6C14;&#x770B;&#x61C2;&#x6240;&#x6709;&#x7684;&#x6C47;&#x7F16;&#x7801;&#xFF0C;&#x4E2D;&#x95F4;&#x5341;&#x5206;&#x7126;&#x8651;&#xFF0C;&#x56E0;&#x4E3A;&#x5BF9;&#x5176;&#x4E2D;&#x505A;&#x8FC7;&#x7684;&#x4E00;&#x4E9B;&#x5730;&#x5740;&#x65E0;&#x5173;&#x4EE5;&#x53CA;&#x6808;&#x4FDD;&#x62A4;&#x90E8;&#x5206;&#x8FC7;&#x4E8E;&#x4E5D;&#x4E5D;&#x3002;</li>
+<li>&#x5BF9;&#x6307;&#x9488;&#x4E0D;&#x662F;&#x5F88;&#x719F;&#x7EC3;&#xFF0C;&#x5728;&#x9605;&#x8BFB;&#x53CD;&#x6C47;&#x7F16;&#x4E4B;&#x540E;&#x7684;&#x4F2A;C&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6D6A;&#x8D39;&#x4E86;&#x5F88;&#x591A;&#x65F6;&#x95F4;&#xFF0C;&#x7279;&#x522B;&#x662F;&#x7B2C;&#x4E00;&#x6B21;&#x5BF9;name&#x505A;&#x53D8;&#x5316;&#x65F6;&#x7684;&#x90A3;&#x4E2A;&#x52A0;&#x6CD5;&#xFF0C;&#x8FD9;&#x91CC;&#x9700;&#x8981;&#x7406;&#x89E3;&#x7684;&#x662F;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x6307;&#x9488;&#x5E76;&#x6CA1;&#x6709;&#x7C7B;&#x578B;&#x4E4B;&#x5206;&#xFF0C;&#x5728;&#x67D0;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#x4E0A;&#x7684;&#x503C;&#x662F;&#x56FA;&#x5B9A;&#x7684;&#xFF0C;&#x662F;&#x8BA4;&#x4E3A;&#x89C4;&#x5B9A;&#x4E86;&#x67D0;&#x79CD;&#x7C7B;&#x578B;&#x7684;&#x6307;&#x9488;&#x7684;&#x5355;&#x4F4D;&#x957F;&#x5EA6;&#xFF0C;&#x7406;&#x89E3;&#x4E86;&#x8FD9;&#x4E00;&#x70B9;&#x4E4B;&#x540E;&#xFF0C;&#x518D;&#x6765;&#x7406;&#x89E3;&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x5C31;&#x6BD4;&#x8F83;&#x65B9;&#x4FBF;&#x4E86;</li>
+<li>&#x5F00;&#x59CB;&#x7684;&#x65F6;&#x5019;&#x81EA;&#x5DF1;&#x5206;&#x6790;&#x7684;&#x65F6;&#x5019;&#x6CA1;&#x6709;&#x4FEE;&#x6539;IDA&#x4F2A;C&#x4EE3;&#x7801;&#x7684;&#x53C2;&#x6570;&#x7C7B;&#x578B;&#xFF0C;&#x5206;&#x6790;&#x8D77;&#x6765;&#x8FC7;&#x4E8E;&#x5403;&#x529B;&#xFF0C;&#x800C;&#x5728;&#x5206;&#x6790;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x5BF9;&#x53C2;&#x6570;&#x7C7B;&#x578B;&#x8FDB;&#x884C;&#x9002;&#x5F53;&#x7684;&#x4FEE;&#x6539;&#xFF0C;&#x53EF;&#x80FD;&#x4F1A;&#x5BB9;&#x6613;&#x5206;&#x6790;&#x592A;&#x591A;&#xFF0C;&#x6BD4;&#x5982;&#x8FD9;&#x4E00;&#x9898;&#x6700;&#x540E;&#x7684;code&#x548C;name&#x7684;&#x5173;&#x7CFB;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x4FEE;&#x6539;&#xFF0C;&#x4F1A;&#x662F;&#x591A;&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x5BC4;&#x5B58;&#x5668;&#xFF0C;&#x5BC4;&#x5B58;&#x5668;&#x4E2D;&#x7684;&#x503C;&#x5176;&#x5B9E;&#x5C31;&#x662F;&#x6570;&#x7EC4;&#x4E2D;&#x7684;&#x67D0;&#x4E00;&#x4E2A;&#x4F4D;&#x7F6E;&#x3002;</li>
+<li>&#x4E0D;&#x4F1A;Android&#x6B63;&#x5411;&#x5F00;&#x53D1;&#xFF0C;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x5728;android&#x4E0A;&#x8DD1;&#x7684;&#x6CE8;&#x518C;&#x673A;&#x6709;&#x70B9;&#x56F0;&#x96BE;&#x3002;</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/writeup-腾讯游戏安全大赛/" rel="tag"># writeup,腾讯游戏安全大赛</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/20/arm汇编语言学习笔记/" rel="next" title="arm汇编语言学习笔记">
+                <i class="fa fa-chevron-left"></i> arm汇编语言学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/28/java基础知识复习/" rel="prev" title="java基础知识复习">
+                java基础知识复习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Tencent-Game-2016安全大赛Android基础题"><span class="nav-number">1.</span> <span class="nav-text">Tencent Game 2016安全大赛Android基础题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-收集信息"><span class="nav-number">1.1.</span> <span class="nav-text">1 收集信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-分析"><span class="nav-number">1.2.</span> <span class="nav-text">2 分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-IDA分析libCheckRegister-so"><span class="nav-number">1.3.</span> <span class="nav-text">3 IDA分析libCheckRegister.so</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-注册机"><span class="nav-number">1.4.</span> <span class="nav-text">4 注册机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">1.5.</span> <span class="nav-text">5 总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/26/Tencent-Game-2016安全大赛Android题/';
+          this.page.identifier = '2020/03/26/Tencent-Game-2016安全大赛Android题/';
+          this.page.title = 'Tencent Game 2016安全大赛Android基础题';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
