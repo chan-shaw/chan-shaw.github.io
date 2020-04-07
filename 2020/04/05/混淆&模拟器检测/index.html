@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;#x6DF7;&amp;#x6DC6;Java &amp;#x6DF7;&amp;#x6DC6; &amp;amp; &amp;#x6A21;&amp;#x62DF;&amp;#x5668;&amp;#x68C0;&amp;#x6D4B; &amp;amp; &amp;#x53CD;&amp;#x8C03;&amp;#x8BD5;1 java &amp;#x5C42;&amp;#x6DF7;&amp;#x6DC6;2 &amp;#x6A21;&amp;#x62DF;&amp;#x5668;&amp;#x68C0;&amp;#x6D4B;&amp;#x5177;&amp;#x4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="混淆&amp;模拟器检测">
+<meta property="og:url" content="http://yoursite.com/2020/04/05/混淆&模拟器检测/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="&amp;#x6DF7;&amp;#x6DC6;Java &amp;#x6DF7;&amp;#x6DC6; &amp;amp; &amp;#x6A21;&amp;#x62DF;&amp;#x5668;&amp;#x68C0;&amp;#x6D4B; &amp;amp; &amp;#x53CD;&amp;#x8C03;&amp;#x8BD5;1 java &amp;#x5C42;&amp;#x6DF7;&amp;#x6DC6;2 &amp;#x6A21;&amp;#x62DF;&amp;#x5668;&amp;#x68C0;&amp;#x6D4B;&amp;#x5177;&amp;#x4">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-07T06:39:45.090Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="混淆&amp;模拟器检测">
+<meta name="twitter:description" content="&amp;#x6DF7;&amp;#x6DC6;Java &amp;#x6DF7;&amp;#x6DC6; &amp;amp; &amp;#x6A21;&amp;#x62DF;&amp;#x5668;&amp;#x68C0;&amp;#x6D4B; &amp;amp; &amp;#x53CD;&amp;#x8C03;&amp;#x8BD5;1 java &amp;#x5C42;&amp;#x6DF7;&amp;#x6DC6;2 &amp;#x6A21;&amp;#x62DF;&amp;#x5668;&amp;#x68C0;&amp;#x6D4B;&amp;#x5177;&amp;#x4">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/05/混淆&模拟器检测/">
+
+
+
+
+
+  <title>混淆&模拟器检测 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/05/混淆&模拟器检测/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">混淆&模拟器检测</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-05T17:33:47+08:00">
+                2020-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/05/混淆&模拟器检测/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/05/混淆&模拟器检测/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/05/混淆&模拟器检测/" class="leancloud_visitors" data-flag-title="混淆&模拟器检测">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="&#x6DF7;&#x6DC6;"><a href="#&#x6DF7;&#x6DC6;" class="headerlink" title="&#x6DF7;&#x6DC6;"></a>&#x6DF7;&#x6DC6;</h1><h1 id="Java-&#x6DF7;&#x6DC6;-amp-&#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B;-amp-&#x53CD;&#x8C03;&#x8BD5;"><a href="#Java-&#x6DF7;&#x6DC6;-amp-&#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B;-amp-&#x53CD;&#x8C03;&#x8BD5;" class="headerlink" title="Java &#x6DF7;&#x6DC6; &amp; &#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B; &amp; &#x53CD;&#x8C03;&#x8BD5;"></a>Java &#x6DF7;&#x6DC6; &amp; &#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B; &amp; &#x53CD;&#x8C03;&#x8BD5;</h1><h2 id="1-java-&#x5C42;&#x6DF7;&#x6DC6;"><a href="#1-java-&#x5C42;&#x6DF7;&#x6DC6;" class="headerlink" title="1 java &#x5C42;&#x6DF7;&#x6DC6;"></a>1 java &#x5C42;&#x6DF7;&#x6DC6;</h2><h2 id="2-&#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B;"><a href="#2-&#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B;" class="headerlink" title="2 &#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B;"></a>2 &#x6A21;&#x62DF;&#x5668;&#x68C0;&#x6D4B;</h2><p>&#x5177;&#x4F53;&#x53C2;&#x8003;:<a href="https://www.kanxue.com/chm.htm?id=13471&amp;pid=node1000953" target="_blank" rel="noopener">&#x68C0;&#x6D4B;Android&#x865A;&#x62DF;&#x673A;&#x7684;&#x65B9;&#x6CD5;&#x548C;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;</a></p>
+<p>&#x7B80;&#x5355;&#x5217;&#x4E3E;&#x4E00;&#x4E0B;:</p>
+<ol>
+<li>&#x6839;&#x636E;&#x7279;&#x5F81;&#x68C0;&#x6D4B;</li>
+<li>Device ID </li>
+<li>Default Number</li>
+<li>IMSI</li>
+<li>Buid&#x7C7B;</li>
+<li>&#x8FD0;&#x8425;&#x5546;&#x540D;&#x79F0;</li>
+<li>QEMU&#x9A71;&#x52A8;</li>
+<li>QEMU&#x6587;&#x4EF6;</li>
+<li>Genymotion&#x6587;&#x4EF6;</li>
+<li>QEMU&#x7BA1;&#x9053;</li>
+</ol>
+<h2 id="3-&#x53CD;&#x8C03;&#x8BD5;"><a href="#3-&#x53CD;&#x8C03;&#x8BD5;" class="headerlink" title="3 &#x53CD;&#x8C03;&#x8BD5;"></a>3 &#x53CD;&#x8C03;&#x8BD5;</h2><h3 id="3-1-IDA&#x7AEF;&#x53E3;&#x68C0;&#x6D4B;"><a href="#3-1-IDA&#x7AEF;&#x53E3;&#x68C0;&#x6D4B;" class="headerlink" title="3.1 IDA&#x7AEF;&#x53E3;&#x68C0;&#x6D4B;"></a>3.1 IDA&#x7AEF;&#x53E3;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x8FDC;&#x7A0B;&#x8C03;&#x8BD5;&#x4F1A;&#x5360;&#x636E;&#x4E00;&#x4E9B;&#x56FA;&#x5B9A;&#x7684;&#x7AEF;&#x53E3;&#x53F7;</p>
+<p><code>/proc/net/tcp</code>&#x67E5;&#x627E;IDA&#x6240;&#x7528;&#x7684;&#x7AEF;&#x53E3;<code>23946</code>&#xFF0C;&#x5982;&#x679C;&#x53D1;&#x73B0;&#x8BF4;&#x660E;&#x8FDB;&#x7A0B;&#x6B63;&#x5728;&#x88AB;IDA&#x8C03;&#x8BD5;</p>
+<p>&#x5728;<code>netstat -apn</code>&#x7ED3;&#x679C;&#x4E2D;&#x641C;&#x7D22;23946</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CheckPort23946ByTcp</span><span class="params">()</span> </span>{</span><br><span class="line">    FILE* pfile = null;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">0x10000</span>] = {<span class="number">0</span>};</span><br><span class="line">    <span class="comment">//&#x6267;&#x884C;&#x547D;&#x4EE4;</span></span><br><span class="line">    <span class="keyword">char</span>* strCatTcp = <span class="string">&quot;cat /proc/net/tcp | grep : 5D8A&quot;</span>;</span><br><span class="line">    <span class="comment">// char* strNetstat = &quot;netstat | grep :23946&quot;;</span></span><br><span class="line">    pfile = popen(strCatTcp, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> == pfile) {</span><br><span class="line">        LOGA(<span class="string">&quot;CheckPort23946ByTcp popen&#x6253;&#x5F00;&#x547D;&#x4EE4;&#x5931;&#x8D25;!\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// &#x83B7;&#x53D6;&#x7ED3;&#x679C;</span></span><br><span class="line">     <span class="keyword">while</span> (fgets(buf, <span class="keyword">sizeof</span>(buf), pfile)) {</span><br><span class="line">         <span class="comment">// &#x6267;&#x884C;&#x5230;&#x8FD9;&#x91CC;&#xFF0C;&#x5224;&#x5B9A;&#x4E3A;&#x8C03;&#x8BD5;&#x72B6;&#x6001;</span></span><br><span class="line">         LOGA(<span class="string">&quot;&#x6267;&#x884C;cat /proc/net/tcp |grep :5D8A&#x7684;&#x7ED3;&#x679C;:\n&quot;</span>);        </span><br><span class="line">         LOGB(<span class="string">&quot;%s&quot;</span>,buf); </span><br><span class="line">     }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-&#x8C03;&#x8BD5;&#x5668;&#x8FDB;&#x7A0B;&#x540D;&#x79F0;&#x68C0;&#x6D4B;"><a href="#3-2-&#x8C03;&#x8BD5;&#x5668;&#x8FDB;&#x7A0B;&#x540D;&#x79F0;&#x68C0;&#x6D4B;" class="headerlink" title="3.2 &#x8C03;&#x8BD5;&#x5668;&#x8FDB;&#x7A0B;&#x540D;&#x79F0;&#x68C0;&#x6D4B;"></a>3.2 &#x8C03;&#x8BD5;&#x5668;&#x8FDB;&#x7A0B;&#x540D;&#x79F0;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x8C03;&#x8BD5;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x5728;&#x624B;&#x673A;&#x4E2D;&#x8FD0;&#x884C;&#x7279;&#x5B9A;&#x7684;&#x8FDB;&#x7A0B; &#x5982;&#xFF1A;</p>
+<p>android_server</p>
+<p>gdbserver</p>
+<p>gdb</p>
+<p>&#x505A;&#x6CD5;:&#x904D;&#x5386;&#x8FDB;&#x7A0B;&#x540D;&#xFF0C;&#x627E;&#x5230;&#x5219;&#x8BF4;&#x660E;&#x8C03;&#x8BD5;&#x5668;&#x5728;&#x8FD0;&#x884C;</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SearchObjProcess</span><span class="params">()</span> </span>{     </span><br><span class="line">    FILE* pfile=<span class="literal">NULL</span>;     </span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">0x1000</span>]={<span class="number">0</span>};     </span><br><span class="line">    <span class="comment">// &#x6267;&#x884C;&#x547D;&#x4EE4;     </span></span><br><span class="line">    <span class="comment">//pfile=popen(&quot;ps | awk &apos;{print $9}&apos;&quot;,&quot;r&quot;); </span></span><br><span class="line">    <span class="comment">// &#x90E8;&#x5206;&#x4E0D;&#x652F;&#x6301;awk&#x547D;&#x4EE4;     </span></span><br><span class="line">    pfile=popen(<span class="string">&quot;ps&quot;</span>,<span class="string">&quot;r&quot;</span>);     </span><br><span class="line">    <span class="keyword">if</span>(<span class="literal">NULL</span>==pfile) {         </span><br><span class="line">        LOGA(<span class="string">&quot;SearchObjProcess popen&#x6253;&#x5F00;&#x547D;&#x4EE4;&#x5931;&#x8D25;!\n&quot;</span>);         </span><br><span class="line">        <span class="keyword">return</span>;     </span><br><span class="line">    }     </span><br><span class="line">    <span class="comment">// &#x83B7;&#x53D6;&#x7ED3;&#x679C;     </span></span><br><span class="line">    LOGA(<span class="string">&quot;popen&#x65B9;&#x6848;:\n&quot;</span>);     </span><br><span class="line">    <span class="keyword">while</span>(fgets(buf,<span class="keyword">sizeof</span>(buf),pfile)) {         </span><br><span class="line">        <span class="comment">// &#x6253;&#x5370;&#x8FDB;&#x7A0B;         </span></span><br><span class="line">        LOGB(<span class="string">&quot;&#x904D;&#x5386;&#x8FDB;&#x7A0B;:%s\n&quot;</span>,buf);         </span><br><span class="line">        <span class="comment">// &#x67E5;&#x627E;&#x5B50;&#x4E32;         </span></span><br><span class="line">        <span class="keyword">char</span>* strA=<span class="literal">NULL</span>,strB=<span class="literal">NULL</span>,strC=<span class="literal">NULL</span>,strD=<span class="literal">NULL</span>;        </span><br><span class="line">        strA=<span class="built_in">strstr</span>(buf,<span class="string">&quot;android_server&quot;</span>);        </span><br><span class="line">        strB=<span class="built_in">strstr</span>(buf,<span class="string">&quot;gdbserver&quot;</span>);</span><br><span class="line">        strC=<span class="built_in">strstr</span>(buf,<span class="string">&quot;gdb&quot;</span>);        </span><br><span class="line">        strD=<span class="built_in">strstr</span>(buf,<span class="string">&quot;fuwu&quot;</span>);         </span><br><span class="line">        <span class="keyword">if</span>(strA || strB ||strC || strD) {             </span><br><span class="line">            <span class="comment">// &#x6267;&#x884C;&#x5230;&#x8FD9;&#x91CC;&#xFF0C;&#x5224;&#x5B9A;&#x4E3A;&#x8C03;&#x8BD5;&#x72B6;&#x6001;             </span></span><br><span class="line">            LOGB(<span class="string">&quot;&#x53D1;&#x73B0;&#x76EE;&#x6807;&#x8FDB;&#x7A0B;:%s\n&quot;</span>,buf);         </span><br><span class="line">        }  </span><br><span class="line">    }    </span><br><span class="line">    pclose(pfile); </span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p><strong>&#x5982;&#x679C;&#x4E0D;&#x662F;&#x4F7F;&#x7528;apk&#x9644;&#x52A0;&#x8C03;&#x8BD5;&#xFF0C;&#x800C;&#x662F;&#x5355;&#x72EC;&#x5199;&#x4E00;&#x4E2A;&#x7A0B;&#x5E8F;&#xFF0C;&#x52A0;&#x8F7D;so&#x6587;&#x4EF6;&#x8FDB;&#x884C;&#x8C03;&#x8BD5;</strong></p>
+<h3 id="3-3-&#x7236;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;"><a href="#3-3-&#x7236;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;" class="headerlink" title="3.3 &#x7236;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;"></a>3.3 &#x7236;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x90A3;&#x4E48;&#xFF0C;&#x7A0B;&#x5E8F;&#x7684;&#x7236;&#x8FDB;&#x7A0B;&#x540D;&#x79F0;&#x548C;&#x6B63;&#x5E38;&#x542F;&#x52A8;apk&#x7684;&#x7236;&#x8FDB;&#x7A0B;&#x540D;&#x79F0;&#x662F;&#x4E0D;&#x4E00;&#x6837;&#x7684;&#x3002;</p>
+<ol>
+<li>&#x6B63;&#x5E38;&#x542F;&#x52A8;&#x7684;apk&#x7A0B;&#x5E8F;&#x7236;&#x8FDB;&#x7A0B;&#x540D;&#x79F0;&#x90FD;&#x662F;<code>zygote</code></li>
+<li>&#x8C03;&#x8BD5;&#x542F;&#x52A8;&#x7684;apk&#x7236;&#x8FDB;&#x7A0B;&#x4E5F;&#x8FD8;&#x662F;<code>zygote</code></li>
+<li>&#x9644;&#x52A0;&#x8C03;&#x8BD5;&#x7684;apk&#x7A0B;&#x5E8F;&#x7236;&#x8FDB;&#x7A0B;&#x662F;<code>zygote</code></li>
+<li>vs&#x8FDC;&#x7A0B;&#x8C03;&#x8BD5;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x52A0;&#x8F7D;so &#x7236;&#x8FDB;&#x7A0B;&#x540D;&#x4E3A;<code>gdbserver</code></li>
+</ol>
+</blockquote>
+<h3 id="3-4-&#x81EA;&#x8EAB;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;"><a href="#3-4-&#x81EA;&#x8EAB;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;" class="headerlink" title="3.4 &#x81EA;&#x8EAB;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;"></a>3.4 &#x81EA;&#x8EAB;&#x8FDB;&#x7A0B;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x540D;&#x5B57;&#x4E0D;&#x662F;<code>com.xxxx</code></p>
+</blockquote>
+<h3 id="3-5-apk-&#x7EBF;&#x7A0B;&#x68C0;&#x6D4B;"><a href="#3-5-apk-&#x7EBF;&#x7A0B;&#x68C0;&#x6D4B;" class="headerlink" title="3.5 apk &#x7EBF;&#x7A0B;&#x68C0;&#x6D4B;"></a>3.5 apk &#x7EBF;&#x7A0B;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x6B63;&#x5E38;apk&#x7EBF;&#x7A0B;&#x4E2A;&#x6570;&#x6BD4;&#x8F83;&#x591A;</p>
+<p>&#x81EA;&#x5199;&#x53EF;&#x6267;&#x884C;&#x7A0B;&#x5E8F;&#x7EBF;&#x7A0B;&#x5355;&#x4E00;</p>
+<p>/proc/{pid}/task</p>
+</blockquote>
+<h3 id="3-6-apk&#x8FDB;&#x7A0B;fd&#x6587;&#x4EF6;&#x68C0;&#x6D4B;"><a href="#3-6-apk&#x8FDB;&#x7A0B;fd&#x6587;&#x4EF6;&#x68C0;&#x6D4B;" class="headerlink" title="3.6 apk&#x8FDB;&#x7A0B;fd&#x6587;&#x4EF6;&#x68C0;&#x6D4B;"></a>3.6 apk&#x8FDB;&#x7A0B;fd&#x6587;&#x4EF6;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x6839;&#x636E;<code>/proc/pid/fd</code>&#x4E0B;&#x6587;&#x4EF6;&#x4E2A;&#x6570;&#x7684;&#x5DEE;&#x5F02;&#xFF0C;&#x5224;&#x65AD;&#x8FDB;&#x7A0B;&#x7684;&#x72B6;&#x6001;</p>
+</blockquote>
+<h3 id="3-7-&#x5B89;&#x5353;&#x7CFB;&#x7EDF;&#x81EA;&#x5E26;&#x8C03;&#x8BD5;&#x51FD;&#x6570;&#x68C0;&#x6D4B;"><a href="#3-7-&#x5B89;&#x5353;&#x7CFB;&#x7EDF;&#x81EA;&#x5E26;&#x8C03;&#x8BD5;&#x51FD;&#x6570;&#x68C0;&#x6D4B;" class="headerlink" title="3.7 &#x5B89;&#x5353;&#x7CFB;&#x7EDF;&#x81EA;&#x5E26;&#x8C03;&#x8BD5;&#x51FD;&#x6570;&#x68C0;&#x6D4B;"></a>3.7 &#x5B89;&#x5353;&#x7CFB;&#x7EDF;&#x81EA;&#x5E26;&#x8C03;&#x8BD5;&#x51FD;&#x6570;&#x68C0;&#x6D4B;</h3><p>&#x68C0;&#x6D4B;&#x8C03;&#x8BD5;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isBeingDebugged</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> Debug.isDebuggerConnected();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-8-ptrace&#x68C0;&#x6D4B;&#x662F;&#x5426;&#x6709;&#x7A0B;&#x5E8F;&#x8DDF;&#x8E2A;"><a href="#3-8-ptrace&#x68C0;&#x6D4B;&#x662F;&#x5426;&#x6709;&#x7A0B;&#x5E8F;&#x8DDF;&#x8E2A;" class="headerlink" title="3.8  ptrace&#x68C0;&#x6D4B;&#x662F;&#x5426;&#x6709;&#x7A0B;&#x5E8F;&#x8DDF;&#x8E2A;:"></a>3.8  ptrace&#x68C0;&#x6D4B;&#x662F;&#x5426;&#x6709;&#x7A0B;&#x5E8F;&#x8DDF;&#x8E2A;:</h3><p>&#x8FDB;&#x7A0B;&#x4E0B;<code>status</code>&#x7B2C;6&#x884C;&#x4E0D;&#x4E3A;0</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String tracerpid = <span class="string">&quot;TracerPid&quot;</span>;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * &#x963F;&#x91CC;&#x5DF4;&#x5DF4;&#x7528;&#x4E8E;&#x68C0;&#x6D4B;&#x662F;&#x5426;&#x5728;&#x8DDF;&#x8E2A;&#x5E94;&#x7528;&#x8FDB;&#x7A0B;</span></span><br><span class="line"><span class="comment"> * &#x5BB9;&#x6613;&#x89C4;&#x907F;, &#x7528;&#x6CD5;&#x662F;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x6BCF;3&#x79D2;&#x68C0;&#x6D4B;&#x4E00;&#x6B21;, &#x5982;&#x679C;&#x68C0;&#x6D4B;&#x5230;&#x5219;&#x7A0B;&#x5E8F;&#x5D29;&#x6E83;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasTracerPid</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>{</span><br><span class="line">    BufferedReader reader = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(<span class="keyword">new</span> FileInputStream(<span class="string">&quot;/proc/self/status&quot;</span>)), <span class="number">1000</span>);</span><br><span class="line">        String line;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) {</span><br><span class="line">            <span class="keyword">if</span> (line.length() &gt; tracerpid.length()) {</span><br><span class="line">                <span class="keyword">if</span> (line.substring(<span class="number">0</span>, tracerpid.length()).equalsIgnoreCase(tracerpid)) {</span><br><span class="line">                    <span class="keyword">if</span> (Integer.decode(line.substring(tracerpid.length() + <span class="number">1</span>).trim()) &gt; <span class="number">0</span>) {</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"> </span><br><span class="line">    } <span class="keyword">catch</span> (Exception exception) {</span><br><span class="line">        exception.printStackTrace();</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        reader.close();</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-9-&#x51FD;&#x6570;hash&#x503C;&#x68C0;&#x6D4B;"><a href="#3-9-&#x51FD;&#x6570;hash&#x503C;&#x68C0;&#x6D4B;" class="headerlink" title="3.9 &#x51FD;&#x6570;hash&#x503C;&#x68C0;&#x6D4B;"></a>3.9 &#x51FD;&#x6570;hash&#x503C;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>so&#x6587;&#x4EF6;&#x4E2D;&#x51FD;&#x6570;&#x7684;&#x6307;&#x4EE4;&#x662F;&#x56FA;&#x5B9A;&#xFF0C;&#x4F46;&#x662F;&#x5982;&#x679C;&#x88AB;&#x4E0B;&#x4E86;&#x8F6F;&#x4EF6;&#x65AD;&#x70B9;&#xFF0C;&#x6307;&#x4EE4;&#x5C31;&#x4F1A;&#x53D1;&#x751F;&#x6539;&#x53D8;(&#x65AD;&#x70B9;&#x5730;&#x5740;&#x88AB;&#x6539; &#x5199;&#x4E3A;bkpt&#x65AD;&#x70B9;&#x6307;&#x4EE4;)&#xFF0C;&#x53EF;&#x4EE5;&#x8BA1;&#x7B97;&#x5185;&#x5B58;&#x4E2D;&#x4E00;&#x6BB5;&#x6307;&#x4EE4;&#x7684;hash&#x503C;&#x8FDB;&#x884C;&#x6821;&#x9A8C;&#xFF0C;&#x68C0;&#x6D4B;&#x51FD;&#x6570;&#x662F;&#x5426;&#x88AB;&#x4FEE;&#x6539;&#x6216;&#x88AB;&#x4E0B;&#x65AD;&#x70B9;</p>
+</blockquote>
+<h3 id="3-10-&#x65AD;&#x70B9;&#x6307;&#x4EE4;&#x68C0;&#x6D4B;"><a href="#3-10-&#x65AD;&#x70B9;&#x6307;&#x4EE4;&#x68C0;&#x6D4B;" class="headerlink" title="3.10 &#x65AD;&#x70B9;&#x6307;&#x4EE4;&#x68C0;&#x6D4B;"></a>3.10 &#x65AD;&#x70B9;&#x6307;&#x4EE4;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x53EF;&#x4EE5;&#x5728;&#x51FD;&#x6570;&#x4F53;&#x4E2D;&#x641C;&#x7D22;bkpt&#x6307;&#x4EE4;&#x6765;&#x68C0;&#x6D4B;&#x8F6F;&#x4EF6;&#x65AD;&#x7535;&#x3002;</p>
+</blockquote>
+<h3 id="3-11-&#x7CFB;&#x7EDF;&#x6E90;&#x7801;&#x4FEE;&#x6539;&#x68C0;&#x6D4B;"><a href="#3-11-&#x7CFB;&#x7EDF;&#x6E90;&#x7801;&#x4FEE;&#x6539;&#x68C0;&#x6D4B;" class="headerlink" title="3.11 &#x7CFB;&#x7EDF;&#x6E90;&#x7801;&#x4FEE;&#x6539;&#x68C0;&#x6D4B;"></a>3.11 &#x7CFB;&#x7EDF;&#x6E90;&#x7801;&#x4FEE;&#x6539;&#x68C0;&#x6D4B;</h3><h3 id="3-12-&#x5355;&#x6B65;&#x8C03;&#x8BD5;&#x9677;&#x9631;"><a href="#3-12-&#x5355;&#x6B65;&#x8C03;&#x8BD5;&#x9677;&#x9631;" class="headerlink" title="3.12 &#x5355;&#x6B65;&#x8C03;&#x8BD5;&#x9677;&#x9631;"></a>3.12 &#x5355;&#x6B65;&#x8C03;&#x8BD5;&#x9677;&#x9631;</h3><blockquote>
+<p>&#x539F;&#x7406;&#xFF1A;</p>
+<p>&#x8C03;&#x8BD5;&#x5668;&#x8C03;&#x8BD5;&#x4E0B;&#x65AD;&#x70B9;&#x5230;&#x6267;&#x884C;&#x65AD;&#x70B9;&#x8FC7;&#x7A0B;&#x5982;&#x4E0B;:</p>
+<ol>
+<li><p>&#x4FDD;&#x5B58;: &#x4FDD;&#x5B58;&#x76EE;&#x6807;&#x5904;&#x6307;&#x4EE4;</p>
+</li>
+<li><p>&#x66FF;&#x6362;: &#x66FF;&#x6362;&#x76EE;&#x6807;&#x5904;&#x6307;&#x4EE4;&#x4E3A;&#x65AD;&#x70B9;&#x6307;&#x4EE4;</p>
+</li>
+<li><p>&#x6267;&#x884C;&#x4E2D;&#x65AD;: &#x5F15;&#x53D1;&#x4E2D;&#x65AD;</p>
+</li>
+</ol>
+<p>&#x8C03;&#x8BD5;&#x5668;&#x6536;&#x5230;&#x4FE1;&#x53F7;&#x4E4B;&#x540E;&#xFF0C;&#x6267;&#x884C;&#x8C03;&#x8BD5;&#x5668;&#x6CE8;&#x518C;&#x7684;&#x4FE1;&#x53F7;&#x5904;&#x7406;&#x51FD;&#x6570;</p>
+<ol start="4">
+<li>&#x6062;&#x590D;&#xFF1A;&#x8C03;&#x8BD5;&#x5668;&#x5904;&#x7406;&#x51FD;&#x6570;&#x6062;&#x590D;&#x4FDD;&#x5B58;&#x7684;&#x6307;&#x4EE4;</li>
+<li>&#x56DE;&#x9000;&#xFF1A;&#x56DE;&#x9000;PC&#x5BC4;&#x5B58;&#x5668;</li>
+<li>&#x63A7;&#x5236;&#x6743;&#x56DE;&#x5F52;&#x7A0B;&#x5E8F;</li>
+</ol>
+<p>&#x53CD;&#x8C03;&#x8BD5;&#x65B9;&#x6848;:</p>
+<p>&#x5728;&#x4EE3;&#x7801;&#x4E2D;&#x6CE8;&#x518C;&#x65AD;&#x70B9;&#x4FE1;&#x53F7;&#x5904;&#x7406;&#x51FD;&#x6570;</p>
+<p>&#x5728;&#x975E;&#x8C03;&#x8BD5;&#x72B6;&#x6001;&#x4E0B;:</p>
+<p>&#x8FDB;&#x5165;&#x81EA;&#x5DF1;&#x6CE8;&#x518C;&#x7684;&#x51FD;&#x6570;&#xFF0C;NOP&#x6389;&#x65AD;&#x6389;&#x6307;&#x4EE4;&#xFF0C;&#x56DE;&#x9000;PC&#x540E;&#x6B63;&#x5E38;&#x6307;&#x4EE4;</p>
+<p>&#x5728;&#x8C03;&#x8BD5;&#x72B6;&#x6001;&#x4E0B;&#xFF1A;</p>
+<p>&#x8FDB;&#x5165;&#x8C03;&#x8BD5;&#x5668;&#x7684;&#x65AD;&#x70B9;&#x5904;&#x7406;&#x6D41;&#x7A0B;&#xFF0C;&#x4F1A;&#x6062;&#x590D;&#x76EE;&#x6807;&#x6307;&#x4EE4;&#x5931;&#x8D25;&#xFF0C;&#x56DE;&#x9000;PC&#x8FDB;&#x5165;&#x6B7B;&#x5FAA;&#x73AF;</p>
+</blockquote>
+<h3 id="3-12-&#x5229;&#x7528;IDA&#x5148;&#x622A;&#x83B7;&#x4E2D;&#x65AD;&#x7279;&#x6027;&#x7684;&#x68C0;&#x6D4B;"><a href="#3-12-&#x5229;&#x7528;IDA&#x5148;&#x622A;&#x83B7;&#x4E2D;&#x65AD;&#x7279;&#x6027;&#x7684;&#x68C0;&#x6D4B;" class="headerlink" title="3.12 &#x5229;&#x7528;IDA&#x5148;&#x622A;&#x83B7;&#x4E2D;&#x65AD;&#x7279;&#x6027;&#x7684;&#x68C0;&#x6D4B;"></a>3.12 &#x5229;&#x7528;IDA&#x5148;&#x622A;&#x83B7;&#x4E2D;&#x65AD;&#x7279;&#x6027;&#x7684;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>IDA&#x4F1A;&#x9996;&#x5148;&#x622A;&#x83B7;&#x4FE1;&#x53F7;&#xFF0C;&#x5BFC;&#x81F4;&#x8FDB;&#x7A0B;&#x65E0;&#x6CD5;&#x63A5;&#x6536;&#x5230;&#x4FE1;&#x53F7;&#xFF0C;&#x5BFC;&#x81F4;&#x4E0D;&#x4F1A;&#x6267;&#x884C;&#x4FE1;&#x53F7;&#x5904;&#x7406;&#x51FD;&#x6570;&#x3002;&#x5C06;&#x5173;&#x952E;&#x6D41;&#x7A0B; &#x653E;&#x5728;&#x4FE1;&#x53F7;&#x5904;&#x7406;&#x51FD;&#x6570;&#x4E2D;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x6267;&#x884C;&#xFF0C;&#x5C31;&#x662F;&#x88AB;&#x8C03;&#x8BD5;&#x72B6;&#x6001;</p>
+</blockquote>
+<h3 id="3-13-&#x6267;&#x884C;&#x65F6;&#x95F4;&#x68C0;&#x6D4B;"><a href="#3-13-&#x6267;&#x884C;&#x65F6;&#x95F4;&#x68C0;&#x6D4B;" class="headerlink" title="3.13 &#x6267;&#x884C;&#x65F6;&#x95F4;&#x68C0;&#x6D4B;"></a>3.13 &#x6267;&#x884C;&#x65F6;&#x95F4;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>&#x6B63;&#x5E38;&#x60C5;&#x51B5;&#x4E0B;&#xFF1A;&#x5728;a&#x5730;&#x70B9;&#x83B7;&#x53D6;&#x6267;&#x884C;&#x65F6;&#x95F4;&#xFF0C;&#x8FD0;&#x884C;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;&#x540E;&#xFF0C;&#x5728;b&#x5904;&#x83B7;&#x53D6;&#x65F6;&#x95F4;&#xFF0C;&#x7136;&#x540E;&#x6C42;&#x65F6;&#x95F4;&#x5DEE;&#xFF0C;&#x8FD9;&#x4E2A;&#x5DEE;&#x4F1A;&#x6BD4;&#x8F83;&#x5C0F;&#x3002;</p>
+<p>&#x8C03;&#x8BD5;&#x72B6;&#x6001;&#x4E0B;: &#x5982;&#x679C;&#x5B58;&#x5728;&#x8C03;&#x8BD5;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x65F6;&#x95F4;&#x5DEE;&#x4F1A;&#x6BD4;&#x8F83;&#x5927;</p>
+</blockquote>
+<h3 id="3-14-&#x8FDB;&#x7A0B;&#x4FE1;&#x606F;&#x7ED3;&#x6784;&#x68C0;&#x6D4B;"><a href="#3-14-&#x8FDB;&#x7A0B;&#x4FE1;&#x606F;&#x7ED3;&#x6784;&#x68C0;&#x6D4B;" class="headerlink" title="3.14 &#x8FDB;&#x7A0B;&#x4FE1;&#x606F;&#x7ED3;&#x6784;&#x68C0;&#x6D4B;"></a>3.14 &#x8FDB;&#x7A0B;&#x4FE1;&#x606F;&#x7ED3;&#x6784;&#x68C0;&#x6D4B;</h3><blockquote>
+<p>/proc/pid/status</p>
+<p>/proc/pid/task/pid/status</p>
+<p>TracerPid  != 0</p>
+<p>statue&#x5B57;&#x6BB5;&#x5199;&#x5165;&#x4E86;t(tracing stop)</p>
+</blockquote>
+<blockquote>
+<p>/proc/pid/stat</p>
+<p>proc/pid/task/pid/stat</p>
+<p>&#x7B2C;&#x4E8C;&#x4E2A;&#x5B57;&#x6BB5;&#x4E3A;t</p>
+</blockquote>
+<blockquote>
+<p>/proc/pid/wchan</p>
+<p>/proc/pid/task/pid/wchan</p>
+<p>ptrace_stop</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/05/IDA-动态调试/" rel="next" title="IDA动态调试apk流程">
+                <i class="fa fa-chevron-left"></i> IDA动态调试apk流程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/06/ELF中的GOT-PLT-REL/" rel="prev" title="ELF中的GOT PLT REL">
+                ELF中的GOT PLT REL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#混淆"><span class="nav-number">1.</span> <span class="nav-text">混淆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-混淆-amp-模拟器检测-amp-反调试"><span class="nav-number">2.</span> <span class="nav-text">Java 混淆 &amp; 模拟器检测 &amp; 反调试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-java-层混淆"><span class="nav-number">2.1.</span> <span class="nav-text">1 java 层混淆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-模拟器检测"><span class="nav-number">2.2.</span> <span class="nav-text">2 模拟器检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-反调试"><span class="nav-number">2.3.</span> <span class="nav-text">3 反调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-IDA端口检测"><span class="nav-number">2.3.1.</span> <span class="nav-text">3.1 IDA端口检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-调试器进程名称检测"><span class="nav-number">2.3.2.</span> <span class="nav-text">3.2 调试器进程名称检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-父进程检测"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.3 父进程检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-自身进程检测"><span class="nav-number">2.3.4.</span> <span class="nav-text">3.4 自身进程检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-apk-线程检测"><span class="nav-number">2.3.5.</span> <span class="nav-text">3.5 apk 线程检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-apk进程fd文件检测"><span class="nav-number">2.3.6.</span> <span class="nav-text">3.6 apk进程fd文件检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-安卓系统自带调试函数检测"><span class="nav-number">2.3.7.</span> <span class="nav-text">3.7 安卓系统自带调试函数检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-ptrace检测是否有程序跟踪"><span class="nav-number">2.3.8.</span> <span class="nav-text">3.8  ptrace检测是否有程序跟踪:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-9-函数hash值检测"><span class="nav-number">2.3.9.</span> <span class="nav-text">3.9 函数hash值检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-10-断点指令检测"><span class="nav-number">2.3.10.</span> <span class="nav-text">3.10 断点指令检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-11-系统源码修改检测"><span class="nav-number">2.3.11.</span> <span class="nav-text">3.11 系统源码修改检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-12-单步调试陷阱"><span class="nav-number">2.3.12.</span> <span class="nav-text">3.12 单步调试陷阱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-12-利用IDA先截获中断特性的检测"><span class="nav-number">2.3.13.</span> <span class="nav-text">3.12 利用IDA先截获中断特性的检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-13-执行时间检测"><span class="nav-number">2.3.14.</span> <span class="nav-text">3.13 执行时间检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-14-进程信息结构检测"><span class="nav-number">2.3.15.</span> <span class="nav-text">3.14 进程信息结构检测</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/05/混淆&模拟器检测/';
+          this.page.identifier = '2020/04/05/混淆&模拟器检测/';
+          this.page.title = '混淆&模拟器检测';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

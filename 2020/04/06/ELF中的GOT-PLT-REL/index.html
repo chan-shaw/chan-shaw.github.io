@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="so,android,elf">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于GOT PLT REL中相关内容的整理">
+<meta name="keywords" content="so,android,elf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELF中的GOT PLT REL">
+<meta property="og:url" content="http://yoursite.com/2020/04/06/ELF中的GOT-PLT-REL/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="对于GOT PLT REL中相关内容的整理">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/06/ELF中的GOT-PLT-REL/1586185898823.png">
+<meta property="og:updated_time" content="2020-04-06T16:19:42.499Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ELF中的GOT PLT REL">
+<meta name="twitter:description" content="对于GOT PLT REL中相关内容的整理">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/06/ELF中的GOT-PLT-REL/1586185898823.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/06/ELF中的GOT-PLT-REL/">
+
+
+
+
+
+  <title>ELF中的GOT PLT REL | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/06/ELF中的GOT-PLT-REL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ELF中的GOT PLT REL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-06T15:59:06+08:00">
+                2020-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/06/ELF中的GOT-PLT-REL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/06/ELF中的GOT-PLT-REL/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/06/ELF中的GOT-PLT-REL/" class="leancloud_visitors" data-flag-title="ELF中的GOT PLT REL">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对于GOT PLT REL中相关内容的整理
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ELF&#x4E2D;&#x7684;GOT-PLT-REL"><a href="#ELF&#x4E2D;&#x7684;GOT-PLT-REL" class="headerlink" title="ELF&#x4E2D;&#x7684;GOT PLT REL"></a>ELF&#x4E2D;&#x7684;GOT PLT REL</h1><blockquote>
+<p>&#x5982;&#x679C;&#x5728;&#x7F16;&#x8BD1;&#x65F6;&#x5F00;&#x542F;PIC(&#x4F4D;&#x7F6E;&#x65E0;&#x5173;&#x4EE3;&#x7801;)&#x548C;PIE(&#x4F4D;&#x7F6E;&#x65E0;&#x5173;&#x53EF;&#x6267;&#x884C;&#x7A0B;&#x5E8F;)&#xFF0C;&#x90A3;&#x4E48;&#x5728;&#x94FE;&#x63A5;&#x5668;&#x52A0;&#x8F7D;&#x7A0B;&#x5E8F;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x53EF;&#x4EE5;&#x5C06;ELF&#x52A0;&#x8F7D;&#x5230;&#x4EFB;&#x610F;&#x5730;&#x5740;&#x7A7A;&#x95F4;.&#x52A8;&#x6001;&#x52A0;&#x8F7D;&#x7684;&#x5B9E;&#x73B0;&#x5C31;&#x4E0E;GOT &#x548C;PLT&#x8868;&#x6709;&#x5173;</p>
+</blockquote>
+<ul>
+<li>gcc &#x7F16;&#x8BD1;: <ul>
+<li>got&#x8868;&#x5728;.got&#x8282;&#x533A;</li>
+<li>plt&#x8868;&#x5728;.plt&#x8282;&#x533A;</li>
+</ul>
+</li>
+<li>clang&#x7F16;&#x8BD1;: <ul>
+<li>got&#x8868;&#x5728;.got&#x8282;&#x533A;&#x548C;.got.plt&#x8282;&#x533A; &#xFF1A;&#x4F1A;&#x52A0;&#x8F7D;&#x5230;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x4E14;&#x53EF;&#x5199;</li>
+<li>plt&#x8868;&#x5728;.plt&#x8282;&#x533A;: &#x4F1A;&#x52A0;&#x8F7D;&#x5230;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x4E14;&#x5305;&#x542B;&#x8981;&#x6267;&#x884C;&#x7684;&#x673A;&#x5668;&#x6307;&#x4EE4;</li>
+</ul>
+</li>
+</ul>
+<p>*<em>RLE&#x8868; - *</em>  &#x7A0B;&#x5E8F;&#x52A0;&#x8F7D;&#x8FDB;&#x5185;&#x5B58;&#x65F6;&#xFF0C;&#x901A;&#x8FC7;&#x81EA;&#x5DF1;&#x7684;rel&#x8868;&#xFF0C;&#x544A;&#x8BC9;&#x94FE;&#x63A5;&#x5668;&#xFF0C;&#x54EA;&#x4E9B;&#x4F4D;&#x7F6E;&#x9700;&#x8981;&#x91CD;&#x5B9A;&#x4F4D;</p>
+<p>*<em>GOT&#x8868; (Global Offset Table&#xFF0C;&#x5168;&#x5C40;&#x504F;&#x79FB;&#x8868;)  - *</em> &#x5B58;&#x653E;&#x94FE;&#x63A5;&#x5668;&#x627E;&#x5230;&#x7684;&#x51FD;&#x6570;/&#x53D8;&#x91CF;&#x7684;&#x5730;&#x5740;</p>
+<p> *<em>PLT&#x8868;(Procedure Linkage Table&#xFF0C;&#x8FC7;&#x7A0B;&#x94FE;&#x63A5;&#x8868; ) - *</em> &#x7531;&#x4EE3;&#x7801;&#x7247;&#x6BB5;&#x7EC4;&#x6210;&#x7684;&#xFF0C;&#x6BCF;&#x4E2A;&#x4EE3;&#x7801;&#x7247;&#x6BB5;&#x90FD;&#x8DF3;&#x8F6C;&#x5230;GOT&#x8868;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x5177;&#x4F53;&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;,&#x7528;&#x4E8E;&#x5C06;&#x5730;&#x5740;&#x65E0;&#x5173;&#x51FD;&#x6570;&#x8F6C;&#x79FB;&#x5230;&#x7EDD;&#x5BF9;&#x5730;&#x5740;</p>
+<p>&#x5728;android arm&#x4E2D;&#xFF0C;&#x662F;&#x88C5;&#x8F7D;&#x65F6;&#x91CD;&#x5B9A;&#x4F4D;&#xFF0C;&#x94FE;&#x63A5;&#x5668;&#x5C06;&#x6A21;&#x5757;&#x52A0;&#x8F7D;&#x8FDB;&#x5185;&#x5B58;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x904D;&#x5386;rel&#x8868;&#xFF0C;&#x5F97;&#x77E5;&#x54EA;&#x4E9B;&#x4F4D;&#x7F6E;&#x9700;&#x8981;&#x91CD;&#x5B9A;&#x5411;&#xFF0C;&#x5C06;&#x91CD;&#x5B9A;&#x5411;&#x4E4B;&#x540E;&#x7684;&#x5730;&#x5740;&#x586B;&#x5165;got&#x8868;</p>
+<p>&#x5F53;&#x7A0B;&#x5E8F;&#x6267;&#x884C;&#x65F6;&#xFF0C;&#x9700;&#x8981;&#x67D0;&#x4E00;&#x4E2A;&#x5F15;&#x7528;&#x53D8;&#x91CF;&#xFF0C;&#x6216;&#x8005;&#x9700;&#x8981;&#x8C03;&#x7528;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5C31;&#x4F1A;&#x8BBF;&#x95EE;got&#x8868;&#xFF0C;&#x67E5;&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x7684;&#x5730;&#x5740;</p>
+<p> PLT&#x8868;&#x662F;Linux ELF&#x6587;&#x4EF6;&#x4E2D;&#x7528;&#x4E8E;&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;&#x7684;&#x8868;&#xFF0C;&#x5373;&#x51FD;&#x6570;&#x7B2C;&#x4E00;&#x6B21;&#x88AB;&#x8C03;&#x7528;&#x7684;&#x65F6;&#x5019;&#x624D;&#x8FDB;&#x884C;&#x7ED1;&#x5B9A;&#x3002; </p>
+<h2 id="&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;"><a href="#&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;" class="headerlink" title="&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;:"></a>&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;:</h2><p>&#x6240;&#x8C13;&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;&#xFF0C;&#x5C31;&#x662F;&#x5F53;&#x51FD;&#x6570;&#x7B2C;&#x4E00;&#x6B21;&#x88AB;&#x8C03;&#x7528;&#x7684;&#x65F6;&#x5019;&#x624D;&#x8FDB;&#x884C;&#x7ED1;&#x5B9A;&#xFF08;&#x5305;&#x62EC;&#x7B26;&#x53F7;&#x67E5;&#x627E;&#x3001;&#x91CD;&#x5B9A;&#x4F4D;&#x7B49;&#xFF09;&#xFF0C;&#x5982;&#x679C;&#x51FD;&#x6570;&#x4ECE;&#x6765;&#x6CA1;&#x6709;&#x7528;&#x5230;&#x8FC7;&#x5C31;&#x4E0D;&#x8FDB;&#x884C;&#x7ED1;&#x5B9A;&#x3002;&#x57FA;&#x4E8E;&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;&#x53EF;&#x4EE5;&#x5927;&#x5927;&#x52A0;&#x5FEB;&#x7A0B;&#x5E8F;&#x7684;&#x542F;&#x52A8;&#x901F;&#x5EA6;&#xFF0C;&#x7279;&#x522B;&#x6709;&#x5229;&#x4E8E;&#x4E00;&#x4E9B;&#x5F15;&#x7528;&#x4E86;&#x5927;&#x91CF;&#x51FD;&#x6570;&#x7684;&#x7A0B;&#x5E8F;&#x3002;</p>
+<p> <img src="/2020/04/06/ELF&#x4E2D;&#x7684;GOT-PLT-REL/1586185898823.png" alt="1586185898823"> </p>
+<p>&#x5B58;&#x5728;&#x4E00;&#x4E2A;<code>puts</code>&#x51FD;&#x6570;&#xFF0C;&#x5728;PLT&#x8868;&#x9879;&#x4E3A;<code>puts@plt</code>&#xFF0C;&#x5728;GOT &#x8868;&#x9879;&#x4E3A;<code>puts@got</code>&#xFF0C;&#x7B2C;&#x4E00;&#x6B21;&#x6267;&#x884C;&#x7684;&#x65F6;&#x5019;&#xFF1A;</p>
+<ol>
+<li><p>&#x8FDB;&#x5165;puts@plt</p>
+</li>
+<li><p>&#x8FDB;&#x5165;GOT&#x8868;&#x91CD;&#x5BF9;&#x5E94;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6B64;&#x65F6;&#x7684;GOT&#x4FDD;&#x5B58;&#x5230;&#x662F; <code>pushl n</code>&#x7684;&#x5730;&#x5740;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x662F;&#x987A;&#x5E8F;&#x6267;&#x884C;&#x7684;&#x4E0B;&#x4E00;&#x6B65;&#xFF0C;&#x5982;&#x56FE;&#x4E2D;&#x6807;&#x53F7;3&#x7684;&#x7EBF;</p>
+</li>
+<li><p>&#x6267;&#x884C;<code>pushl n</code> n &#x4E3A;puts&#x51FD;&#x6570;&#x5728;GOT&#x8868;&#x4E2D;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x5411;&#x5806;&#x6808;&#x4E2D;&#x538B;&#x5165;&#x8FD9;&#x4E2A;&#x504F;&#x79FB;&#x91CF;&#x7684;&#x4E3B;&#x8981;&#x4F5C;&#x7528;&#x5C31;&#x662F;&#x4E3A;&#x4E86;&#x627E;&#x5230;puts&#x51FD;&#x6570;&#x7684;&#x7B26;&#x53F7;&#x540D;&#x4EE5;&#x53CA;puts&#x51FD;&#x6570;&#x5730;&#x5740;&#x5728;GOT&#x8868;&#x9879;&#x4E2D;&#x6240;&#x5360;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x4EE5;&#x4FBF;&#x5728;&#x51FD;&#x6570;&#x5B9A;&#x4F4D;&#x5B8C;&#x6210;&#x540E;&#x5C06;&#x51FD;&#x6570;&#x7684;&#x5B9E;&#x9645;&#x5730;&#x5740;&#x5199;&#x5230;&#x8FD9;&#x4E2A;&#x4F4D;&#x7F6E;&#x3002; </p>
+</li>
+<li><p>&#x8DF3;&#x5230;PLT[0]&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x8FD9;&#x6B65;&#x5C06;<code>push GOT[1]</code>&#xFF0C;&#x5373;&#x5171;&#x4EAB;&#x5E93;&#x94FE;&#x8868;&#x5730;&#x5740;&#x5165;&#x6808;</p>
+</li>
+<li><p>&#x987A;&#x5E8F;&#x6267;&#x884C;<code>jmp GOT[2]</code>&#xFF0C;&#x4FDD;&#x5B58;&#x7684;&#x662F;<code>_dl_runtime_resolve</code>&#x51FD;&#x6570;&#x7684;&#x5165;&#x53E3;</p>
+</li>
+<li><p>&#x6267;&#x884C;<code>_dl_runtime_resolve</code> &#x8BE5;&#x51FD;&#x6570;&#x4F1A;&#x627E;&#x5230;puts&#x51FD;&#x6570;&#x7684;&#x5B9E;&#x9645;&#x52A0;&#x8F7D;&#x5730;&#x5740;&#xFF0C;&#x5E76;&#x628A;&#x5B83;&#x5199;&#x5230;GOT&#x8868;&#x4E2D;&#xFF0C;&#x8FD4;&#x56DE;&#x65F6;&#x5C31;&#x4F1A;&#x8FDB;&#x5165;puts&#x51FD;&#x6570;&#x5185;&#x6267;&#x884C;&#x3002; </p>
+<p>&#x51FD;&#x6570;&#x540E;&#x7EED;&#x6267;&#x884C;&#x5C31;&#x4F1A;&#x76F4;&#x63A5;&#x8DF3;&#x8F6C;&#x7684;GOT&#x8868;puts&#x51FD;&#x6570;&#x5BF9;&#x5E94;&#x4F4D;&#x7F6E;&#xFF0C;&#x8BE5;&#x4F4D;&#x7F6E;&#x4FDD;&#x5B58;&#x7740;puts&#x51FD;&#x6570;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x76F4;&#x63A5;&#x8FDB;&#x5165;puts&#x51FD;&#x6570;&#x3002; </p>
+</li>
+</ol>
+<ul>
+<li>GOT[1]&#x4FDD;&#x5B58;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#xFF0C;&#x6307;&#x5411;&#x5DF2;&#x7ECF;&#x52A0;&#x8F7D;&#x7684;&#x5171;&#x4EAB;&#x5E93;&#x7684;&#x94FE;&#x8868;&#x5730;&#x5740;&#xFF08;&#x52A0;&#x8F7D;&#x7684;&#x5171;&#x4EAB;&#x5E93;&#x4F1A;&#x5F62;&#x6210;&#x4E00;&#x4E2A;&#x94FE;&#x8868;&#xFF09;&#xFF1B; </li>
+<li>GOT[2]&#x4FDD;&#x5B58;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x5B9A;&#x4E49;&#x5982;&#x4E0B;&#xFF1A;GOT[2] = &amp;_dl_runtime_resolve&#xFF0C;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x4E3B;&#x8981;&#x4F5C;&#x7528;&#x5C31;&#x662F;&#x627E;&#x5230;&#x67D0;&#x4E2A;&#x7B26;&#x53F7;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x5E76;&#x628A;&#x5B83;&#x5199;&#x5230;&#x4E0E;&#x6B64;&#x7B26;&#x53F7;&#x76F8;&#x5173;&#x7684;GOT&#x9879;&#x4E2D; </li>
+</ul>
+<p>&#x4F1A;&#x8FDB;&#x5165;plt&#x8868;&#x9879;&#xFF0C;&#x5982;1&#xFF0C;&#x7136;&#x540E;&#x56DE;&#x4ECE;plt&#x8DF3;&#x8F6C;&#x8FDB;got&#x8868;&#xFF0C;&#x5982;2&#xFF0C;&#x5982;&#x679C;&#x51FD;&#x6570;&#x4ECE;&#x6765;&#x6CA1;&#x6709;&#x8C03;&#x7528;&#x8FC7;&#xFF0C;&#x90A3;&#x4E48;&#x56DE;&#x4ECE;got&#x8868;&#x91CD;&#x65B0;&#x8DF3;&#x8F6C;&#x56DE;plt&#x5982;3&#xFF0C;&#x5E76;&#x8C03;&#x7528;<code>patch puts@got</code>&#x4F5C;&#x7528;&#x662F;&#x5C06;<code>puts</code>&#x51FD;&#x6570;&#x771F;&#x6B63;&#x7684;&#x5730;&#x5740;&#x586B;&#x5145;&#x5230;<code>puts@got</code>&#x5982;4 5 6 7&#xFF0C;&#x7136;&#x540E;&#x8DF3;&#x8F6C;&#x5230;puts&#x51FD;&#x6570;&#x771F;&#x6B63;&#x7684;&#x5730;&#x5740;&#x6267;&#x884C;&#x4EE3;&#x7801;&#x3002;</p>
+<h2 id="&#x5751;&#xFF1A;"><a href="#&#x5751;&#xFF1A;" class="headerlink" title="&#x5751;&#xFF1A;"></a>&#x5751;&#xFF1A;</h2><p>&#x627E;&#x5230;&#x771F;&#x6B63;&#x7684;&#x5730;&#x5740;&#x5E76;&#x586B;&#x5145;&#x7684;&#x8FC7;&#x7A0B;,&#x5373;<code>patch</code>&#x7684;&#x8FC7;&#x7A0B;</p>
+<h2 id="&#x53C2;&#x8003;"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</h2><p><a href="https://blog.csdn.net/bme314/article/details/83055632" target="_blank" rel="noopener">ELF&#x6587;&#x4EF6;&#x7B26;&#x53F7;&#x52A8;&#x6001;&#x89E3;&#x6790;&#x7684;&#x8FC7;&#x7A0B;</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/逆向/" rel="tag"># 逆向</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/05/混淆&模拟器检测/" rel="next" title="混淆&模拟器检测">
+                <i class="fa fa-chevron-left"></i> 混淆&模拟器检测
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/07/进程间通信/" rel="prev" title="进程间通信">
+                进程间通信 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ELF中的GOT-PLT-REL"><span class="nav-number">1.</span> <span class="nav-text">ELF中的GOT PLT REL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#延迟绑定"><span class="nav-number">1.1.</span> <span class="nav-text">延迟绑定:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坑："><span class="nav-number">1.2.</span> <span class="nav-text">坑：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.3.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/06/ELF中的GOT-PLT-REL/';
+          this.page.identifier = '2020/04/06/ELF中的GOT-PLT-REL/';
+          this.page.title = 'ELF中的GOT PLT REL';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

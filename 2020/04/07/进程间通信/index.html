@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对常见的进程间通信的总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程间通信">
+<meta property="og:url" content="http://yoursite.com/2020/04/07/进程间通信/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="对常见的进程间通信的总结">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/07/进程间通信/1586244102037.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/07/进程间通信/1586244393254.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/07/进程间通信/9c0e38e31c7a51da12faf4a1aca10ba3.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/07/进程间通信/71eb7b4d026d04e4093daad7e24feab6.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/07/进程间通信/81be4d460aaa804e9176ec70d59fdefa.png">
+<meta property="og:updated_time" content="2020-04-07T08:25:07.978Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程间通信">
+<meta name="twitter:description" content="对常见的进程间通信的总结">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/07/进程间通信/1586244102037.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/07/进程间通信/">
+
+
+
+
+
+  <title>进程间通信 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/07/进程间通信/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">进程间通信</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-07T00:19:31+08:00">
+                2020-04-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/07/进程间通信/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/07/进程间通信/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/07/进程间通信/" class="leancloud_visitors" data-flag-title="进程间通信">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对常见的进程间通信的总结
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x65B9;&#x5F0F;"><a href="#&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x65B9;&#x5F0F;" class="headerlink" title="&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x65B9;&#x5F0F;"></a>&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x65B9;&#x5F0F;</h1><blockquote>
+<p> &#x6BCF;&#x4E2A;&#x8FDB;&#x7A0B;&#x5404;&#x81EA;&#x6709;&#x4E0D;&#x540C;&#x7684;&#x7528;&#x6237;&#x5730;&#x5740;&#x7A7A;&#x95F4;,&#x4EFB;&#x4F55;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x7684;&#x5168;&#x5C40;&#x53D8;&#x91CF;&#x5728;&#x53E6;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x4E2D;&#x90FD;&#x770B;&#x4E0D;&#x5230;&#xFF0C;&#x6240;&#x4EE5;&#x8FDB;&#x7A0B;&#x4E4B;&#x95F4;&#x8981;&#x4EA4;&#x6362;&#x6570;&#x636E;&#x5FC5;&#x987B;&#x901A;&#x8FC7;&#x5185;&#x6838;,&#x5728;&#x5185;&#x6838;&#x4E2D;&#x5F00;&#x8F9F;&#x4E00;&#x5757;&#x7F13;&#x51B2;&#x533A;,&#x8FDB;&#x7A0B;A&#x628A;&#x6570;&#x636E;&#x4ECE;&#x7528;&#x6237;&#x7A7A;&#x95F4;&#x62F7;&#x5230;&#x5185;&#x6838;&#x7F13;&#x51B2;&#x533A;,&#x8FDB;&#x7A0B;B&#x518D;&#x4ECE;&#x5185;&#x6838;&#x7F13;&#x51B2;&#x533A;&#x628A;&#x6570;&#x636E;&#x8BFB;&#x8D70;,&#x5185;&#x6838;&#x63D0;&#x4F9B;&#x7684;&#x8FD9;&#x79CD;&#x673A;&#x5236;&#x79F0;&#x4E3A;&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x3002; </p>
+</blockquote>
+<img src="/2020/04/07/&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;/1586244102037.png" alt="1586244102037" style="zoom:50%;">
+
+<h2 id="1-&#x7BA1;&#x9053;&#x6A21;&#x578B;"><a href="#1-&#x7BA1;&#x9053;&#x6A21;&#x578B;" class="headerlink" title="1 &#x7BA1;&#x9053;&#x6A21;&#x578B;"></a>1 &#x7BA1;&#x9053;&#x6A21;&#x578B;</h2><blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line">&gt; <span class="comment">/** fd[1]&#x7684;&#x8F93;&#x51FA;&#x662F;fd[0]&#x7684;&#x8F93;&#x5165;&#x3002;</span></span><br><span class="line"><span class="comment">&gt;  * @return 0:&#x6210;&#x529F; 1:&#x51FA;&#x9519;</span></span><br><span class="line"><span class="comment">&gt;  * @param fd[0] &#x7BA1;&#x9053;&#x7684;&#x8BFB;&#x7AEF;</span></span><br><span class="line"><span class="comment">&gt;  * @param fd[1] &#x7BA1;&#x9053;&#x7684;&#x5199;&#x7AEF;</span></span><br><span class="line"><span class="comment">&gt;  */</span></span><br><span class="line">&gt; <span class="function"><span class="keyword">int</span> <span class="title">pipe</span> <span class="params">(<span class="keyword">int</span> fd[<span class="number">2</span>])</span></span>;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="1-1-&#x533F;&#x540D;&#x7BA1;&#x9053;-Anonymous-Pipes"><a href="#1-1-&#x533F;&#x540D;&#x7BA1;&#x9053;-Anonymous-Pipes" class="headerlink" title="1.1 &#x533F;&#x540D;&#x7BA1;&#x9053;( Anonymous Pipes)"></a>1.1 &#x533F;&#x540D;&#x7BA1;&#x9053;( Anonymous Pipes)</h3><p><strong>&#x53EA;&#x80FD;&#x5728;&#x7BA1;&#x9053;&#x521B;&#x5EFA;&#x8FDB;&#x7A0B;&#x53CA;&#x5176;&#x540E;&#x4EE3;&#x4E4B;&#x95F4;&#x901A;&#x4FE1;</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ps -ef | grep &#x5173;&#x952E;&#x5B57; | awk <span class="string">&apos;{print $2}&apos;</span> | xargs <span class="built_in">kill</span> -9</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/2020/04/07/&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;/1586244393254.png" alt="img" style="zoom: 25%;">  <img src="/2020/04/07/&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;/9c0e38e31c7a51da12faf4a1aca10ba3.png" alt="img" style="zoom: 25%;"> </p>
+ <img src="/2020/04/07/&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;/71eb7b4d026d04e4093daad7e24feab6.png" alt="img" style="zoom: 50%;"> 
+
+<p>&#x7BA1;&#x9053;&#x7236;&#x5B50;&#x901A;&#x4FE1;&#x7684;&#x6B65;&#x9AA4;:</p>
+<ol>
+<li>&#x7236;&#x8FDB;&#x7A0B;&#x521B;&#x5EFA;&#x7BA1;&#x9053;&#xFF0C;&#x5F97;&#x5230;&#x4E24;&#x4E2A;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x6307;&#x5411;&#x7BA1;&#x9053;&#x4E24;&#x7AEF;</li>
+<li>&#x7236;&#x8FDB;&#x7A0B;fork&#x51FA;&#x5B50;&#x8FDB;&#x7A0B;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x4E5F;&#x6709;&#x4E24;&#x4E2A;&#x6587;&#x4EF6;&#x63CF;&#x8FF0;&#x7B26;&#x6307;&#x5411;&#x540C;&#x4E00;&#x7BA1;&#x9053;</li>
+<li>&#x7236;&#x8FDB;&#x7A0B;&#x5173;&#x95ED;<code>fd[0]</code>&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x5173;&#x95ED;<code>fd[1]</code>(&#x53EA;&#x80FD;&#x5355;&#x5411;&#x901A;&#x4FE1;)</li>
+</ol>
+<p>&#x7BA1;&#x9053;&#x5144;&#x5F1F;&#x901A;&#x4FE1;&#x6B65;&#x9AA4;&#xFF1A;</p>
+<ol>
+<li><p>&#x5728;&#x4E0A;&#x9762;&#x7684;&#x6700;&#x540E;&#x4E00;&#x6B65;&#x6539;&#x4E3A;&#x7236;&#x8FDB;&#x7A0B;&#x5173;&#x95ED;<code>fd[1]</code>&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x5173;&#x95ED;<code>fd[0]</code>&#xFF0C;&#x518D;fork&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x5B50;&#x8FDB;&#x7A0B;B</p>
+</li>
+<li><p>shell&#x4FDD;&#x7559;&#x7684;&#x8BFB;&#x53D6;&#x7AEF;&#x7684;<code>fd[0]</code>&#x4E5F;&#x88AB;&#x590D;&#x5236;&#x5230;&#x4E86;&#x5B50;&#x8FDB;&#x7A0B;B&#x4E2D;&#xFF0C;&#x53EA;&#x8981;&#x7236;&#x8FDB;&#x7A0B;&#x5173;&#x95ED;<code>fd[0]</code>&#xFF0C;&#x7BA1;&#x9053;&#x53CC;&#x65B9;&#x5C31;&#x6362;&#x6210;&#x4E86;A &#x548C;B</p>
+<img src="/2020/04/07/&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;/81be4d460aaa804e9176ec70d59fdefa.png" alt="img" style="zoom:50%;">
+
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">  <span class="keyword">int</span> fds[<span class="number">2</span>];</span><br><span class="line">  <span class="keyword">if</span> (pipe(fds) == <span class="number">-1</span>)</span><br><span class="line">    perror(<span class="string">&quot;pipe error&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">pid_t</span> pid;</span><br><span class="line">  pid = fork();</span><br><span class="line">  <span class="keyword">if</span> (pid == <span class="number">-1</span>)</span><br><span class="line">    perror(<span class="string">&quot;fork error&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (pid == <span class="number">0</span>){</span><br><span class="line">    dup2(fds[<span class="number">1</span>], STDOUT_FILENO); <span class="comment">// &#x5C06; STDOUT_FILENO &#x6307;&#x5411;&#x521B;&#x5EFA;&#x7684;&#x7BA1;&#x9053;&#x6587;&#x4EF6;</span></span><br><span class="line">    close(fds[<span class="number">1</span>]);</span><br><span class="line">    close(fds[<span class="number">0</span>]);</span><br><span class="line">    execlp(<span class="string">&quot;ps&quot;</span>, <span class="string">&quot;ps&quot;</span>, <span class="string">&quot;-ef&quot;</span>, <span class="literal">NULL</span>);</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    dup2(fds[<span class="number">0</span>], STDIN_FILENO);  <span class="comment">// &#x5C06; STDIN_FILENO &#x6307;&#x5411;&#x521B;&#x5EFA;&#x7684;&#x7BA1;&#x9053;&#x6587;&#x4EF6;</span></span><br><span class="line">    close(fds[<span class="number">0</span>]);</span><br><span class="line">    close(fds[<span class="number">1</span>]);</span><br><span class="line">    execlp(<span class="string">&quot;grep&quot;</span>, <span class="string">&quot;grep&quot;</span>, <span class="string">&quot;systemd&quot;</span>, <span class="literal">NULL</span>);</span><br><span class="line">  }</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-&#x547D;&#x540D;&#x7BA1;&#x9053;"><a href="#1-2-&#x547D;&#x540D;&#x7BA1;&#x9053;" class="headerlink" title="1.2 &#x547D;&#x540D;&#x7BA1;&#x9053;"></a>1.2 &#x547D;&#x540D;&#x7BA1;&#x9053;</h3><p><strong>&#x901A;&#x8FC7;&#x7BA1;&#x9053;&#x6587;&#x4EF6;&#x540D;, &#x53EF;&#x4EE5;&#x5728;&#x4EFB;&#x610F;&#x8FDB;&#x7A0B;&#x4E4B;&#x95F4;&#x901A;&#x4FE1;</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ mkfifo hello</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;hello world&quot;</span> &gt; hello</span><br><span class="line"></span><br><span class="line">another shell</span><br><span class="line">$ cat &lt; hello</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+
+<p>&#x5B9E;&#x9645;&#x4E0A;&#x662F;&#x5185;&#x6838;&#x91CC;&#x9762;&#x7684;&#x4E00;&#x4E32;&#x7F13;&#x5B58;</p>
+<h2 id="2-&#x6D88;&#x606F;&#x961F;&#x5217;"><a href="#2-&#x6D88;&#x606F;&#x961F;&#x5217;" class="headerlink" title="2 &#x6D88;&#x606F;&#x961F;&#x5217;"></a>2 &#x6D88;&#x606F;&#x961F;&#x5217;</h2><p> &#x4FE1;&#x606F;&#x590D;&#x5236;&#x4E24;&#x6B21;&#xFF0C;&#x989D;&#x5916;&#x7684;CPU&#x6D88;&#x8017;&#xFF1B;&#x4E0D;&#x5408;&#x9002;&#x9891;&#x7E41;&#x6216;&#x4FE1;&#x606F;&#x91CF;&#x5927;&#x7684;&#x901A;&#x4FE1;&#xFF1B; </p>
+<h2 id="3-&#x5171;&#x4EAB;&#x5185;&#x5B58;"><a href="#3-&#x5171;&#x4EAB;&#x5185;&#x5B58;" class="headerlink" title="3  &#x5171;&#x4EAB;&#x5185;&#x5B58;"></a>3  &#x5171;&#x4EAB;&#x5185;&#x5B58;</h2><p> &#x65E0;&#x987B;&#x590D;&#x5236;&#xFF0C;&#x5171;&#x4EAB;&#x7F13;&#x51B2;&#x533A;&#x76F4;&#x63A5;&#x4ED8;&#x9644;&#x52A0;&#x5230;&#x8FDB;&#x7A0B;&#x865A;&#x62DF;&#x5730;&#x5740;&#x7A7A;&#x95F4;&#xFF0C;&#x901F;&#x5EA6;&#x5FEB;&#xFF1B;&#x4F46;&#x8FDB;&#x7A0B;&#x95F4;&#x7684;&#x540C;&#x6B65;&#x95EE;&#x9898;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x65E0;&#x6CD5;&#x5B9E;&#x73B0;&#xFF0C;&#x5FC5;&#x987B;&#x5404;&#x8FDB;&#x7A0B;&#x5229;&#x7528;&#x540C;&#x6B65;&#x5DE5;&#x5177;&#x89E3;&#x51B3;&#xFF1B; </p>
+<h2 id="4-&#x4FE1;&#x53F7;&#x91CF;"><a href="#4-&#x4FE1;&#x53F7;&#x91CF;" class="headerlink" title="4 &#x4FE1;&#x53F7;&#x91CF;"></a>4 &#x4FE1;&#x53F7;&#x91CF;</h2><p> &#x5E38;&#x4F5C;&#x4E3A;&#x4E00;&#x79CD;&#x9501;&#x673A;&#x5236;&#xFF0C;&#x9632;&#x6B62;&#x67D0;&#x8FDB;&#x7A0B;&#x6B63;&#x5728;&#x8BBF;&#x95EE;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#x65F6;&#xFF0C;&#x5176;&#x4ED6;&#x8FDB;&#x7A0B;&#x4E5F;&#x8BBF;&#x95EE;&#x8BE5;&#x8D44;&#x6E90;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x4E3B;&#x8981;&#x4F5C;&#x4E3A;&#x8FDB;&#x7A0B;&#x95F4;&#x4EE5;&#x53CA;&#x540C;&#x4E00;&#x8FDB;&#x7A0B;&#x5185;&#x4E0D;&#x540C;&#x7EBF;&#x7A0B;&#x4E4B;&#x95F4;&#x7684;&#x540C;&#x6B65;&#x624B;&#x6BB5; </p>
+<h2 id="5-&#x4FE1;&#x53F7;"><a href="#5-&#x4FE1;&#x53F7;" class="headerlink" title="5  &#x4FE1;&#x53F7;"></a>5  &#x4FE1;&#x53F7;</h2><p> &#x4E0D;&#x9002;&#x7528;&#x4E8E;&#x4FE1;&#x606F;&#x4EA4;&#x6362;&#xFF0C;&#x66F4;&#x9002;&#x7528;&#x4E8E;&#x8FDB;&#x7A0B;&#x4E2D;&#x65AD;&#x63A7;&#x5236;&#xFF0C;&#x6BD4;&#x5982;&#x975E;&#x6CD5;&#x5185;&#x5B58;&#x8BBF;&#x95EE;&#xFF0C;&#x6740;&#x6B7B;&#x67D0;&#x4E2A;&#x8FDB;&#x7A0B;&#x7B49;&#xFF1B; </p>
+<h2 id="6-&#x5957;&#x63A5;&#x5B57;"><a href="#6-&#x5957;&#x63A5;&#x5B57;" class="headerlink" title="6  &#x5957;&#x63A5;&#x5B57;"></a>6  &#x5957;&#x63A5;&#x5B57;</h2><p>&#x7565;&#xFF0C;&#x4F7F;&#x7528;&#x53C2;&#x8003;ICMP&#x91CD;&#x5B9A;&#x5411;&#x5B9E;&#x9A8C;</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/06/ELF中的GOT-PLT-REL/" rel="next" title="ELF中的GOT PLT REL">
+                <i class="fa fa-chevron-left"></i> ELF中的GOT PLT REL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#进程间通信方式"><span class="nav-number">1.</span> <span class="nav-text">进程间通信方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-管道模型"><span class="nav-number">1.1.</span> <span class="nav-text">1 管道模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-匿名管道-Anonymous-Pipes"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 匿名管道( Anonymous Pipes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-命名管道"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 命名管道</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-消息队列"><span class="nav-number">1.2.</span> <span class="nav-text">2 消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-共享内存"><span class="nav-number">1.3.</span> <span class="nav-text">3  共享内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-信号量"><span class="nav-number">1.4.</span> <span class="nav-text">4 信号量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-信号"><span class="nav-number">1.5.</span> <span class="nav-text">5  信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-套接字"><span class="nav-number">1.6.</span> <span class="nav-text">6  套接字</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/07/进程间通信/';
+          this.page.identifier = '2020/04/07/进程间通信/';
+          this.page.title = '进程间通信';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
