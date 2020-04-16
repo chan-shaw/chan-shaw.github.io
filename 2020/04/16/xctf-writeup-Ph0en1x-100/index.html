@@ -70,7 +70,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="android,安全,逆向">
 
 
 
@@ -81,16 +81,23 @@
 
 
 
-<meta name="description" content="言念君子，温其如玉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="安和桥南丶的博客">
-<meta property="og:url" content="http://yoursite.com/tags/信息安全/index.html">
+<meta name="description" content="xctf mobile区easy-apk题解">
+<meta name="keywords" content="android,安全,逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xctf-writeup-Ph0en1x-100">
+<meta property="og:url" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/index.html">
 <meta property="og:site_name" content="安和桥南丶的博客">
-<meta property="og:description" content="言念君子，温其如玉">
+<meta property="og:description" content="xctf mobile区easy-apk题解">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587039238537.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587039659098.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587040096792.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587043746453.png">
+<meta property="og:updated_time" content="2020-04-16T13:35:40.477Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="安和桥南丶的博客">
-<meta name="twitter:description" content="言念君子，温其如玉">
+<meta name="twitter:title" content="xctf-writeup-Ph0en1x-100">
+<meta name="twitter:description" content="xctf mobile区easy-apk题解">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587039238537.png">
 
 
 
@@ -120,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/信息安全/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/">
 
 
 
 
 
-  <title>标签: 信息安全 | 安和桥南丶的博客</title>
+  <title>xctf-writeup-Ph0en1x-100 | 安和桥南丶的博客</title>
   
 
 
@@ -154,7 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -268,52 +275,214 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>信息安全<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/10/12/LinuxRootkit学习/" itemprop="url">
-              
-                <span itemprop="name">LinuxRootkit学习</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">xctf-writeup-Ph0en1x-100</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-10-12T21:07:33+08:00" content="2019-10-12">
-          10-12
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-16T20:07:41+08:00">
+                2020-04-16
+              </time>
+            
 
-    </header>
-  </article>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/crackme/" itemprop="url" rel="index">
+                    <span itemprop="name">crackme</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/16/xctf-writeup-Ph0en1x-100/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/16/xctf-writeup-Ph0en1x-100/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/16/xctf-writeup-Ph0en1x-100/" class="leancloud_visitors" data-flag-title="xctf-writeup-Ph0en1x-100">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  xctf mobile区easy-apk题解
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Ph0en1x-100-&#x89E3;&#x9898;&#x62A5;&#x544A;"><a href="#Ph0en1x-100-&#x89E3;&#x9898;&#x62A5;&#x544A;" class="headerlink" title="Ph0en1x-100 &#x89E3;&#x9898;&#x62A5;&#x544A;"></a>Ph0en1x-100 &#x89E3;&#x9898;&#x62A5;&#x544A;</h1><blockquote>
+<p>&#x6253;&#x5F00;apk&#xFF0C;&#x53D1;&#x73B0;&#x662F;&#x8981;&#x6C42;&#x8F93;&#x5165;flag</p>
+</blockquote>
+<p>JEB&#x6253;&#x5F00;</p>
+<p><img src="/2020/04/16/xctf-writeup-Ph0en1x-100/1587039238537.png" alt="1587039238537"></p>
+<p>&#x4F7F;&#x7528;<code>encrypt(NE6)</code>&#x6240;&#x5BF9;&#x5E94;&#x7684;hash&#x7B97;&#x6CD5;&#xFF0C;&#x5F97;&#x5230;hash</p>
+<p>&#x7136;&#x540E;&#x8F6C;16&#x8FDB;&#x5236;</p>
+<p><img src="/2020/04/16/xctf-writeup-Ph0en1x-100/1587039659098.png" alt="1587039659098"></p>
+<p>&#x5982;&#x679C;<code>getSecret(getFlag())</code>&#x548C;<code>getSecret(encrypt(sInput))</code>&#x76F8;&#x7B49;&#x5219;&#x4E3A;true</p>
+<p>&#x5373;&#x53EA;&#x9700;&#x8981;&#x5224;&#x65AD;getFlag&#x548C;encrypt(sInput)&#x5373;&#x53EF;</p>
+<p>  <img src="/2020/04/16/xctf-writeup-Ph0en1x-100/1587040096792.png" alt></p>
+<p>&#x5BF9;&#x5E94;&#x4F4D;&#x7F6E;ascii&#x51CF;&#x4E00;</p>
+<p>getFlag()&#x6CA1;&#x6709;&#x8F93;&#x5165;&#xFF0C;&#x52A8;&#x6001;&#x8C03;&#x8BD5;&#x83B7;&#x53D6;&#x5BF9;&#x5E94;&#x503C;:</p>
+<p><img src="/2020/04/16/xctf-writeup-Ph0en1x-100/1587043746453.png" alt="1587043746453"></p>
+<p>JEB &#x4E2D; v1&#x503C;&#x6539;&#x4E3A;string&#x5F97;&#x5230;&#x8F93;&#x51FA;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string@4584:&quot;ek`fz@q2^x/t^fn0mF^6/^rb`qanqntfg^E`hq|&quot;</span><br></pre></td></tr></table></figure>
+
+<p>&#x7136;&#x540E;&#x5BF9;&#x5E94;ascii+1</p>
+<p>writeup&#x5982;&#x4E0B;:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;ek`fz@q2^x/t^fn0mF^6/^rb`qanqntfg^E`hq|&quot;</span></span><br><span class="line"></span><br><span class="line">s_list = list(s)</span><br><span class="line"></span><br><span class="line">result = []</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> s_list:</span><br><span class="line">    result.append(chr(ord(c)+<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">res = <span class="string">&quot;&quot;</span>.join([x <span class="keyword">for</span> x <span class="keyword">in</span> result])</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
 
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/writeup-xctf/" rel="tag"># writeup,xctf</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/16/xctf-writeup-easyso/" rel="next" title="xctf-writeup-easyso">
+                <i class="fa fa-chevron-left"></i> xctf-writeup-easyso
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -321,6 +490,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -341,8 +524,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -357,7 +549,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -379,7 +571,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -402,6 +594,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ph0en1x-100-解题报告"><span class="nav-number">1.</span> <span class="nav-text">Ph0en1x-100 解题报告</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -542,6 +750,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -559,6 +771,18 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/';
+          this.page.identifier = '2020/04/16/xctf-writeup-Ph0en1x-100/';
+          this.page.title = 'xctf-writeup-Ph0en1x-100';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
@@ -578,6 +802,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
@@ -714,26 +949,6 @@
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

