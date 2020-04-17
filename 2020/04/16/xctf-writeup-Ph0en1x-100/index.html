@@ -81,22 +81,22 @@
 
 
 
-<meta name="description" content="xctf mobile区easy-apk题解">
+<meta name="description" content="xctf mobile区Ph0en1x-100题解">
 <meta name="keywords" content="android,安全,逆向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="xctf-writeup-Ph0en1x-100">
 <meta property="og:url" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/index.html">
 <meta property="og:site_name" content="安和桥南丶的博客">
-<meta property="og:description" content="xctf mobile区easy-apk题解">
+<meta property="og:description" content="xctf mobile区Ph0en1x-100题解">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587039238537.png">
 <meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587039659098.png">
 <meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587040096792.png">
 <meta property="og:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587043746453.png">
-<meta property="og:updated_time" content="2020-04-16T13:35:40.477Z">
+<meta property="og:updated_time" content="2020-04-17T07:37:56.652Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xctf-writeup-Ph0en1x-100">
-<meta name="twitter:description" content="xctf mobile区easy-apk题解">
+<meta name="twitter:description" content="xctf mobile区Ph0en1x-100题解">
 <meta name="twitter:image" content="http://yoursite.com/2020/04/16/xctf-writeup-Ph0en1x-100/1587039238537.png">
 
 
@@ -386,7 +386,7 @@
 
           
               <div class="post-description">
-                  xctf mobile区easy-apk题解
+                  xctf mobile区Ph0en1x-100题解
               </div>
           
 
@@ -424,6 +424,10 @@
 <p>writeup&#x5982;&#x4E0B;:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">&quot;ek`fz@q2^x/t^fn0mF^6/^rb`qanqntfg^E`hq|&quot;</span></span><br><span class="line"></span><br><span class="line">s_list = list(s)</span><br><span class="line"></span><br><span class="line">result = []</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> s_list:</span><br><span class="line">    result.append(chr(ord(c)+<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">res = <span class="string">&quot;&quot;</span>.join([x <span class="keyword">for</span> x <span class="keyword">in</span> result])</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure>
 
+<h2 id="todo"><a href="#todo" class="headerlink" title="todo"></a>todo</h2><ul>
+<li>&#x9759;&#x6001;&#x5206;&#x6790;getFlag&#x65B9;&#x6CD5;</li>
+<li>&#x4F7F;&#x7528;hook&#x83B7;&#x53D6;getflag&#x8FD4;&#x56DE;&#x503C;</li>
+</ul>
 
       
     </div>
@@ -553,7 +557,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -608,7 +612,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ph0en1x-100-解题报告"><span class="nav-number">1.</span> <span class="nav-text">Ph0en1x-100 解题报告</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ph0en1x-100-解题报告"><span class="nav-number">1.</span> <span class="nav-text">Ph0en1x-100 解题报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#todo"><span class="nav-number">1.1.</span> <span class="nav-text">todo</span></a></li></ol></li></ol></div>
             
 
           </div>

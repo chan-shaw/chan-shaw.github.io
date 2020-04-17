@@ -70,7 +70,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="android,安全,逆向">
 
 
 
@@ -81,16 +81,24 @@
 
 
 
-<meta name="description" content="言念君子，温其如玉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="安和桥南丶的博客">
-<meta property="og:url" content="http://yoursite.com/categories/linux-Rootkit/index.html">
+<meta name="description" content="xctf mobile区RememberOther题解">
+<meta name="keywords" content="android,安全,逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xctf-writeup-RememberOther">
+<meta property="og:url" content="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/index.html">
 <meta property="og:site_name" content="安和桥南丶的博客">
-<meta property="og:description" content="言念君子，温其如玉">
+<meta property="og:description" content="xctf mobile区RememberOther题解">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/1587106559371.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/1587107253480.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/1587107301075.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/1587107367083.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/1587108381468.png">
+<meta property="og:updated_time" content="2020-04-17T07:37:49.754Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="安和桥南丶的博客">
-<meta name="twitter:description" content="言念君子，温其如玉">
+<meta name="twitter:title" content="xctf-writeup-RememberOther">
+<meta name="twitter:description" content="xctf mobile区RememberOther题解">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/1587106559371.png">
 
 
 
@@ -120,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/linux-Rootkit/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/">
 
 
 
 
 
-  <title>分类: linux Rootkit | 安和桥南丶的博客</title>
+  <title>xctf-writeup-RememberOther | 安和桥南丶的博客</title>
   
 
 
@@ -154,7 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -268,79 +276,215 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>linux Rootkit<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/10/14/RootKit系列二-基于VFS层的rootkit/" itemprop="url">
-              
-                <span itemprop="name">RootKit系列二--基于VFS层的rootkit</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">xctf-writeup-RememberOther</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-10-14T19:17:30+08:00" content="2019-10-14">
-          10-14
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-17T14:54:29+08:00">
+                2020-04-17
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/crackme/" itemprop="url" rel="index">
+                    <span itemprop="name">crackme</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/17/xctf-writeup-RememberOther/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/17/xctf-writeup-RememberOther/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/17/xctf-writeup-RememberOther/" class="leancloud_visitors" data-flag-title="xctf-writeup-RememberOther">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  xctf mobile区RememberOther题解
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h1 id="RememberOther&#x89E3;&#x9898;&#x62A5;&#x544A;"><a href="#RememberOther&#x89E3;&#x9898;&#x62A5;&#x544A;" class="headerlink" title="RememberOther&#x89E3;&#x9898;&#x62A5;&#x544A;"></a>RememberOther&#x89E3;&#x9898;&#x62A5;&#x544A;</h1><blockquote>
+<p>&#x6253;&#x5F00;apk&#xFF0C;&#x53D1;&#x73B0;&#x662F;&#x4E00;&#x4E2A;&#x8F93;&#x5165;&#x7528;&#x6237;&#x540D;&#x548C;&#x6CE8;&#x518C;&#x7801;&#x7684;activity&#xFF0C;</p>
+</blockquote>
+<p><img src="/2020/04/17/xctf-writeup-RememberOther/1587106559371.png" alt="1587106612356"></p>
+<p>JEB&#x6253;&#x5F00;</p>
+<p><img src="/2020/04/17/xctf-writeup-RememberOther/1587107253480.png" alt="1587107253480"></p>
+<p><img src="/2020/04/17/xctf-writeup-RememberOther/1587107301075.png" alt="1587107301075"></p>
+<p>&#x5173;&#x952E;&#x65B9;&#x6CD5;</p>
+<p><img src="/2020/04/17/xctf-writeup-RememberOther/1587107367083.png" alt="1587107367083"></p>
+<p>&#x8F93;&#x5165;&#x7528;&#x6237;&#x540D;&#xFF0C;&#x5F97;&#x5230;md5,&#x7136;&#x540E;&#x53D6;&#x5947;&#x6570;&#x4F4D;&#x7F6E;&#x3002;</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> md5</span><br><span class="line"></span><br><span class="line">s = <span class="string">&quot;a&quot;</span></span><br><span class="line">h = md5()</span><br><span class="line">h.update(s.encode(<span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line"></span><br><span class="line">res = h.hexdigest()</span><br><span class="line">tmp = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(res), <span class="number">2</span>):</span><br><span class="line">    tmp.append(res[i])</span><br><span class="line"></span><br><span class="line">ans = <span class="string">&quot;&quot;</span>.join([x <span class="keyword">for</span> x <span class="keyword">in</span> tmp])</span><br><span class="line">print(ans)</span><br></pre></td></tr></table></figure>
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/14/RootKit系列一-系统调用/" itemprop="url">
-              
-                <span itemprop="name">RootKit系列一--系统调用</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-10-14T19:01:16+08:00" content="2019-10-14">
-          10-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+<p>&#x5F97;&#x5230;succeedmd5</p>
+<p><img src="/2020/04/17/xctf-writeup-RememberOther/1587108381468.png" alt="1587108381468"></p>
+<p><code>b3241668ecbeb19921fdac5ac1aafa69</code>&#x89E3;&#x5BC6;&#x5F97;&#x5230;<code>YOU_KNOW_</code></p>
+<p>&#x540E;&#x7EED;&#x6BD4;&#x8F83;&#x5751;&#x7684;&#x662F;&#xFF0C;&#x6587;&#x6863;&#x91CC;&#x9762;&#x5199;&#x4E86;&#x4E00;&#x4E2A;&#x4E0D;&#x61C2;android,&#x6240;&#x4EE5;&#x8981;&#x5728;&#x540E;&#x9762;&#x52A0;&#x4E00;&#x4E2A;ANDROID</p>
+<h1 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h1><p>&#x6CA1;&#x5565;&#x8425;&#x517B;&#x7684;&#x9898;&#xFF0C;JEB&#x6253;&#x5F00;&#x4E4B;&#x540E;&#x80FD;&#x76F4;&#x63A5;&#x770B;&#x5230;&#x6CE8;&#x91CA;&#x91CC;&#x9762;&#x6709;&#x6210;&#x529F;&#x8F93;&#x51FA;&#x7684;md5&#x503C;&#xFF0C;&#x62FF;&#x51FA;&#x6765;&#x89E3;&#x5BC6;&#x5C31;&#x597D;&#xFF0C;</p>
+<p>&#x5269;&#x4E0B;&#x7684;&#x8FD9;&#x4E2A;&#x8111;&#x6D1E;&#x6211;&#x89C9;&#x5F97;&#x4E0D;&#x592A;&#x884C;&#x2026;.</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/writeup-xctf/" rel="tag"># writeup,xctf</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/16/科恩面试总结/" rel="next" title="科恩面试总结">
+                <i class="fa fa-chevron-left"></i> 科恩面试总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/17/xctf-writeup-app1/" rel="prev" title="xctf-writeup-app1">
+                xctf-writeup-app1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -348,6 +492,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -368,8 +526,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -429,6 +596,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RememberOther解题报告"><span class="nav-number">1.</span> <span class="nav-text">RememberOther解题报告</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -569,6 +752,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -586,6 +773,18 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/17/xctf-writeup-RememberOther/';
+          this.page.identifier = '2020/04/17/xctf-writeup-RememberOther/';
+          this.page.title = 'xctf-writeup-RememberOther';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
@@ -605,6 +804,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
@@ -741,26 +951,6 @@
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
