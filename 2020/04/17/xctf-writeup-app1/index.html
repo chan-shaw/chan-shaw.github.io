@@ -89,10 +89,12 @@
 <meta property="og:site_name" content="安和桥南丶的博客">
 <meta property="og:description" content="xctf mobile区app1题解">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-17T07:37:44.186Z">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-app1/1587109635850.png">
+<meta property="og:updated_time" content="2020-04-17T08:00:23.892Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xctf-writeup-app1">
 <meta name="twitter:description" content="xctf mobile区app1题解">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/17/xctf-writeup-app1/1587109635850.png">
 
 
 
@@ -398,7 +400,19 @@
       
 
       
-        
+        <h1 id="app1-&#x89E3;&#x9898;&#x62A5;&#x544A;"><a href="#app1-&#x89E3;&#x9898;&#x62A5;&#x544A;" class="headerlink" title="app1 &#x89E3;&#x9898;&#x62A5;&#x544A;"></a>app1 &#x89E3;&#x9898;&#x62A5;&#x544A;</h1><blockquote>
+<p>&#x6253;&#x5F00;apk&#x3002;&#x5B57;&#x7B26;&#x4E32;&#x6821;&#x9A8C;</p>
+</blockquote>
+<p>&#x62D6;&#x5165;JEB</p>
+<p><img src="/2020/04/17/xctf-writeup-app1/1587109635850.png" alt="1587109635850"></p>
+<p>&#x5F97;&#x5230;versionCode&#x548C;versionName&#x4E4B;&#x540E;</p>
+<p>&#x6309;&#x4F4D;&#x5F02;&#x6216;&#x5373;&#x53EF;&#xFF0C;</p>
+<p>&#x5229;&#x7528;JEB&#x52A8;&#x6001;&#x8C03;&#x8BD5;&#x76F4;&#x63A5;&#x83B7;&#x53D6;</p>
+<p><code>versionName = 15</code></p>
+<p><code>versionCode = X&lt;cP[?PHNB&lt;P?aj</code></p>
+<h2 id="writeup"><a href="#writeup" class="headerlink" title="writeup"></a>writeup</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">versionName = <span class="number">15</span></span><br><span class="line">versionCode = <span class="string">&quot;X&lt;cP[?PHNB&lt;P?aj&quot;</span></span><br><span class="line">ans = []</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> versionCode:</span><br><span class="line">    ans.append(chr(ord(s) ^ versionName))</span><br><span class="line">print(<span class="string">&quot;&quot;</span>.join([x <span class="keyword">for</span> x <span class="keyword">in</span> ans]))</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     
@@ -437,6 +451,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/17/xctf-writeup-app2/" rel="prev" title="xctf-writeup-app2">
+                xctf-writeup-app2 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -498,8 +516,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -514,7 +541,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -525,7 +552,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -536,7 +563,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -559,6 +586,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#app1-解题报告"><span class="nav-number">1.</span> <span class="nav-text">app1 解题报告</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup"><span class="nav-number">1.1.</span> <span class="nav-text">writeup</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

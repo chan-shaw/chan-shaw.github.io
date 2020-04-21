@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于系统从加电到初始化的过程的整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux操作系统(1) -- 系统初始化">
+<meta property="og:url" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="对于系统从加电到初始化的过程的整理">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/1587194759095.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/1587202783152.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/1587210589127.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/1587211062813.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/1587211596716.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/1587211611732.png">
+<meta property="og:updated_time" content="2020-04-19T06:43:31.642Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux操作系统(1) -- 系统初始化">
+<meta name="twitter:description" content="对于系统从加电到初始化的过程的整理">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/1587194759095.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/">
+
+
+
+
+
+  <title>Linux操作系统(1) -- 系统初始化 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux操作系统(1) -- 系统初始化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-18T15:06:33+08:00">
+                2020-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/18/Linux操作系统-1-系统初始化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/18/Linux操作系统-1-系统初始化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/18/Linux操作系统-1-系统初始化/" class="leancloud_visitors" data-flag-title="Linux操作系统(1) -- 系统初始化">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对于系统从加电到初始化的过程的整理
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x2013;-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;"><a href="#Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x2013;-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;" class="headerlink" title="Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;(1) &#x2013; &#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;"></a>Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;(1) &#x2013; &#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;</h1><blockquote>
+<p>&#x7CFB;&#x7EDF;&#x5728;&#x521D;&#x59CB;&#x5316;&#x8FC7;&#x7A0B;&#x4E2D;&#x7684;&#x64CD;&#x4F5C;&#x5927;&#x81F4;&#x53EF;&#x4EE5;&#x5206;&#x4E3A;&#x4EE5;&#x4E0B;&#x51E0;&#x6B65;</p>
+<ul>
+<li>&#x542F;&#x52A8;BIOS&#xFF0C;&#x51C6;&#x5907;&#x5B9E;&#x6A21;&#x5F0F;&#x4E0B;&#x7684;&#x4E2D;&#x65AD;&#x5411;&#x91CF;&#x8868;&#x4EE5;&#x53CA;&#x4E2D;&#x65AD;&#x670D;&#x52A1;&#x7A0B;&#x5E8F;</li>
+<li>&#x4ECE;&#x542F;&#x52A8;&#x76D8;&#x52A0;&#x8F7D;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7A0B;&#x5E8F;&#x5230;&#x5185;&#x5B58;</li>
+<li>&#x5185;&#x6838;&#x521D;&#x59CB;&#x5316;&#xFF0C;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;</li>
+</ul>
+</blockquote>
+<h2 id="1-BIOS"><a href="#1-BIOS" class="headerlink" title="1 BIOS"></a>1 BIOS</h2><p>&#x8BBE;&#x5907;&#x52A0;&#x7535;&#xFF0C;&#x6B64;&#x65F6;&#x7CFB;&#x7EDF;&#x5904;&#x4E8E;&#x5B9E;&#x6A21;&#x5F0F;&#xFF0C;&#x5730;&#x5740;&#x603B;&#x7EBF;&#x4E3A;20&#x4F4D;&#xFF0C;&#x6240;&#x4EE5;&#x80FD;&#x5BFB;&#x5740;&#x7684;&#x8303;&#x56F4;&#x662F;$2^{20}$&#x5373;1M&#x7684;&#x7A7A;&#x95F4;&#xFF0C;&#x800C;BIOS&#x65F6;&#x671F;&#x7684;&#x6240;&#x6709;&#x4E8B;&#x60C5;&#x90FD;&#x662F;&#x5728;&#x8FD9;1M&#x7A7A;&#x95F4;&#x4E2D;&#x5B8C;&#x6210;&#x7684;&#x3002;</p>
+<p>&#x5F53;&#x8BBE;&#x5907;&#x52A0;&#x7535;&#x4E4B;&#x540E;&#xFF0C;&#x786C;&#x7F16;&#x7801;&#x4F7F;&#x5F97;<code>CS = 0xFFFF</code>,<code>IP = 0x0000</code> &#x6240;&#x4EE5;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x4F1A;&#x6307;&#x5411;<code>0xFFFF0</code></p>
+<p> <img src="/2020/04/18/Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;/1587194759095.png" alt="img"> </p>
+<p>x86&#x7CFB;&#x7EDF;&#x4E2D;&#xFF0C;&#x4F1A;&#x5C06;1M&#x7A7A;&#x95F4;&#x6700;&#x4E0A;&#x9762;&#x7684;<code>0xF0000</code>&#x5230;<code>0xFFFFF</code>&#x4E00;&#x5171;64k&#x6620;&#x5C04;&#x7ED9;ROM&#x3002;</p>
+<p>&#x800C;BIOS&#x542F;&#x52A8;&#x4E4B;&#x540E;&#xFF0C;&#x9700;&#x8981;&#x4ECE;&#x78C1;&#x76D8;&#x4E0A;&#x8BFB;&#x53D6;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x6570;&#x636E;&#xFF0C;&#x90A3;&#x4E48;&#x5C31;&#x9700;&#x8981;&#x76F8;&#x5E94;&#x7684;&#x670D;&#x52A1;&#xFF0C;&#x8BBF;&#x95EE;&#x78C1;&#x76D8;&#x8BBE;&#x5907;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x5728;BIOS&#x65F6;&#x671F;&#xFF0C;&#x6709;&#x4EE5;&#x4E0B;&#x51E0;&#x4E2A;&#x529F;&#x80FD;&#xFF1A;</p>
+<ul>
+<li>&#x57FA;&#x672C;&#x7684;&#x8F93;&#x5165;&#x8F93;&#x51FA;&#x7A0B;&#x5E8F;(&#x4ECE;&#x78C1;&#x76D8;&#x4E2D;&#x8BFB;&#x53D6;&#x4FE1;&#x606F;&#xFF0C;&#x5E76;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x663E;&#x793A;&#x4FE1;&#x606F;)</li>
+<li>&#x7CFB;&#x7EDF;&#x8BBE;&#x7F6E;&#x4FE1;&#x606F;</li>
+<li>&#x5F00;&#x673A;&#x4E4B;&#x540E;&#x7684;&#x81EA;&#x68C0;&#x7A0B;&#x5E8F;</li>
+<li>&#x7CFB;&#x7EDF;&#x81EA;&#x542F;&#x52A8;&#x7A0B;&#x5E8F;</li>
+</ul>
+<p>&#x56E0;&#x6B64;&#xFF0C;&#x5728;BIOS&#x4E2D;&#xFF0C;&#x4F1A;&#x505A;&#x4EE5;&#x4E0B;&#x7684;&#x4E8B;&#xFF1A;</p>
+<ul>
+<li>&#x786C;&#x4EF6;&#x8BBE;&#x5907;&#x81EA;&#x68C0;</li>
+<li>&#x5EFA;&#x7ACB;&#x4E2D;&#x65AD;&#x5411;&#x91CF;&#x8868;&#x548C;&#x4E2D;&#x65AD;&#x670D;&#x52A1;&#x7A0B;&#x5E8F;</li>
+</ul>
+<p>&#x4E4B;&#x540E;&#x518D;&#x5229;&#x7528;&#x4E2D;&#x65AD;<code>INT 19</code>&#x5C06;&#x52A0;&#x8F7D;&#x7A0B;&#x5E8F;&#x4ECE;&#x78C1;&#x76D8;&#x5F15;&#x5BFC;&#x6247;&#x533A;(512&#x5B57;&#x8282;, &#x4EE5;xAA55&#x7ED3;&#x675F;) &#x52A0;&#x8F7D;&#x5230;<code>0x7c00</code></p>
+<p>&#x5728;&#x8FD9;512&#x4E2A;&#x5B57;&#x8282;&#x7684;&#x52A0;&#x8F7D;&#x7A0B;&#x5E8F;&#x4F1A;&#x5C06;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x4EE3;&#x7801;&#x548C;&#x6570;&#x636E;&#x4ECE;&#x786C;&#x76D8;&#x52A0;&#x8F7D;&#x5230;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x7136;&#x540E;&#x8DF3;&#x8F6C;&#x5230;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x8D77;&#x59CB;&#x4F4D;&#x7F6E;&#xFF0C;&#x5C06;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x52A0;&#x8F7D;&#x8FDB;&#x5185;&#x5B58;&#x5E76;&#x8FD0;&#x884C;&#x3002;</p>
+<p><strong>0x7c00&#x76F8;&#x5F53;&#x4E8E;&#x4E00;&#x4E2A;&#x63A5;&#x53E3;&#xFF0C;BIOS&#x59CB;&#x7EC8;&#x4F1A;&#x4ECE;&#x8FD9;&#x4E2A;&#x4F4D;&#x7F6E;&#x52A0;&#x8F7D;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x542F;&#x52A8;&#x4EE3;&#x7801;&#xFF0C;&#x800C;&#x56E0;&#x4E3A;&#x4E0D;&#x540C;&#x7684;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x5F15;&#x5BFC;&#x5F0F;&#x4E0D;&#x4E00;&#x6837;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x63D0;&#x4F9B;&#x63A5;&#x53E3;&#x4E4B;&#x540E;&#xFF0C;&#x4E0D;&#x7BA1;&#x4EC0;&#x4E48;&#x6837;&#x7684;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;BIOS&#x4E2D;&#x7684;&#x7A0B;&#x5E8F;&#x90FD;&#x662F;&#x4E00;&#x6837;&#x7684;</strong></p>
+<h3 id="&#x5C0F;&#x7ED3;"><a href="#&#x5C0F;&#x7ED3;" class="headerlink" title="&#x5C0F;&#x7ED3;"></a>&#x5C0F;&#x7ED3;</h3><p><strong>BIOS&#x7CFB;&#x7EDF;&#x8C03;&#x7528;</strong></p>
+<ul>
+<li>BIOS&#x4EE5;&#x4E2D;&#x65AD;&#x8C03;&#x7528;&#x65B9;&#x5F0F;&#x63D0;&#x4F9B;&#x4E86;&#x57FA;&#x672C;&#x7684;I/O&#x529F;&#x80FD;</li>
+<li>&#x53EA;&#x80FD;&#x5728;&#x5B9E;&#x6A21;&#x5F0F;&#x4E0B;&#x4F7F;&#x7528;</li>
+</ul>
+<p><strong>&#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x8FC7;&#x7A0B;</strong></p>
+<p>&#x52A0;&#x7535;&#x4E4B;&#x540E;&#x8BFB;BIOS&#xFF0C;BIOS&#x8BFB;&#x53D6;&#x52A0;&#x8F7D;&#x7A0B;&#x5E8F;&#xFF0C;&#x52A0;&#x8F7D;&#x7A0B;&#x5E8F;&#x5C06;&#x5185;&#x6838;&#x6620;&#x50CF;&#x4ECE;&#x78C1;&#x76D8;&#x52A0;&#x8F7D;&#x8FDB;&#x5185;&#x5B58;</p>
+<h2 id="2-&#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x6D41;&#x7A0B;"><a href="#2-&#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x6D41;&#x7A0B;" class="headerlink" title="2 &#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x6D41;&#x7A0B;"></a>2 &#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x6D41;&#x7A0B;</h2><ul>
+<li>CPU&#x52A0;&#x7535;&#x7A33;&#x5B9A;&#x4E4B;&#x540E;&#x4ECE;<code>0xFFFF0</code>&#x8BFB;&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;<ul>
+<li>CS:IP = 0xF000:FFF0</li>
+<li>&#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x662F;&#x8DF3;&#x8F6C;&#x6307;&#x4EE4;</li>
+</ul>
+</li>
+<li>CPU&#x521D;&#x59CB;&#x72B6;&#x6001;&#x662F;16&#x4F4D;&#x5B9E;&#x6A21;&#x5F0F;<ul>
+<li>CS:IP &#x662F;16&#x4F4D;&#x5BC4;&#x5B58;&#x5668;</li>
+<li>&#x6307;&#x4EE4;&#x6307;&#x9488; <code>PC= 16 * CS + IP</code> </li>
+<li>&#x6700;&#x5927;&#x5BFB;&#x5740;&#x7A7A;&#x95F4;&#x662F;1MB</li>
+</ul>
+</li>
+<li>BOIS&#x521D;&#x59CB;&#x5316;<ul>
+<li>&#x786C;&#x4EF6;&#x81EA;&#x68C0;<ul>
+<li>&#x68C0;&#x6D4B;&#x7CFB;&#x7EDF;&#x4E2D;&#x5173;&#x952E;&#x90E8;&#x4EF6;&#x7684;&#x5B58;&#x5728;&#x548C;&#x5DE5;&#x4F5C;&#x72B6;&#x6001;</li>
+<li>&#x67E5;&#x627E;&#x5E76;&#x6267;&#x884C;IO&#x8BBE;&#x5907;BOIS&#x5E76;&#x8FDB;&#x884C;&#x8BBE;&#x5907;&#x521D;&#x59CB;&#x5316;</li>
+</ul>
+</li>
+<li>&#x6267;&#x884C;&#x7CFB;&#x7EDF;BIOS&#x8FDB;&#x884C;&#x7CFB;&#x7EDF;&#x68C0;&#x6D4B;</li>
+<li>&#x66F4;&#x65B0;CMOS&#x4E2D;&#x7684;&#x6269;&#x5C55;&#x7CFB;&#x7EDF;&#x914D;&#x7F6E;&#x6570;&#x636E;</li>
+</ul>
+</li>
+<li>&#x6309;&#x6307;&#x4EE4;&#x542F;&#x52A8;&#x987A;&#x5E8F;&#x4ECE;&#x8F6F;&#x76D8;&#xFF0C;&#x786C;&#x76D8;&#xFF0C;&#x5149;&#x76D8;&#x542F;&#x52A8;</li>
+</ul>
+<p>&#x5728;&#x5B8C;&#x6210;&#x4E0A;&#x9762;&#x7684;&#x64CD;&#x4F5C;&#x4E4B;&#x540E;&#xFF0C;&#x4F1A;&#x8BFB;&#x53D6;&#x542F;&#x52A8;&#x76D8;&#x7B2C;&#x4E00;&#x5757;&#x6247;&#x533A; <strong>MBR</strong> &#x4E3B;&#x5F15;&#x5BFC;&#x6247;&#x533A;</p>
+<p><strong>MBR(<code>boot.img</code>)&#x4E00;&#x5171;&#x6709;512&#x5B57;&#x8282;&#xFF0C;&#x5176;&#x4E2D;:</strong></p>
+<p>&#x542F;&#x52A8;&#x4EE3;&#x7801; 446&#x4E2A;&#x5B57;&#x8282;&#xFF0C;&#x4F1A;&#x5B8C;&#x6210;&#x4EE5;&#x4E0B;&#x7684;&#x64CD;&#x4F5C;:</p>
+<ul>
+<li>&#x68C0;&#x67E5;&#x5206;&#x533A;&#x8868;&#x7684;&#x6B63;&#x786E;&#x6027;</li>
+<li>&#x52A0;&#x8F7D;&#x5E76;&#x8DF3;&#x8F6C;&#x5230;&#x78C1;&#x76D8;&#x4E0A;&#x7684;&#x5F15;&#x5BFC;&#x7A0B;&#x5E8F;<code>core.img</code></li>
+</ul>
+<p>&#x786C;&#x76D8;&#x5206;&#x533A;&#x8868;:64&#x4E2A;&#x5B57;&#x8282;</p>
+<ul>
+<li>&#x63CF;&#x8FF0;&#x5206;&#x533A;&#x72B6;&#x6001;&#x548C;&#x4F4D;&#x7F6E;</li>
+<li>&#x6BCF;&#x4E2A;&#x5206;&#x533A;&#x7684;&#x63CF;&#x8FF0;&#x548C;&#x4FE1;&#x606F;&#x5360;16&#x4E2A;&#x5B57;&#x8282;&#xFF08;&#x6240;&#x4EE5;&#x4E00;&#x5171;&#x6709;4&#x4E2A;&#x5206;&#x533A;)(&#x6CE8;&#xFF1A;&#x73B0;&#x5728;&#x6709;BIOS-GPT&#xFF0C;&#x4E0D;&#x53D7;4&#x4E2A;&#x5206;&#x533A;&#x7684;&#x7EA6;&#x675F;)</li>
+</ul>
+<p>&#x7ED3;&#x675F;&#x6807;&#x5FD7;:2&#x4E2A;&#x5B57;&#x8282;</p>
+<ul>
+<li>55AA</li>
+</ul>
+<p><strong>&#x5206;&#x533A;&#x5F15;&#x5BFC;&#x6247;&#x533A;<code>core.img</code></strong>&#x4F1A;&#x6709;&#x4EE5;&#x4E0B;&#x4FE1;&#x606F;&#xFF1A;</p>
+<ul>
+<li>&#x8DF3;&#x8F6C;&#x6307;&#x4EE4;:&#x8DF3;&#x8F6C;&#x5230;&#x542F;&#x52A8;&#x4EE3;&#x7801;</li>
+<li>&#x6587;&#x4EF6;&#x5377;&#x5934;:&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x7684;&#x63CF;&#x8FF0;&#x4FE1;&#x606F;</li>
+<li>&#x542F;&#x52A8;&#x4EE3;&#x7801;<code>kernel.img</code></li>
+<li>&#x7ED3;&#x675F;&#x6807;&#x5FD7;:55AA</li>
+</ul>
+<p>&#x5728;&#x8FD9;&#x4E2A;&#x5F15;&#x5BFC;&#x6247;&#x533A;&#x4E2D;&#xFF0C;&#x4F1A;&#x5C06;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x5185;&#x6838;&#x8BFB;&#x8FDB;&#x5185;&#x5B58;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x5B9E;&#x6A21;&#x5F0F;&#x4E0B;&#xFF0C;&#x5BFB;&#x5740;&#x8303;&#x56F4;&#x53EA;&#x6709;1M&#xFF0C;&#x56E0;&#x6B64;&#x9700;&#x8981;&#x5207;&#x6362;&#x5230;&#x4FDD;&#x62A4;&#x6A21;&#x5F0F;&#x3002;</p>
+<p>&#x5207;&#x6362;&#x7684;&#x8FC7;&#x7A0B;&#x4F1A;&#x6709;&#x4EE5;&#x4E0B;&#x64CD;&#x4F5C;</p>
+<ul>
+<li><p>&#x542F;&#x52A8;&#x5206;&#x6BB5;</p>
+</li>
+<li><p>&#x542F;&#x52A8;&#x5206;&#x9875;</p>
+</li>
+</ul>
+<p>&#x8FD9;&#x4E24;&#x90E8;&#x5206;&#x5728;&#x540E;&#x7EED;&#x518D;&#x8BE6;&#x7EC6;&#x8BB2;&#x3002;</p>
+<p>&#x8BBE;&#x5B9A;&#x4E86;&#x6BB5;&#x9875;&#x5F0F;&#x5185;&#x5B58;&#x8BBF;&#x95EE;&#x673A;&#x5236;&#x4E4B;&#x540E;&#xFF0C;&#x5C31;&#x4F1A;&#x4F1A;&#x6253;&#x5F00;Gate A20&#xFF0C;&#x5373;CR0&#x5BC4;&#x5B58;&#x5668;&#x7F6E;1&#xFF0C;&#x8FDB;&#x5165;&#x4FDD;&#x62A4;&#x6A21;&#x5F0F;&#xFF0C;&#x4F7F;&#x7528;32&#x6839;&#x5730;&#x5740;&#x603B;&#x7EBF;&#xFF0C;&#x5BFB;&#x5740;&#x8303;&#x56F4;&#x4E3A;4GB</p>
+<h3 id="&#x5C0F;&#x7ED3;-1"><a href="#&#x5C0F;&#x7ED3;-1" class="headerlink" title="&#x5C0F;&#x7ED3;"></a>&#x5C0F;&#x7ED3;</h3><p>&#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x8FC7;&#x7A0B;&#x603B;&#x7ED3;&#x51FA;&#x6765;&#x5927;&#x6982;&#x6709;&#x4EE5;&#x4E0B;&#x7684;&#x8FC7;&#x7A0B;:</p>
+<ul>
+<li><p>&#x52A0;&#x7535;&#x8FDB;&#x5165;BIOS</p>
+</li>
+<li><p>&#x4ECE;BIOS&#x542F;&#x52A8;bootloader</p>
+</li>
+<li><p>bootloader&#x52A0;&#x8F7D;&#x5F15;&#x5BFC;&#x6247;&#x533A;</p>
+</li>
+<li><p>&#x5F15;&#x5BFC;&#x6247;&#x533A;&#x5728;&#x51C6;&#x5907;&#x7CFB;&#x7EDF;&#x542F;&#x52A8;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#x4ECE;&#x5B9E;&#x6A21;&#x5F0F;&#x5207;&#x6362;&#x5230;&#x4FDD;&#x62A4;&#x6A21;&#x5F0F;&#xFF0C;&#x5E76;&#x5C06;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x52A0;&#x8F7D;&#x8FDB;&#x5165;&#x5185;&#x6838;</p>
+</li>
+<li><p>&#x542F;&#x52A8;&#x5185;&#x6838;&#x8FDB;&#x5165;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;</p>
+</li>
+</ul>
+<h2 id="3-&#x5185;&#x6838;&#x521D;&#x59CB;&#x5316;"><a href="#3-&#x5185;&#x6838;&#x521D;&#x59CB;&#x5316;" class="headerlink" title="3 &#x5185;&#x6838;&#x521D;&#x59CB;&#x5316;"></a>3 &#x5185;&#x6838;&#x521D;&#x59CB;&#x5316;</h2><p><code>init/main.c</code>&#x6587;&#x4EF6;&#x4E2D;&#x7684;<code>start_kernel()</code>&#x51FD;&#x6570;&#x662F;&#x5185;&#x6838;&#x7684;&#x5165;&#x53E3;&#x51FD;&#x6570;&#xFF0C;&#x800C;&#x5728;&#x542F;&#x52A8;&#x4F1A;&#x6709;&#x5404;&#x79CD;&#x5404;&#x6837;&#x7684;&#x521D;&#x59CB;&#x5316;&#x64CD;&#x4F5C;,&#x4E3B;&#x8981;&#x7684;&#x529F;&#x80FD;&#xFF0C;&#x662F;&#x4E0B;&#x9762;&#x8FD9;&#x6837;&#x7684;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">asmlinkage __visible <span class="keyword">void</span> __<span class="function">init <span class="title">start_kernel</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">	...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* init_task&#x5B9A;&#x4E49;&#x4E3A;</span></span><br><span class="line"><span class="comment">     * struct task_struct init_task = INIT_TASK(init_task) </span></span><br><span class="line"><span class="comment">     * &#x5B83;&#x662F;&#x7CFB;&#x7EDF;&#x521B;&#x5EFA;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#xFF0C;0&#x53F7;&#x8FDB;&#x7A0B;</span></span><br><span class="line"><span class="comment">     * &#x4E5F;&#x662F;&#x7B2C;&#x4E00;&#x4E2A;&#x6CA1;&#x6709;&#x901A;&#x8FC7;fork&#x6216;&#x8005;kernel_thread&#x4EA7;&#x751F;&#x7684;&#x8FDB;&#x7A0B;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">	set_task_stack_end_magic(&amp;init_task);</span><br><span class="line">	</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/* &#x521D;&#x59CB;&#x5316;&#x57FA;&#x4E8E;&#x5185;&#x5B58;&#x7684;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;rootfs</span></span><br><span class="line"><span class="comment">     * &#x4F1A;&#x8C03;&#x7528; mnt_init()-&gt;init_rootfs()</span></span><br><span class="line"><span class="comment">     * &#x6709;</span></span><br><span class="line"><span class="comment">     * register_filesystem(&amp;rootfs_fs_type)</span></span><br><span class="line"><span class="comment">     * rootfs_fs_type&#x5B9A;&#x4E49;&#x4E3A;</span></span><br><span class="line"><span class="comment">     * struct file_system_type rootfs_fs_type;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    vfs_caches_init();</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* &#x8BBE;&#x7F6E; Interrupt Gate &#x7528;&#x4E8E;&#x5904;&#x7406;&#x7CFB;&#x7EDF;&#x4E2D;&#x65AD; </span></span><br><span class="line"><span class="comment">     * set_system_intr_gate(IA32_SYSCALL_VECTOR, entry_INT80_32)</span></span><br><span class="line"><span class="comment">     * &#x8FD9;&#x4E2A;&#x4E2D;&#x65AD;&#x540E;&#x9762;&#x4F1A;&#x8BB2;&#x89E3;&#xFF0C;&#x5B83;&#x662F;32&#x4F4D;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#x7684;&#x4E2D;&#x65AD;&#x95E8;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">	trap_init();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* &#x521D;&#x59CB;&#x5316;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x6A21;&#x5757;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">	mm_init();</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/* &#x521D;&#x59CB;&#x5316;&#x8C03;&#x5EA6;&#x6A21;&#x5757;</span></span><br><span class="line"><span class="comment">	 * Set up the scheduler prior starting any interrupts (such as the</span></span><br><span class="line"><span class="comment">	 * timer interrupt). Full topology setup happens at smp_init()</span></span><br><span class="line"><span class="comment">	 * time - but meanwhile we still have a functioning scheduler.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	sched_init();</span><br><span class="line">	</span><br><span class="line">    ....</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/* &#x5176;&#x4ED6;&#x521D;&#x59CB;&#x5316;*/</span></span><br><span class="line">    arch_call_rest_init();</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>&#x800C;&#x5728;rest_init()&#x4E2D;&#x4F1A;&#x5B8C;&#x6210;&#x4EE5;&#x4E0B;&#x7684;&#x5DE5;&#x4F5C;</p>
+<h3 id="3-1-&#x542F;&#x52A8;1&#x53F7;&#x8FDB;&#x7A0B;"><a href="#3-1-&#x542F;&#x52A8;1&#x53F7;&#x8FDB;&#x7A0B;" class="headerlink" title="3.1 &#x542F;&#x52A8;1&#x53F7;&#x8FDB;&#x7A0B;"></a>3.1 &#x542F;&#x52A8;1&#x53F7;&#x8FDB;&#x7A0B;</h3><p>&#x5728;&#x5185;&#x6838;&#x4E2D;&#x6267;&#x884C; <code>kernel_thread(kernel_init, NULL, CLONE_FS)</code>&#x521B;&#x5EFA;&#x7B2C;&#x4E8C;&#x4E2A;&#x8FDB;&#x7A0B;&#xFF0C;&#x4E5F;&#x662F;1&#x53F7;&#x8FDB;&#x7A0B;&#xFF0C;&#x7528;&#x6237;&#x6001;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x3002;</p>
+<p>&#x4E00;&#x53F7;&#x8FDB;&#x7A0B;&#x901A;&#x8FC7;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF0C;&#x542F;&#x52A8;&#x6267;&#x884C;&#x5185;&#x5B58;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;ramdisk&#x7684; <code>/init</code>, &#x6216;&#x8005;&#x662F;&#x666E;&#x901A;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E0A;&#x7684;<code>/sbin/init</code>,<code>/etc/init</code>,<code>/bin/init</code>,<code>/bin/sh</code>&#x4E2D;&#x7684;&#x67D0;&#x4E00;&#x4E2A;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x7528;&#x6237;&#x6001;&#x3002;</p>
+<p><strong>ramdisk</strong>&#x7684;&#x4F5C;&#x7528;&#xFF0C;&#x7531;&#x4E8E;&#x5728;&#x5185;&#x6838;&#x4E2D;&#x4E0D;&#x53EF;&#x80FD;&#x5C06;&#x6240;&#x6709;&#x7C7B;&#x578B;&#x7684;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x90FD;&#x5199;&#x5165;&#xFF0C;&#x6240;&#x4EE5;&#x5728;&#x5185;&#x6838;&#x542F;&#x52A8;&#x7684;&#x65F6;&#x5019;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;<code>ramdisk</code>&#xFF0C;&#x5728;&#x5B83;&#x6267;&#x884C;&#x5B8C;<code>init</code>&#x4E4B;&#x540E;&#x5C31;&#x5230;&#x4E86;&#x7528;&#x6237;&#x6001;&#xFF0C;&#x800C;&#x5728;<code>/init</code>&#x91CC;&#x9762;&#xFF0C;&#x4F1A;&#x6839;&#x636E;&#x5B58;&#x50A8;&#x7CFB;&#x7EDF;&#x7684;&#x7C7B;&#x578B;&#x52A0;&#x8F7D;&#x9A71;&#x52A8;&#xFF0C;&#x8BBE;&#x7F6E;&#x771F;&#x6B63;&#x7684;&#x6839;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x5E76;&#x542F;&#x52A8;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E0A;&#x7684;<code>/init</code></p>
+<p>1&#x53F7;&#x8FDB;&#x7A0B;&#x521D;&#x59CB;&#x5316;&#x5B8C;&#x6210;&#x4E4B;&#x540E;&#x5C31;&#x5230;&#x4E86;&#x7528;&#x6237;&#x6001;&#xFF0C;&#x5B8C;&#x6210;&#x5404;&#x79CD;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;&#x5DE5;&#x4F5C;&#x3002;</p>
+<h3 id="3-2-&#x542F;&#x52A8;2&#x53F7;&#x8FDB;&#x7A0B;"><a href="#3-2-&#x542F;&#x52A8;2&#x53F7;&#x8FDB;&#x7A0B;" class="headerlink" title="3.2 &#x542F;&#x52A8;2&#x53F7;&#x8FDB;&#x7A0B;"></a>3.2 &#x542F;&#x52A8;2&#x53F7;&#x8FDB;&#x7A0B;</h3><p>&#x5728;&#x5185;&#x6838;&#x4E2D;&#x6267;&#x884C;<code>kernel_thread(kthreadd, NULL, CLONE_FS | CLONE_FILES)</code>.</p>
+<p> kthreadd &#x662F;&#x5185;&#x6838;&#x6001;&#x6240;&#x6709;&#x7EBF;&#x7A0B;&#x8FD0;&#x884C;&#x7684;&#x7956;&#x5148;</p>
+<p>&#x5C0F;tips&#xFF1A;</p>
+<p>&#x5728;&#x5185;&#x6838;&#x6001;&#x4E2D;&#xFF0C;&#x8FDB;&#x7A0B;&#x548C;&#x7EBF;&#x7A0B;&#x90FD;&#x662F;task&#xFF0C;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x4E14;&#x5728;&#x540C;&#x4E00;&#x4E2A;&#x94FE;&#x8868;&#x4E2D;&#x3002;&#x800C;&#x5728;&#x7528;&#x6237;&#x6001;&#x4E2D;&#xFF0C;&#x8FDB;&#x7A0B;&#x76F8;&#x5F53;&#x4E8E;&#x4E00;&#x4E2A;&#x9879;&#x76EE;&#xFF0C;&#x7EBF;&#x7A0B;&#x76F8;&#x5F53;&#x4E8E;&#x4E00;&#x4E2A;&#x9879;&#x76EE;&#x7684;&#x4E0D;&#x540C;&#x90E8;&#x5206;&#x3002;</p>
+<h2 id="4-&#x4E2D;&#x65AD;&#xFF0C;&#x5F02;&#x5E38;&#xFF0C;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;"><a href="#4-&#x4E2D;&#x65AD;&#xFF0C;&#x5F02;&#x5E38;&#xFF0C;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;" class="headerlink" title="4 &#x4E2D;&#x65AD;&#xFF0C;&#x5F02;&#x5E38;&#xFF0C;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;"></a>4 &#x4E2D;&#x65AD;&#xFF0C;&#x5F02;&#x5E38;&#xFF0C;&#x7CFB;&#x7EDF;&#x8C03;&#x7528;</h2><blockquote>
+<p>(&#x5916;&#x90E8;)&#x4E2D;&#x65AD;: &#x5916;&#x90E8;&#x8BBE;&#x5907;&#x7684;&#x5904;&#x7406;&#x8BF7;&#x6C42;</p>
+<p>&#x5F02;&#x5E38;&#xFF1A;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x8FC7;&#x7A0B;&#x4E2D;&#x51FA;&#x73B0;&#x610F;&#x60F3;&#x4E0D;&#x5230;&#x7684;&#x95EE;&#x9898;</p>
+<p>(&#x5185;&#x90E8;&#x4E2D;&#x65AD;)&#x7CFB;&#x7EDF;&#x8C03;&#x7528;&#xFF1A;&#x7A0B;&#x5E8F;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x5185;&#x6838;&#x7684;&#x67D0;&#x4E9B;&#x529F;&#x80FD;&#x4E3B;&#x52A8;&#x5411;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x53D1;&#x51FA;&#x670D;&#x52A1;&#x8BF7;&#x6C42;</p>
+</blockquote>
+<p><img src="/2020/04/18/Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;/1587202783152.png" alt="1587202783152"></p>
+<h2 id="5-&#x7CFB;&#x7EDF;&#x8C03;&#x7528;"><a href="#5-&#x7CFB;&#x7EDF;&#x8C03;&#x7528;" class="headerlink" title="5 &#x7CFB;&#x7EDF;&#x8C03;&#x7528;"></a>5 &#x7CFB;&#x7EDF;&#x8C03;&#x7528;</h2><p><img src="/2020/04/18/Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;/1587210589127.png" alt="1587210589127"></p>
+<p>&#x6BCF;&#x4E00;&#x4E2A;&#x4E2D;&#x65AD;&#x6216;&#x8005;&#x5F02;&#x5E38;&#x90FD;&#x4E0E;&#x4E00;&#x4E2A;&#x4E2D;&#x65AD;&#x670D;&#x52A1;&#x4F8B;&#x7A0B;(Interrupt Service Routine, ISR)&#x5173;&#x8054;&#xFF0C;&#x5173;&#x8054;&#x5173;&#x7CFB;&#x5B58;&#x50A8;&#x5728;&#x4E2D;&#x65AD;&#x63CF;&#x8FF0;&#x7B26;&#x8868;(Interrupt Descriptor Table, IDT)&#x4E2D;,IDT &#x7684;&#x8D77;&#x59CB;&#x5730;&#x5740;&#x548C;&#x5927;&#x5C0F;&#x4FDD;&#x5B58;&#x5728;&#x4E2D;&#x65AD;&#x63CF;&#x8FF0;&#x7B26;&#x8868;&#x5BC4;&#x5B58;&#x5668;IDTR&#x4E2D;&#xFF0C;&#x5982;&#x4E0A;&#x56FE;&#x6240;&#x793A;&#x3002;&#x6BCF;&#x4E00;&#x9879;&#x90FD;&#x662F;&#x4E00;&#x4E2A;&#x4E2D;&#x65AD;&#x95E8;&#x3002;&#x6839;&#x636E;&#x4E2D;&#x65AD;&#x53F7;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x4E2D;&#x65AD;Trap Gate&#x6216;&#x8005;Interrupt Gate&#xFF0C;&#x7136;&#x540E;&#x8FDB;&#x4E00;&#x6B65;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x5230;&#x76F8;&#x5173;&#x7684;&#x6BB5;&#x9009;&#x62E9;&#x5B50;&#x548C;&#x6BB5;&#x504F;&#x79FB;&#x3002;</p>
+<p><img src="/2020/04/18/Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;/1587211062813.png" alt="1587211062813"></p>
+<p>&#x4ECE;&#x4E0A;&#x56FE;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x4EA7;&#x751F;&#x4E2D;&#x65AD;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x5BF9;&#x5E94;&#x7684;&#x4E2D;&#x65AD;&#x53F7;&#xFF0C;CPU&#x6839;&#x636E;&#x4E2D;&#x65AD;&#x53F7;&#xFF0C;&#x9009;&#x62E9;&#x786E;&#x5B9A;&#x7684;IDT&#x8868;&#x9879;&#xFF0C;&#x7136;&#x540E;&#x4ECE;&#x4E2D;&#x53D6;&#x51FA;&#x6BB5;&#x9009;&#x62E9;&#x5B50;&#xFF0C;&#x5728;GDT&#x4E2D;&#x5F97;&#x5230;&#x5BF9;&#x5E94;&#x7684;&#x6BB5;&#x63CF;&#x8FF0;&#x7B26;&#xFF0C;&#x62FF;&#x5230;Base Address&#xFF0C;&#x52A0;&#x4E0A;&#x504F;&#x79FB;&#xFF0C;&#x5C31;&#x5F97;&#x5230;&#x4E86;&#x4E2D;&#x65AD;&#x7684;&#x7EBF;&#x6027;&#x5730;&#x5740;&#xFF0C;&#x5728;&#x4E2D;&#x65AD;&#x7EBF;&#x6027;&#x5730;&#x5740;&#x7684;&#x4F4D;&#x7F6E;&#x5B58;&#x653E;&#x7684;&#x5C31;&#x662F;&#x4E2D;&#x65AD;&#x4F8B;&#x7A0B;&#x3002;</p>
+<h3 id="&#x7279;&#x6743;&#x7EA7;&#x5207;&#x6362;&#x5BF9;&#x5806;&#x6808;&#x7684;&#x5F71;&#x54CD;"><a href="#&#x7279;&#x6743;&#x7EA7;&#x5207;&#x6362;&#x5BF9;&#x5806;&#x6808;&#x7684;&#x5F71;&#x54CD;" class="headerlink" title="&#x7279;&#x6743;&#x7EA7;&#x5207;&#x6362;&#x5BF9;&#x5806;&#x6808;&#x7684;&#x5F71;&#x54CD;"></a>&#x7279;&#x6743;&#x7EA7;&#x5207;&#x6362;&#x5BF9;&#x5806;&#x6808;&#x7684;&#x5F71;&#x54CD;</h3><p><strong>&#x5185;&#x6838;&#x6001;&#x4EA7;&#x751F;&#x7684;&#x4E2D;&#x65AD;&#x8FD8;&#x662F;&#x5728;&#x5185;&#x6838;&#x6001;</strong></p>
+<p><img src="/2020/04/18/Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;/1587211596716.png" alt="1587211596716"></p>
+<p><strong>&#x7528;&#x6237;&#x6001;&#x4EA7;&#x751F;&#x4E2D;&#x65AD;&#x5230;&#x5185;&#x6838;&#x6001;</strong></p>
+<p>&#x9700;&#x8981;&#x5C06;&#x7528;&#x6237;&#x6808;&#x7684;ESP&#x548C;SS&#x5165;&#x6808;</p>
+<p><img src="/2020/04/18/Linux&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;-1-&#x7CFB;&#x7EDF;&#x521D;&#x59CB;&#x5316;/1587211611732.png" alt="1587211611732"></p>
+<h3 id="&#x8FD4;&#x56DE;"><a href="#&#x8FD4;&#x56DE;" class="headerlink" title="&#x8FD4;&#x56DE;"></a>&#x8FD4;&#x56DE;</h3><p>iret &#x548C; ret</p>
+<p>iret &#x5F39;&#x51FA; EFLAGS &#x548C; SS/ESP</p>
+<p>ret&#x5F39;&#x51FA;EIP&#xFF0C; retf&#x5F39;&#x51FA;CS&#x548C;EIP</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/17/xctf-writeup-easydex/" rel="next" title="xctf-writeup-easydex">
+                <i class="fa fa-chevron-left"></i> xctf-writeup-easydex
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/18/x86和arm上的调用约定/" rel="prev" title="x86和arm上的调用约定">
+                x86和arm上的调用约定 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux操作系统-1-–-系统初始化"><span class="nav-number">1.</span> <span class="nav-text">Linux操作系统(1) – 系统初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-BIOS"><span class="nav-number">1.1.</span> <span class="nav-text">1 BIOS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">1.1.1.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-系统启动流程"><span class="nav-number">1.2.</span> <span class="nav-text">2 系统启动流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小结-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-内核初始化"><span class="nav-number">1.3.</span> <span class="nav-text">3 内核初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-启动1号进程"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 启动1号进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-启动2号进程"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 启动2号进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-中断，异常，系统调用"><span class="nav-number">1.4.</span> <span class="nav-text">4 中断，异常，系统调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-系统调用"><span class="nav-number">1.5.</span> <span class="nav-text">5 系统调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特权级切换对堆栈的影响"><span class="nav-number">1.5.1.</span> <span class="nav-text">特权级切换对堆栈的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回"><span class="nav-number">1.5.2.</span> <span class="nav-text">返回</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/18/Linux操作系统-1-系统初始化/';
+          this.page.identifier = '2020/04/18/Linux操作系统-1-系统初始化/';
+          this.page.title = 'Linux操作系统(1) -- 系统初始化';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

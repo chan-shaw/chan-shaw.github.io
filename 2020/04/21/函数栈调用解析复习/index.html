@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="arm,x86,动态加载">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对于之前做过的项目的复习">
+<meta name="keywords" content="arm,x86,动态加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数栈调用解析复习">
+<meta property="og:url" content="http://yoursite.com/2020/04/21/函数栈调用解析复习/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="对于之前做过的项目的复习">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/21/函数栈调用解析复习/1587216724069.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/21/函数栈调用解析复习/1586185898823.png">
+<meta property="og:updated_time" content="2020-04-21T12:56:06.792Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="函数栈调用解析复习">
+<meta name="twitter:description" content="对于之前做过的项目的复习">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/21/函数栈调用解析复习/1587216724069.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/21/函数栈调用解析复习/">
+
+
+
+
+
+  <title>函数栈调用解析复习 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/21/函数栈调用解析复习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">函数栈调用解析复习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-21T19:09:06+08:00">
+                2020-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/面试准备/" itemprop="url" rel="index">
+                    <span itemprop="name">面试准备</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/21/函数栈调用解析复习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/21/函数栈调用解析复习/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/21/函数栈调用解析复习/" class="leancloud_visitors" data-flag-title="函数栈调用解析复习">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对于之前做过的项目的复习
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="&#x51FD;&#x6570;&#x6808;&#x8C03;&#x7528;&#x89E3;&#x6790;&#x590D;&#x4E60;"><a href="#&#x51FD;&#x6570;&#x6808;&#x8C03;&#x7528;&#x89E3;&#x6790;&#x590D;&#x4E60;" class="headerlink" title="&#x51FD;&#x6570;&#x6808;&#x8C03;&#x7528;&#x89E3;&#x6790;&#x590D;&#x4E60;"></a>&#x51FD;&#x6570;&#x6808;&#x8C03;&#x7528;&#x89E3;&#x6790;&#x590D;&#x4E60;</h1><blockquote>
+<p>&#x7531;&#x4E8E;&#x65F6;&#x95F4;&#x8FC7;&#x957F;&#xFF0C;&#x4E2D;&#x95F4;&#x6709;&#x4E9B;&#x9057;&#x5FD8;&#x7684;&#xFF0C;&#x5728;&#x6B64;&#x603B;&#x7ED3;&#x5F52;&#x7EB3;&#x4E00;&#x4E0B;&#x77E5;&#x8BC6;&#x70B9;&#x5E76;&#x8FDB;&#x884C;&#x4E00;&#x4E2A;&#x56DE;&#x987E;</p>
+</blockquote>
+<h2 id="&#x590D;&#x4E60;&#x53C2;&#x8003;&#x8D44;&#x6599;"><a href="#&#x590D;&#x4E60;&#x53C2;&#x8003;&#x8D44;&#x6599;" class="headerlink" title="&#x590D;&#x4E60;&#x53C2;&#x8003;&#x8D44;&#x6599;"></a>&#x590D;&#x4E60;&#x53C2;&#x8003;&#x8D44;&#x6599;</h2><ul>
+<li><a href="[https://chan-shaw.github.io/2020/04/06/ELF%E4%B8%AD%E7%9A%84GOT-PLT-REL/](https://chan-shaw.github.io/2020/04/06/ELF&#x4E2D;&#x7684;GOT-PLT-REL/)">&#x52A8;&#x6001;&#x52A0;&#x8F7D;&#x76F8;&#x5173;</a></li>
+<li><a href="[https://chan-shaw.github.io/2020/03/20/arm%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/](https://chan-shaw.github.io/2020/03/20/arm&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;/)">arm&#x76F8;&#x5173;</a></li>
+<li><a href="[https://chan-shaw.github.io/2019/12/11/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AF%BC%E8%AE%BA/](https://chan-shaw.github.io/2019/12/11/x86&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x5BFC;&#x8BBA;/)">x86&#x76F8;&#x5173;</a></li>
+</ul>
+<h2 id="1-&#x5171;&#x6027;"><a href="#1-&#x5171;&#x6027;" class="headerlink" title="1 &#x5171;&#x6027;"></a>1 &#x5171;&#x6027;</h2><blockquote>
+<p>&#x4E00;&#x4E2A;&#x51FD;&#x6570;&#x90FD;&#x53EF;&#x4EE5;&#x5206;&#x4E3A;&#x4E09;&#x90E8;&#x5206;</p>
+<ul>
+<li>prologue: &#x8FD9;&#x90E8;&#x5206;&#x8D1F;&#x8D23;&#x76F8;&#x5173;&#x6808;&#x548C;&#x5BC4;&#x5B58;&#x5668;&#x7684;&#x521D;&#x59CB;&#x5316;</li>
+<li>body: &#x8FD9;&#x90E8;&#x5206;&#x8D1F;&#x8D23;&#x51FD;&#x6570;&#x8FD0;&#x7B97;&#x4E3B;&#x9898;&#x90E8;&#x5206;</li>
+<li>Epilogue: &#x8FD9;&#x90E8;&#x5206;&#x8D1F;&#x8D23;&#x5BF9;&#x51FD;&#x6570;&#x6808;&#x7684;&#x6E05;&#x7406;&#x548C;&#x6062;&#x590D;&#x5DE5;&#x4F5C;</li>
+</ul>
+</blockquote>
+<h2 id="2-x86&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;"><a href="#2-x86&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;" class="headerlink" title="2 x86&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;"></a>2 x86&#x7684;&#x51FD;&#x6570;&#x8C03;&#x7528;</h2><img src="/2020/04/21/&#x51FD;&#x6570;&#x6808;&#x8C03;&#x7528;&#x89E3;&#x6790;&#x590D;&#x4E60;/1587216724069.png" alt="1587216724069" style="zoom:50%;">
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">.486</span><br><span class="line">.MODEL FLAT</span><br><span class="line">.CODE</span><br><span class="line">PUBLIC _myFunc</span><br><span class="line">_myFunc PROC</span><br><span class="line">  ; Subroutine Prologue</span><br><span class="line">  push ebp     ; Save the old base pointer value.</span><br><span class="line">  mov ebp, esp ; Set the new base pointer value.</span><br><span class="line">  sub esp, 4   ; Make room for one 4-byte local variable.</span><br><span class="line">  push edi     ; Save the values of registers that the function</span><br><span class="line">  push esi     ; will modify. This function uses EDI and ESI.</span><br><span class="line">  ; (no need to save EBX, EBP, or ESP)</span><br><span class="line"></span><br><span class="line">  ; Subroutine Body</span><br><span class="line">  mov eax, [ebp+8]   ; Move value of parameter 1 into EAX</span><br><span class="line">  mov esi, [ebp+12]  ; Move value of parameter 2 into ESI</span><br><span class="line">  mov edi, [ebp+16]  ; Move value of parameter 3 into EDI</span><br><span class="line"></span><br><span class="line">  mov [ebp-4], edi   ; Move EDI into the local variable</span><br><span class="line">  add [ebp-4], esi   ; Add ESI into the local variable</span><br><span class="line">  add eax, [ebp-4]   ; Add the contents of the local variable</span><br><span class="line">                     ; into EAX (final result)</span><br><span class="line"></span><br><span class="line">  ; Subroutine Epilogue </span><br><span class="line">  pop esi      ; Recover register values</span><br><span class="line">  pop edi</span><br><span class="line">  mov esp, ebp ; Deallocate local variables</span><br><span class="line">  pop ebp ; Restore the caller&apos;s base pointer value</span><br><span class="line">  ret</span><br><span class="line">_myFunc ENDP</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>&#x6CE8;&#x610F;:</p>
+<ul>
+<li><p><code>ebp</code> &#x4FDD;&#x5B58;&#x6808;&#x5E27;</p>
+</li>
+<li><p><code>esp</code> &#x4FDD;&#x5B58;&#x6808;&#x5E95;</p>
+</li>
+<li><p>&#x51FD;&#x6570;&#x53C2;&#x6570;&#x90FD;&#x5728;&#x6808;&#x4E0A;&#xFF0C;&#x4F7F;&#x7528;<code>ebp</code>&#x4F5C;&#x4E3A;&#x57FA;&#x51C6;&#x8FDB;&#x884C;&#x8C03;&#x7528;</p>
+</li>
+<li><p><code>call func</code> &#x7B49;&#x4E8E; <code>push eip</code> + <code>jump func</code></p>
+</li>
+<li><p><code>ret</code> &#x7B49;&#x4E8E;<code>pop eip</code> </p>
+</li>
+</ul>
+</blockquote>
+<h2 id="2-ARM"><a href="#2-ARM" class="headerlink" title="2 ARM"></a>2 ARM</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">.global main</span><br><span class="line"></span><br><span class="line">main:</span><br><span class="line">	push   {r11, lr}    /* Start of the prologue. Saving Frame Pointer and LR onto the stack */</span><br><span class="line">	add    r11, sp, #0  /* Setting up the bottom of the stack frame */</span><br><span class="line">	sub    sp, sp, #16  /* End of the prologue. Allocating some buffer on the stack */</span><br><span class="line">	mov    r0, #1       /* setting up local variables (a=1). This also serves as setting up the first parameter for the max function */</span><br><span class="line">	mov    r1, #2       /* setting up local variables (b=2). This also serves as setting up the second parameter for the max function */</span><br><span class="line">	bl     max          /* Calling/branching to function max */</span><br><span class="line">	sub    sp, r11, #0  /* Start of the epilogue. Readjusting the Stack Pointer */</span><br><span class="line">	pop    {r11, pc}    /* End of the epilogue. Restoring Frame pointer from the stack, jumping to previously saved LR via direct load into PC */</span><br><span class="line"></span><br><span class="line">max:</span><br><span class="line">	push   {r11}        /* Start of the prologue. Saving Frame Pointer onto the stack */</span><br><span class="line">	add    r11, sp, #0  /* Setting up the bottom of the stack frame */</span><br><span class="line">	sub    sp, sp, #12  /* End of the prologue. Allocating some buffer on the stack */</span><br><span class="line">	cmp    r0, r1       /* Implementation of if(a&lt;b) */</span><br><span class="line">	movlt  r0, r1       /* if r0 was lower than r1, store r1 into r0 */</span><br><span class="line">	add    sp, r11, #0  /* Start of the epilogue. Readjusting the Stack Pointer */</span><br><span class="line">	pop    {r11}        /* restoring frame pointer */</span><br><span class="line">	bx     lr           /* End of the epilogue. Jumping back to main via LR register */</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>&#x6CE8;&#x610F;:</p>
+<ul>
+<li><code>r11(fp)</code>&#x4FDD;&#x5B58;&#x6808;&#x5E27;</li>
+<li><code>lr</code>&#x4FDD;&#x5B58;&#x8FD4;&#x56DE;&#x5730;&#x5740;</li>
+<li><code>sp</code>&#x4FDD;&#x5B58;&#x6808;&#x5E95;</li>
+<li>&#x53C2;&#x6570;&#x524D;&#x56DB;&#x4E2A;&#x5B58;&#x5728;<code>r0-r3</code>&#xFF0C;&#x540E;&#x9762;&#x5B58;&#x5728;&#x6808;</li>
+<li><code>bl func</code>&#x7B49;&#x4E8E;<code>mov lr,PC+4</code> <code>b func</code></li>
+<li>PC &#x6307;&#x5411;&#x5F53;&#x524D;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x7684;&#x6307;&#x4EE4;&#xFF0C;&#x7F16;&#x7801;&#xFF0C;&#x8BD1;&#x7801;&#xFF0C;&#x6267;&#x884C;&#x5BFC;&#x81F4;pc&#x7684;&#x6539;&#x53D8; </li>
+</ul>
+</blockquote>
+<h2 id="3-&#x52A8;&#x6001;&#x52A0;&#x8F7D;"><a href="#3-&#x52A8;&#x6001;&#x52A0;&#x8F7D;" class="headerlink" title="3 &#x52A8;&#x6001;&#x52A0;&#x8F7D;"></a>3 &#x52A8;&#x6001;&#x52A0;&#x8F7D;</h2><blockquote>
+<p>&#x52A8;&#x6001;&#x94FE;&#x63A5;&#x5904;&#x7406;&#x5171;&#x4EAB;&#x5E93;&#x7684;&#x65F6;&#x5019;&#x975E;&#x5E38;&#x9AD8;&#x6548;&#xFF0C;&#x5F53;&#x4E00;&#x4E2A;&#x7A0B;&#x5E8F;&#x88AB;&#x52A0;&#x8F7D;&#x8FDB;&#x5185;&#x5B58;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x52A8;&#x6001;&#x94FE;&#x63A5;&#x5668;&#x4F1A;&#x5C06;&#x9700;&#x8981;&#x7684;&#x5171;&#x4EAB;&#x5E93;&#xFF0C;&#x52A0;&#x8F7D;&#x5E76;&#x7ED1;&#x5B9A;&#x5230;&#x8FDB;&#x7A0B;&#x7684;&#x5730;&#x5740;&#x7A7A;&#x95F4;&#xFF0C;&#x5728;&#x8C03;&#x7528;&#x67D0;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5BF9;&#x51FD;&#x6570;&#x5730;&#x5740;&#x8FDB;&#x884C;&#x89E3;&#x6790;&#xFF0C;&#x8FBE;&#x5230;&#x5BF9;&#x51FD;&#x6570;&#x8C03;&#x7528;&#x7684;&#x76EE;&#x7684;</p>
+</blockquote>
+<h3 id="3-1-&#x4E24;&#x4E2A;&#x8868;"><a href="#3-1-&#x4E24;&#x4E2A;&#x8868;" class="headerlink" title="3.1 &#x4E24;&#x4E2A;&#x8868;"></a>3.1 &#x4E24;&#x4E2A;&#x8868;</h3><h4 id="3-1-1-PLT-Procedure-Linkage-Table"><a href="#3-1-1-PLT-Procedure-Linkage-Table" class="headerlink" title="3.1.1 PLT(Procedure Linkage Table)"></a>3.1.1 PLT(Procedure Linkage Table)</h4><blockquote>
+<p>&#x8FC7;&#x7A0B;&#x8FDE;&#x63A5;&#x8868;&#xFF0C;&#x5728;&#x7A0B;&#x5E8F;&#x4E2D;&#x4EE5;<code>.plt</code>&#x8282;&#x8868;&#x793A;&#xFF0C;&#x8868;&#x5728;&#x4EE3;&#x7801;&#x6BB5;&#xFF0C;&#x6BCF;&#x4E2A;&#x8868;&#x9879;&#x8868;&#x793A;&#x4E86;&#x4E00;&#x4E2A;&#x9700;&#x8981;&#x91CD;&#x5B9A;&#x4F4D;&#x7684;&#x51FD;&#x6570;&#x7684;&#x76F8;&#x5173;&#x82E5;&#x5E72;&#x6761;&#x6307;&#x4EE4;&#xFF0C;&#x6BCF;&#x4E2A;&#x8868;&#x9879;&#x957F;&#x5EA6;&#x4E3A;16&#x5B57;&#x8282;&#xFF0C;&#x5B58;&#x50A8;&#x7528;&#x4E8E;&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;&#x7684;&#x4EE3;&#x7801;</p>
+<p>&#x53EF;&#x6267;&#x884C;</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">PLT[0]  --&gt; &#x4E0E;&#x6BCF;&#x4E2A;&#x51FD;&#x6570;&#x7B2C;&#x4E00;&#x6B21;&#x94FE;&#x63A5;&#x76F8;&#x5173;&#x6307;&#x4EE4;</span><br><span class="line">&#x4F8B;&#xFF1A;</span><br><span class="line">0x4004c0:</span><br><span class="line">0x4004c0:  ff 35 42 0b 20 00        push   QWORD PTR [rip+0x200b42]      // push [GOT[1]]</span><br><span class="line">0x4004c6:  ff 25 44 0b 20 00        jmp    QWORD PTR [rip+0x200b44]      // jmp  [GOT[2]]</span><br><span class="line">0x4004cc:  0f 1f 40 00              nop    DWORD PTR [rax+0x0]</span><br><span class="line">&#x5373;&#xFF1A;</span><br><span class="line">    &#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x4E3A; push &#x4E00;&#x4E2A;&#x503C;&#xFF0C;&#x8BE5;&#x503C;&#x4E3A; GOT[1] &#x5904;&#x5B58;&#x653E;&#x7684;&#x5730;&#x5740;&#xFF0C;</span><br><span class="line">    &#x7B2C;&#x4E8C;&#x6761;&#x6307;&#x4EE4;&#x4E3A; jmp &#x5230;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#x6267;&#x884C;&#xFF0C;&#x8BE5;&#x503C;&#x4E3A; GOT[2] &#x5904;&#x5B58;&#x653E;&#x7684;&#x5730;&#x5740;</span><br><span class="line"></span><br><span class="line">PLT[1]  --&gt; &#x67D0;&#x4E2A;&#x51FD;&#x6570;&#x94FE;&#x63A5;&#x65F6;&#x6240;&#x9700;&#x8981;&#x7684;&#x6307;&#x4EE4;,&#x4E0E; got &#x8868;&#x4E00;&#x4E00;&#x5BF9;&#x5E94;</span><br><span class="line">&#x4F8B;&#xFF1A;</span><br><span class="line">0x4004d0 &lt;__stack_chk_fail@plt&gt;:</span><br><span class="line">0x4004d0:  ff 25 42 0b 20 00        jmp    QWORD PTR [rip+0x200b42]  // jmp GOT[3]  </span><br><span class="line">0x4004d6:  68 00 00 00 00           push   0x0                       // push reloc_arg</span><br><span class="line">0x4004db:  e9 e0 ff ff ff           jmp    0x4004c0 &lt;_init+0x20&gt;     // jmp PLT[0]</span><br><span class="line">&#x5373;&#xFF1A;</span><br><span class="line">    &#x7B2C;&#x4E00;&#x6761;&#x6307;&#x4EE4;&#x4E3A;: jmp &#x5230;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#x6267;&#x884C;&#xFF0C;&#x8BE5;&#x5730;&#x5740;&#x4E3A;&#x5BF9;&#x5E94; GOT &#x8868;&#x9879;&#x5904;&#x5B58;&#x653E;&#x7684;&#x5730;&#x5740;&#xFF0C;&#x5728;&#x4E0B;&#x6587;&#x4E2D;&#x4F1A;&#x5177;&#x4F53;&#x8BA8;&#x8BBA;&#x8FD9;&#x79CD;&#x7ED3;&#x6784;</span><br><span class="line">    &#x7B2C;&#x4E8C;&#x6761;&#x6307;&#x4EE4;&#x4E3A;: push &#x4E00;&#x4E2A;&#x503C;&#xFF0C;&#x8BE5;&#x503C;&#x4F5C;&#x7528;&#x5728;&#x4E0B;&#x6587;&#x63D0;&#x5230;</span><br><span class="line">    &#x7B2C;&#x4E09;&#x4E2A;&#x6307;&#x4EE4;&#x4E3A;: jmp &#x4E00;&#x4E2A;&#x5730;&#x5740;&#x6267;&#x884C;&#xFF0C;&#x5176;&#x5B9E;&#x8BE5;&#x5730;&#x5740;&#x5C31;&#x662F;&#x4E0A;&#x8FB9;&#x63D0;&#x5230;&#x7684; PLT[0] &#x7684;&#x5730;&#x5740;&#xFF0C;</span><br><span class="line">                &#x4E5F;&#x5C31;&#x662F;&#x8BF4;&#x63A5;&#x4E0B;&#x6765;&#x8981;&#x6267;&#x884C; PLT[0] &#x4E2D;&#x4FDD;&#x5B58;&#x7684;&#x4E24;&#x6761;&#x6307;&#x4EE4;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-2-GOT-Global-Offset-Table"><a href="#3-1-2-GOT-Global-Offset-Table" class="headerlink" title="3.1.2 GOT(Global Offset Table)"></a>3.1.2 GOT(Global Offset Table)</h4><blockquote>
+<p>&#x5168;&#x5C40;&#x504F;&#x79FB;&#x8868;&#xFF0C;&#x5728;&#x7A0B;&#x5E8F;&#x4E2D;&#x4EE5;<code>.gpt</code>&#x548C;<code>.got.plt</code>&#x8282;&#x533A;&#x8868;&#x793A;&#xFF0C;&#x5B58;&#x653E;&#x4E8E;&#x6570;&#x636E;&#x6BB5;&#xFF0C;&#x53EF;&#x8BFB;&#x53EF;&#x5199;&#xFF0C;&#x6BCF;&#x4E00;&#x4E2A;&#x8868;&#x9879;&#x5B58;&#x50A8;&#x7684;&#x90FD;&#x662F;&#x4E00;&#x4E2A;&#x5730;&#x5740;&#xFF0C;&#x6BCF;&#x4E2A;&#x8868;&#x9879;&#x7684;&#x957F;&#x5EA6;&#x90FD;&#x662F;&#x5F53;&#x524D;&#x7A0B;&#x5E8F;&#x5BF9;&#x5E94;&#x7684;&#x9700;&#x8981;&#x5BFB;&#x5740;&#x7684;&#x957F;&#x5EA6;(32&#x4F4D;&#x7A0B;&#x5E8F;:4&#x4E2A;&#x5B57;&#x8282;&#xFF0C;64&#x4F4D;&#x7A0B;&#x5E8F;8&#x4E2A;&#x5B57;&#x8282;)</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GOT[0]  --&gt; &#x6B64;&#x5904;&#x5B58;&#x653E;&#x7684;&#x662F; .dynamic &#x7684;&#x5730;&#x5740;&#xFF1B;&#x8BE5;&#x8282;(&#x6BB5;)&#x7684;&#x4F5C;&#x7528;&#x4F1A;&#x5728;&#x4E0B;&#x6587;&#x8BA8;&#x8BBA;</span><br><span class="line">GOT[1]  --&gt; &#x6B64;&#x5904;&#x5B58;&#x653E;&#x7684;&#x662F; link_map &#x7684;&#x5730;&#x5740;&#xFF1B;&#x8BE5;&#x7ED3;&#x6784;&#x4E5F;&#x4F1A;&#x5728;&#x4E0B;&#x6587;&#x8BA8;&#x8BBA;</span><br><span class="line">GOT[2]  --&gt; &#x6B64;&#x5904;&#x5B58;&#x653E;&#x7684;&#x662F; dl_runtime_resolve &#x51FD;&#x6570;&#x7684;&#x5730;&#x5740;</span><br><span class="line">GOT[3]  --&gt; &#x4E0E; PLT[1] &#x5BF9;&#x5E94;&#xFF0C;&#x5B58;&#x653E;&#x7684;&#x662F;&#x4E0E;&#x8BE5;&#x8868;&#x9879; (PLT[1]) &#x8981;&#x89E3;&#x6790;&#x7684;&#x51FD;&#x6570;&#x76F8;&#x5173;&#x5730;&#x5740;&#xFF0C;</span><br><span class="line">            &#x7531;&#x4E8E;&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;&#x7684;&#x539F;&#x56E0;&#xFF0C;&#x5F00;&#x59CB;&#x672A;&#x8C03;&#x7528;&#x5BF9;&#x5E94;&#x51FD;&#x6570;&#x65F6;&#x8BE5;&#x9879;&#x5B58;&#x7684;&#x662F; PLT[1] &#x4E2D;&#x7B2C;&#x4E8C;&#x6761;&#x6307;&#x4EE4;&#x7684;&#x5730;&#x5740;&#xFF0C;</span><br><span class="line">            &#x5F53;&#x8FDB;&#x884C;&#x5B8C;&#x4E00;&#x6B21;&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;&#x4E4B;&#x540E;&#x5B58;&#x653E;&#x7684;&#x624D;&#x662F;&#x6240;&#x8981;&#x89E3;&#x6790;&#x7684;&#x51FD;&#x6570;&#x7684;&#x771F;&#x5B9E;&#x5730;&#x5740;</span><br><span class="line">GOT[4]  --&gt; &#x4E0E; PLT[2] &#x5BF9;&#x5E94;&#xFF0C;&#x6240;&#x4EE5;&#x5B58;&#x653E;&#x7684;&#x662F;&#x4E0E; PLT[2] &#x6240;&#x89E3;&#x6790;&#x7684;&#x51FD;&#x6570;&#x76F8;&#x5173;&#x7684;&#x5730;&#x5740;</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line"> .</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-3-&#x8868;&#x4E0E;&#x8868;&#x4E4B;&#x95F4;&#x7684;&#x5173;&#x7CFB;"><a href="#3-1-3-&#x8868;&#x4E0E;&#x8868;&#x4E4B;&#x95F4;&#x7684;&#x5173;&#x7CFB;" class="headerlink" title="3.1.3 &#x8868;&#x4E0E;&#x8868;&#x4E4B;&#x95F4;&#x7684;&#x5173;&#x7CFB;"></a>3.1.3 &#x8868;&#x4E0E;&#x8868;&#x4E4B;&#x95F4;&#x7684;&#x5173;&#x7CFB;</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GOT[0]: .dynamic &#x5730;&#x5740;                    PLT[0]: &#x4E0E;&#x6BCF;&#x4E2A;&#x51FD;&#x6570;&#x7B2C;&#x4E00;&#x6B21;&#x94FE;&#x63A5;&#x76F8;&#x5173;&#x6307;&#x4EE4;</span><br><span class="line">GOT[1]: link_map &#x5730;&#x5740;</span><br><span class="line">GOT[2]: dl_runtime_resolve &#x51FD;&#x6570;&#x5730;&#x5740;      </span><br><span class="line">GOT[3]  --&gt;  PLT[1]    // &#x4E00;&#x4E00;&#x5BF9;&#x5E94;</span><br><span class="line">GOT[4]  --&gt;  PLT[2]    // &#x76F8;&#x4E92;&#x534F;&#x540C;&#xFF0C;&#x4F5C;&#x7528;&#x4E8E;&#x4E00;&#x4E2A;&#x51FD;&#x6570;</span><br><span class="line">GOT[5]  --&gt;  PLT[3]    // &#x4E00;&#x4E2A;&#x4FDD;&#x5B58;&#x7684;&#x662F;&#x8BE5;&#x51FD;&#x6570;&#x6240;&#x9700;&#x8981;&#x7684;&#x5EF6;&#x8FDF;&#x7ED1;&#x5B9A;&#x7684;&#x6307;&#x4EE4;</span><br><span class="line">GOT[6]  --&gt;  PLT[4]    // &#x4E00;&#x4E2A;&#x662F;&#x4FDD;&#x5B58;&#x4E2A;&#x8BE5;&#x51FD;&#x6570;&#x94FE;&#x63A5;&#x6240;&#x9700;&#x8981;&#x7684;&#x5730;&#x5740;</span><br><span class="line"> .             .</span><br><span class="line"> .             .</span><br><span class="line"> .             .</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-&#x4E09;&#x4E2A;&#x8282;"><a href="#3-2-&#x4E09;&#x4E2A;&#x8282;" class="headerlink" title="3.2 &#x4E09;&#x4E2A;&#x8282;"></a>3.2 &#x4E09;&#x4E2A;&#x8282;</h3><h4 id="3-2-1-dynamic"><a href="#3-2-1-dynamic" class="headerlink" title="3.2.1 .dynamic"></a>3.2.1 .dynamic</h4><blockquote>
+<p>&#x52A0;&#x8F7D;&#x7684;&#x65F6;&#x5019;<code>.dynamic</code>&#x8282;&#x533A;&#x4E5F;&#x662F;<code>.dynamic</code>&#x6BB5;&#xFF0C;&#x8FD9;&#x90E8;&#x5206;&#x4E3B;&#x8981;&#x4E0E;&#x52A8;&#x6001;&#x94FE;&#x63A5;&#x7684;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x6709;&#x5173;&#xFF0C;&#x4FDD;&#x5B58;&#x7684;&#x662F;&#x4E0E;&#x52A8;&#x6001;&#x94FE;&#x63A5;&#x76F8;&#x5173;&#x7684;&#x4FE1;&#x606F;&#x3002;</p>
+<p>&#x901A;&#x8FC7;<code>.dynamic</code>&#x80FD;&#x591F;&#x627E;&#x5230;&#x4E0E;&#x52A8;&#x6001;&#x94FE;&#x63A5;&#x76F8;&#x5173;&#x7684;&#x5176;&#x4ED6;&#x8282;&#x533A;(<code>.dynsym</code>,<code>.dynstr</code>,<code>.rel.plt</code>&#x7B49;&#x8282;&#x533A;)</p>
+</blockquote>
+<p>&#x7ED3;&#x6784;&#xFF1A;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Elf64_Dyn</span> {</span></span><br><span class="line">    Elf64_Sxword d_tag;		<span class="comment">// type of dynamic table entry</span></span><br><span class="line">    						<span class="comment">// &#x8BC6;&#x522B;&#x8BE5;&#x7ED3;&#x6784;&#x4F53;&#x8868;&#x793A;&#x54EA;&#x4E00;&#x8282;&#xFF0C;&#x901A;&#x8FC7;&#x8FD9;&#x4E2A;&#x5B57;&#x6BB5;&#x80FD;&#x591F;&#x5BFB;&#x627E;&#x4E0D;&#x540C;&#x8282;&#x533A;</span></span><br><span class="line">    <span class="keyword">union</span> {</span><br><span class="line">        Elf64_Xword d_val;	<span class="comment">// Integer value of entry</span></span><br><span class="line">        					<span class="comment">// &#x5BF9;&#x5E94;&#x8868;&#x5728;&#x6587;&#x4EF6;&#x4E2D;&#x7684;&#x504F;&#x79FB;&#x5730;&#x5740;</span></span><br><span class="line">        Elf64_Addr  d_ptr;	<span class="comment">// Pointer value of entry</span></span><br><span class="line">    } d_un;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-2-dynsym"><a href="#3-2-2-dynsym" class="headerlink" title="3.2.2 .dynsym"></a>3.2.2 .dynsym</h4><blockquote>
+<p>&#x52A8;&#x6001;&#x7B26;&#x53F7;&#x8868;&#xFF0C;&#x5B58;&#x50A8;&#x7740;&#x5728;&#x52A8;&#x6001;&#x94FE;&#x63A5;&#x4E2D;&#x9700;&#x8981;&#x7684;&#x6BCF;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x7B26;&#x53F7;&#x4FE1;&#x606F;&#xFF0C;&#x6BCF;&#x4E2A;&#x7ED3;&#x6784;&#x4F53;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A;&#x7B26;&#x53F7;&#xFF0C;&#x7ED3;&#x6784;&#x4F53;&#x6570;&#x7EC4;,<code>d_tag = DT_SYMTAB(0x06)</code> </p>
+<ul>
+<li><code>.symtab</code>&#x5728;&#x8FD0;&#x884C;&#x65F6;&#x4F1A;&#x5C06;&#x8FD0;&#x884C;&#x65F6;&#x9700;&#x8981;&#x7684;&#x7B26;&#x53F7;&#x8868;&#x590D;&#x5236;&#x4E00;&#x4EFD;&#x5230;<code>.dynsym</code>&#xFF0C;&#x800C;&#x4E0D;&#x9700;&#x8981;&#x7684;&#x5E76;&#x4E0D;&#x9700;&#x8981;&#x52A0;&#x8F7D;&#x8FDB;&#x5185;&#x5B58;&#xFF0C;&#x56E0;&#x6B64;&#x53EF;&#x4EE5;&#x4F18;&#x5316;</li>
+<li>&#x540C;&#x7406;<code>strtab</code>&#x4E5F;&#x53EF;&#x4EE5;&#x4F18;&#x5316;</li>
+</ul>
+</blockquote>
+<p>&#x7ED3;&#x6784;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    Elf64_Word st_name;	<span class="comment">// Symbol name(String table index)</span></span><br><span class="line">    					<span class="comment">// &#x4FDD;&#x5B58;&#x4E86;&#x51FD;&#x6570;&#x540D;&#x5728;.dynstr&#x4E2D;&#x7684;&#x504F;&#x79FB;&#xFF0C;&#x7ED3;&#x5408;.dynstr&#x53EF;&#x4EE5;&#x627E;&#x5230;&#x51C6;&#x786E;&#x7684;&#x51FD;&#x6570;&#x540D;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> st_info;	<span class="comment">// Synbol type and binding</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> st_other; <span class="comment">// Symbol visibility</span></span><br><span class="line">    Elf64_Section st_shndx;	<span class="comment">// Section index</span></span><br><span class="line">    Elf64_Addr	  st_value; <span class="comment">// Symbol value</span></span><br><span class="line">    						<span class="comment">// &#x5982;&#x679C;&#x7B26;&#x53F7;&#x88AB;&#x5BFC;&#x51FA;&#xFF0C;&#x5219;&#x5B58;&#x5728;&#x8FD9;&#x4E2A;&#x5BFC;&#x51FA;&#x51FD;&#x6570;&#x7684;&#x865A;&#x62DF;&#x5730;&#x5740;&#xFF0C;&#x5426;&#x5219;&#x4E3A;null</span></span><br><span class="line">    Elf64_Xword	  st_size;	<span class="comment">// Symbol size</span></span><br><span class="line">} Elf64_Sym;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-3-dynstr"><a href="#3-2-3-dynstr" class="headerlink" title="3.2.3 .dynstr"></a>3.2.3 .dynstr</h4><blockquote>
+<p>&#x52A8;&#x6001;&#x5B57;&#x7B26;&#x4E32;&#x8868;&#xFF0C;&#x5B58;&#x653E;&#x4E86;&#x4E00;&#x7CFB;&#x5217;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x8868;&#x793A;&#x4E86;&#x7B26;&#x53F7;&#x7684;&#x540D;&#x79F0;&#xFF0C;&#x662F;&#x4E00;&#x7EC4;&#x5B57;&#x7B26;&#x4E32;&#x6570;&#x7EC4;&#xFF0C;<code>d_tag = DT_STRTAB(0x05)</code></p>
+<ul>
+<li><code>strtab</code>&#x5728;&#x8FD0;&#x884C;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x5C06;&#x8FD0;&#x884C;&#x65F6;&#x9700;&#x8981;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x8D4B;&#x503C;&#x5230;<code>.dynstr</code>&#xFF0C;&#x6240;&#x4EE5;<code>strtab</code>&#x53EF;&#x4EE5;&#x4F18;&#x5316;</li>
+</ul>
+</blockquote>
+<h4 id="3-2-4-rel-plt-rela-plt"><a href="#3-2-4-rel-plt-rela-plt" class="headerlink" title="3.2.4 .rel.plt(.rela.plt)"></a>3.2.4 .rel.plt(.rela.plt)</h4><blockquote>
+<p>&#x91CD;&#x5B9A;&#x4F4D;&#x8868;&#xFF0C;&#x4FDD;&#x5B58;&#x4E86;&#x91CD;&#x5B9A;&#x4F4D;&#x76F8;&#x5173;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x63CF;&#x8FF0;&#x4E86;&#x5982;&#x4F55;&#x5728;&#x94FE;&#x63A5;&#x6216;&#x8005;&#x8FD0;&#x884C;&#x65F6;&#xFF0C;&#x5BF9;ELF&#x76EE;&#x6807;&#x6587;&#x4EF6;&#x7684;&#x67D0;&#x90E8;&#x5206;&#x5185;&#x5BB9;&#x6216;&#x8005;&#x8FDB;&#x7A0B;&#x955C;&#x50CF;&#x8FDB;&#x884C;&#x8865;&#x5145;&#x548C;&#x4FEE;&#x6539;</p>
+<p>&#x6BCF;&#x4E2A;&#x7ED3;&#x6784;&#x4F53;&#x4E5F;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A;&#x9700;&#x8981;&#x91CD;&#x5B9A;&#x4F4D;&#x7684;&#x51FD;&#x6570;&#xFF0C;<code>d_tag = DT_REL(0x11)/DT_RELA(0x7)</code></p>
+</blockquote>
+<p>&#x7ED3;&#x6784;:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">    Elf64_Addr	r_offset;	<span class="comment">// Address</span></span><br><span class="line">    						<span class="comment">// &#x89E3;&#x6790;&#x5B8C;&#x7684;&#x51FD;&#x6570;&#x7684;&#x771F;&#x662F;&#x5730;&#x5740;&#x5B58;&#x653E;&#x7684;&#x4F4D;&#x7F6E;</span></span><br><span class="line">    						<span class="comment">// &#x5BF9;&#x5E94;&#x89E3;&#x6790;&#x51FD;&#x6570;&#x7684;GOT&#x8868;&#x9879;&#x5730;&#x5740;</span></span><br><span class="line">    Elf64_Xword r_info;		<span class="comment">// Relocation type and symbol index</span></span><br><span class="line">    						<span class="comment">// &#x9AD8;&#x4F4D;&#x8868;&#x793A;&#x7D22;&#x5F15;&#xFF0C;&#x4F4E;&#x4F4D;&#x8868;&#x793A;&#x4FE1;&#x606F;</span></span><br><span class="line">} Elf64_Rel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> {</span></span><br><span class="line">   Elf32_Addr    r_offset;  <span class="comment">/* Address */</span></span><br><span class="line">   Elf32_Word    r_info;    <span class="comment">/* Relocation type and symbol index */</span></span><br><span class="line">   Elf32_Sword   r_addend;  <span class="comment">/* Addend */</span></span><br><span class="line"> } Elf32_Rela;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-&#x94FE;&#x63A5;&#x8FC7;&#x7A0B;"><a href="#3-3-&#x94FE;&#x63A5;&#x8FC7;&#x7A0B;" class="headerlink" title="3.3 &#x94FE;&#x63A5;&#x8FC7;&#x7A0B;"></a>3.3 &#x94FE;&#x63A5;&#x8FC7;&#x7A0B;</h3><p><img src="/2020/04/21/&#x51FD;&#x6570;&#x6808;&#x8C03;&#x7528;&#x89E3;&#x6790;&#x590D;&#x4E60;/1586185898823.png" alt="1586185898823"></p>
+<blockquote>
+<p>&#x4E3B;&#x8981;&#x51FD;&#x6570;&#x662F; <code>dl_runtime__resolve(link_map_obj, reloc_arg)</code></p>
+<p>&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x662F;&#x4E00;&#x4E2A;link_map</p>
+<p>&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#x662F;&#x4E00;&#x4E2A;&#x91CD;&#x5B9A;&#x4F4D;&#x53C2;&#x6570;&#xFF0C;&#x5373;&#x5728;&#x8FD0;&#x884C;PLT&#x4EE3;&#x7801;&#x65F6;push&#x8FDB;&#x53BB;&#x7684;n</p>
+<p>&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x4E3B;&#x8981;&#x662F;&#x8C03;&#x7528;&#x4E86;&#x4E00;&#x4E2A;<code>dl_fixup(link_map_obj, reloc_arg)</code>&#x7ED3;&#x6784;&#x5B8C;&#x6210;&#x4E3B;&#x8981;&#x529F;&#x80FD;</p>
+<p>&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x4F5C;&#x7528;&#x662F;&#x83B7;&#x5F97;&#x91CD;&#x5B9A;&#x4F4D;&#x51FD;&#x6570;&#x6240;&#x5728;&#x7684;library&#x7684;&#x57FA;&#x5740;&#x5730;&#x5740;&#xFF0C;&#x4EE5;&#x53CA;&#x6216;&#x8BB8;&#x5728;library&#x4E2D;&#x5BFB;&#x627E;&#x91CD;&#x5B9A;&#x4F4D;&#x51FD;&#x6570;&#x65F6;&#x6240;&#x9700;&#x8981;&#x7684;Section&#x3002;</p>
+<p> &#x7B2C;&#x4E8C;&#x4E2A;&#x51FD;&#x6570;&#x4E3B;&#x8981;&#x662F;&#x786E;&#x5B9A;&#x9700;&#x8981;&#x89E3;&#x6790;&#x7684;&#x51FD;&#x6570;&#x540D;&#xFF0C;&#x4EE5;&#x53CA;&#x89E3;&#x6790;&#x5B8C;&#x4E4B;&#x540E;&#x5199;&#x56DE;&#x7684;&#x5730;&#x5740;&#x3002; </p>
+<p>&#x56E0;&#x6B64;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x5927;&#x6982;&#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x4E3A;&#xFF0C;dl_fixup&#xFF0C;&#x901A;&#x8FC7;reloc_arg&#x53C2;&#x6570;&#x786E;&#x5B9A;&#x5F53;&#x524D;&#x6B63;&#x5728;&#x89E3;&#x6790;&#x7684;&#x51FD;&#x6570;&#x540D;</p>
+<p>&#x7136;&#x540E;&#x62FF;&#x7740;&#x51FD;&#x6570;&#x540D;&#xFF0C;&#x5229;&#x7528;link_map&#x627E;&#x5230;<code>.dynsym</code> &#xFF0C;&#x7136;&#x540E;&#x8FDB;&#x884C;&#x51FD;&#x6570;&#x540D;&#x5339;&#x914D;&#xFF0C;&#x5982;&#x679C;&#x6210;&#x529F;&#xFF0C;&#x5219;&#x4ECE;<code>.dynsym</code>&#x4E2D;&#x83B7;&#x53D6;&#x5BF9;&#x5E94;&#x7B26;&#x53F7;&#x7684;&#x51FD;&#x6570;&#x5730;&#x5740;</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">reloc_arg : &#x51FD;&#x6570;&#x540D;A</span><br><span class="line">linkmap --&gt; .dynsym</span><br><span class="line">--&gt; &#x904D;&#x5386;&#x5339;&#x914D;&#x51FD;&#x6570;&#x540D;&#x79F0; A</span><br><span class="line">&#x82E5; &#x67D0;&#x4E00;&#x4E2A; Elf64_Sym(&#x7B26;&#x53F7;) &#x7684; st_name + .dynstr ==  A</span><br><span class="line">&#x5219; &#x8BE5; Elf64_Sym &#x8868;&#x793A;&#x7684;&#x7B26;&#x53F7;&#x5373;&#x4E3A;&#x51FD;&#x6570; A</span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x5B58;&#x5728;&#x4E00;&#x4E2A;&#x51FD;&#x6570;put,&#x5728;&#x7B2C;&#x4E00;&#x6B21;&#x6267;&#x884C;&#x7684;&#x65F6;&#x5019;&#x7ED1;&#x5B9A;&#x8FC7;&#x7A0B;&#x5982;&#x4E0B;:</p>
+<ol>
+<li><p>&#x8FDB;&#x5165;puts@plt,&#x6267;&#x884C;2&#x4E2D;&#x7684;case2:</p>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">case1:</span><br><span class="line">jump GOT[x] # address</span><br><span class="line"></span><br><span class="line">case2:</span><br><span class="line">push n</span><br><span class="line">jump PLT[0] # dynmic</span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PLT[0]:</span><br><span class="line">push GOT[1] # link_map</span><br><span class="line">jump GOT[2] # call dl_runtime_resolve(&#x6808;&#x4E0A;&#x7684;&#x53C2;&#x6570;&#x4E3A; n &#x4EE5;&#x53CA; link_map)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&#x4E0A;&#x9762;<code>dl_runtime_resolve</code>&#x51FD;&#x6570;&#x5F97;&#x5230;&#x7684;<code>puts</code>&#x51FD;&#x6570;&#x7684;&#x771F;&#x5B9E;&#x5730;&#x5740;&#x5199;&#x5165;GOT[x]</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/18/x86和arm上的调用约定/" rel="next" title="x86和arm上的调用约定">
+                <i class="fa fa-chevron-left"></i> x86和arm上的调用约定
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#函数栈调用解析复习"><span class="nav-number">1.</span> <span class="nav-text">函数栈调用解析复习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#复习参考资料"><span class="nav-number">1.1.</span> <span class="nav-text">复习参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-共性"><span class="nav-number">1.2.</span> <span class="nav-text">1 共性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-x86的函数调用"><span class="nav-number">1.3.</span> <span class="nav-text">2 x86的函数调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ARM"><span class="nav-number">1.4.</span> <span class="nav-text">2 ARM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-动态加载"><span class="nav-number">1.5.</span> <span class="nav-text">3 动态加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-两个表"><span class="nav-number">1.5.1.</span> <span class="nav-text">3.1 两个表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-PLT-Procedure-Linkage-Table"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">3.1.1 PLT(Procedure Linkage Table)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-GOT-Global-Offset-Table"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">3.1.2 GOT(Global Offset Table)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3-表与表之间的关系"><span class="nav-number">1.5.1.3.</span> <span class="nav-text">3.1.3 表与表之间的关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-三个节"><span class="nav-number">1.5.2.</span> <span class="nav-text">3.2 三个节</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-dynamic"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">3.2.1 .dynamic</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-dynsym"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">3.2.2 .dynsym</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-dynstr"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">3.2.3 .dynstr</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-4-rel-plt-rela-plt"><span class="nav-number">1.5.2.4.</span> <span class="nav-text">3.2.4 .rel.plt(.rela.plt)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-链接过程"><span class="nav-number">1.5.3.</span> <span class="nav-text">3.3 链接过程</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/21/函数栈调用解析复习/';
+          this.page.identifier = '2020/04/21/函数栈调用解析复习/';
+          this.page.title = '函数栈调用解析复习';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

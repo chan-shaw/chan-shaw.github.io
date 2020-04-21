@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,安全,逆向">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="xctf mobile区黑客精神题解">
+<meta name="keywords" content="android,安全,逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xctf-writeup-黑客精神">
+<meta property="og:url" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="xctf mobile区黑客精神题解">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587124866101.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587124932783.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587125025411.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587126060077.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587127356323.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587127452608.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587127607183.png">
+<meta property="og:updated_time" content="2020-04-17T13:17:19.495Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="xctf-writeup-黑客精神">
+<meta name="twitter:description" content="xctf mobile区黑客精神题解">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/1587124866101.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/">
+
+
+
+
+
+  <title>xctf-writeup-黑客精神 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">xctf-writeup-黑客精神</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-17T19:55:11+08:00">
+                2020-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/crackme/" itemprop="url" rel="index">
+                    <span itemprop="name">crackme</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/17/xctf-writeup-黑客精神/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/17/xctf-writeup-黑客精神/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/17/xctf-writeup-黑客精神/" class="leancloud_visitors" data-flag-title="xctf-writeup-黑客精神">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  xctf mobile区黑客精神题解
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;-&#x89E3;&#x9898;&#x62A5;&#x544A;"><a href="#&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;-&#x89E3;&#x9898;&#x62A5;&#x544A;" class="headerlink" title="&#x9ED1;&#x5BA2;&#x7CBE;&#x795E; &#x89E3;&#x9898;&#x62A5;&#x544A;"></a>&#x9ED1;&#x5BA2;&#x7CBE;&#x795E; &#x89E3;&#x9898;&#x62A5;&#x544A;</h1><blockquote>
+<p>&#x6253;&#x5F00;apk&#xFF0C; &#x4F9D;&#x6B21;&#x70B9;&#x4E0B;&#x53BB;&#xFF0C;&#x968F;&#x4FBF;&#x8F93;&#x5165;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x70B9;&#x4FDD;&#x5B58;&#xFF0C;&#x76F4;&#x63A5;&#x9000;&#x51FA;&#x4E86;</p>
+</blockquote>
+<p>JEB &#x6253;&#x5F00;</p>
+<p><img src="/2020/04/17/xctf-writeup-&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;/1587124866101.png" alt="1587124866101"></p>
+<p>&#x5BF9;<code>m</code>&#x8FDB;&#x884C;&#x5224;&#x65AD;&#xFF0C;&#x672A;&#x6CE8;&#x518C;&#x6216;&#x8005;&#x5DF2;&#x7ECF;&#x6CE8;&#x518C;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6CE8;&#x518C;&#x5219;&#x8FDB;&#x884C;&#x6CE8;&#x518C;</p>
+<p><img src="/2020/04/17/xctf-writeup-&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;/1587124932783.png" alt="1587124932783"></p>
+<p>&#x4FDD;&#x5B58;sn, &#x76F4;&#x63A5;&#x9000;&#x51FA;</p>
+<p>&#x770B;MyApp</p>
+<p><img src="/2020/04/17/xctf-writeup-&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;/1587125025411.png" alt="1587125025411"></p>
+<p>IDA&#x6253;&#x5F00;:</p>
+<p><img src="/2020/04/17/xctf-writeup-&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;/1587126060077.png" alt="1587126060077"></p>
+<p>&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x51FD;&#x6570;</p>
+<p>initSN,saveSn,work</p>
+<h3 id="initSN"><a href="#initSN" class="headerlink" title="initSN"></a>initSN</h3><p><img src="/2020/04/17/xctf-writeup-&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;/1587127356323.png" alt="1587127356323"></p>
+<p>&#x6253;&#x5F00;reg.data&#xFF0C;&#x548C;EoPAoY62@ElRD&#x6BD4;&#x8F83;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x5C31;&#x65B0;&#x5EFA;</p>
+<h3 id="saveSN"><a href="#saveSN" class="headerlink" title="saveSN"></a>saveSN</h3><p><img src="/2020/04/17/xctf-writeup-&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;/1587127452608.png" alt="1587127452608"></p>
+<p>&#x5BF9;reg.data&#x7684;&#x5904;&#x7406;</p>
+<h3 id="work"><a href="#work" class="headerlink" title="work"></a>work</h3><p><img src="/2020/04/17/xctf-writeup-&#x9ED1;&#x5BA2;&#x7CBE;&#x795E;/1587127607183.png" alt="1587127607183"></p>
+<h3 id="&#x634B;&#x4E00;&#x4E0B;"><a href="#&#x634B;&#x4E00;&#x4E0B;" class="headerlink" title="&#x634B;&#x4E00;&#x4E0B;"></a>&#x634B;&#x4E00;&#x4E0B;</h3><ol>
+<li>&#x62FF;&#x5230;m&#xFF0C;&#x5224;&#x65AD;&#x503C;&#xFF0C;&#x5982;&#x679C;&#x4E3A;0 &#x6CE8;&#x518C;&#xFF0C;&#x8FDB;&#x5165;2&#xFF0C;&#x5982;&#x679C;&#x4E3A;1&#xFF0C;&#x8C03;&#x7528;work&#xFF0C;&#x8F93;&#x51FA;&#xFF0C;&#x5728;work&#x91CC;&#xFF0C;m = 1 &#xFF0C;&#x8868;&#x793A;&#x8F93;&#x5165;&#x5373;&#x4E3A;flag</li>
+<li>&#x6CE8;&#x518C;&#x7684;&#x65F6;&#x5019;&#x8C03;&#x7528;saveSN,&#x5C06;&#x8F93;&#x5165;&#x7684;&#x6587;&#x4EF6;&#x7ECF;&#x8FC7;&#x4E00;&#x7CFB;&#x5217;&#x5904;&#x7406;&#x4E4B;&#x540E;&#x8FD8;&#x662F;&#x5B58;&#x5728;<code>/sdcard/reg.dat</code></li>
+<li>saveSN&#x5728;<code>myApp</code>&#x8FD9;&#x4E2A;Application&#x4E2D;&#xFF0C;&#x521B;&#x5EFA;&#x7684;&#x65F6;&#x5019;&#x8C03;&#x7528;initSN,&#x5982;&#x679C;&#x6587;&#x4EF6;&#x4E0D;&#x5B58;&#x5728;&#xFF0C;&#x65B0;&#x5EFA;&#xFF0C;&#x5E76;&#x548C;<code>EoPAoY62@ElRD</code>&#x6BD4;&#x8F83;&#xFF0C;&#x5982;&#x679C;&#x76F8;&#x7B49;,setValue</li>
+<li>&#x5728;work&#x91CC;&#x9762;&#x53EF;&#x4EE5;&#x5C31;&#x770B;&#x5230;&#x7ED3;&#x679C;&#x6B63;&#x786E;</li>
+</ol>
+<p>&#x6240;&#x4EE5;&#x89E3;&#x9898;&#x6B65;&#x9AA4;&#xFF0C;&#x8F93;&#x5165;<code>EoPAoY62@ElRD</code>&#xFF0C;&#x70B9;&#x51FB;&#x6CE8;&#x518C;&#xFF0C;</p>
+<p>&#x5728;<code>sdcard/reg.data</code>&#x91CC;&#x9762;&#x62FF;&#x5230;&#x7ED3;&#x679C;&#xFF0C;&#x52A0;&#x4E0A;<code>xman{}</code>&#xFF0C;&#x5373;&#x662F;&#x6700;&#x7EC8;&#x7ED3;&#x679C;</p>
+<h2 id="&#x8865;&#x5145;"><a href="#&#x8865;&#x5145;" class="headerlink" title="&#x8865;&#x5145;"></a>&#x8865;&#x5145;</h2><p>&#x5206;&#x6790;<code>saveSN</code>&#x8FC7;&#x7A0B;&#x62FF;&#x5230;&#x7ED3;&#x679C;</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">env = <span class="string">&quot;EoPAoY62@ElRD&quot;</span></span><br><span class="line">str1 = <span class="string">&quot;W3_arE_whO_we_ARE&quot;</span></span><br><span class="line"></span><br><span class="line">flag = <span class="string">&quot;&quot;</span></span><br><span class="line">v9 = <span class="number">2016</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> v10 <span class="keyword">in</span> range(len(env)):</span><br><span class="line">    <span class="keyword">if</span> v10 % <span class="number">3</span> == <span class="number">1</span>:</span><br><span class="line">        v9 = (v9 + <span class="number">5</span>) % <span class="number">16</span></span><br><span class="line">        v11 = str1[v9 + <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">elif</span> v10 % <span class="number">3</span> == <span class="number">2</span>:</span><br><span class="line">        v9 = (v9 + <span class="number">7</span>) % <span class="number">15</span></span><br><span class="line">        v11 = str1[v9 + <span class="number">2</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        v9 = (v9 + <span class="number">3</span>) % <span class="number">13</span></span><br><span class="line">        v11 = str1[v9 + <span class="number">3</span>]</span><br><span class="line">    flag += chr(ord(env[v10]) ^ ord(v11))</span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/writeup-xctf/" rel="tag"># writeup,xctf</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/17/xctf-writeup-app2/" rel="next" title="xctf-writeup-app2">
+                <i class="fa fa-chevron-left"></i> xctf-writeup-app2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/17/xctf-writeup-easydex/" rel="prev" title="xctf-writeup-easydex">
+                xctf-writeup-easydex <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#黑客精神-解题报告"><span class="nav-number">1.</span> <span class="nav-text">黑客精神 解题报告</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#initSN"><span class="nav-number">1.0.1.</span> <span class="nav-text">initSN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#saveSN"><span class="nav-number">1.0.2.</span> <span class="nav-text">saveSN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#work"><span class="nav-number">1.0.3.</span> <span class="nav-text">work</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#捋一下"><span class="nav-number">1.0.4.</span> <span class="nav-text">捋一下</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充"><span class="nav-number">1.1.</span> <span class="nav-text">补充</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/17/xctf-writeup-黑客精神/';
+          this.page.identifier = '2020/04/17/xctf-writeup-黑客精神/';
+          this.page.title = 'xctf-writeup-黑客精神';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
