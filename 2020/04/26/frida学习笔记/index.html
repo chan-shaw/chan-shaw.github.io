@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="1VSb7KgXA34WGgoVKCCkrkEMjx1Vq8uwVB6FC3iUGV8">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="frida">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在学frida挺有意思的工具,记录一下吧">
+<meta name="keywords" content="frida">
+<meta property="og:type" content="article">
+<meta property="og:title" content="frida学习笔记">
+<meta property="og:url" content="http://yoursite.com/2020/04/26/frida学习笔记/index.html">
+<meta property="og:site_name" content="安和桥南丶的博客">
+<meta property="og:description" content="在学frida挺有意思的工具,记录一下吧">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-05-02T08:20:13.631Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="frida学习笔记">
+<meta name="twitter:description" content="在学frida挺有意思的工具,记录一下吧">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/26/frida学习笔记/">
+
+
+
+
+
+  <title>frida学习笔记 | 安和桥南丶的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-149847357-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">安和桥南丶的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/frida学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="安河桥南丶">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="安和桥南丶的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">frida学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-26T16:22:20+08:00">
+                2020-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/26/frida学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/26/frida学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/26/frida学习笔记/" class="leancloud_visitors" data-flag-title="frida学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  在学frida挺有意思的工具,记录一下吧
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="frida-&#x5B66;&#x4E60;&#x7B14;&#x8BB0;"><a href="#frida-&#x5B66;&#x4E60;&#x7B14;&#x8BB0;" class="headerlink" title="frida &#x5B66;&#x4E60;&#x7B14;&#x8BB0;"></a>frida &#x5B66;&#x4E60;&#x7B14;&#x8BB0;</h1><blockquote>
+<p><a href="https://frida.re/docs/frida-ps/" target="_blank" rel="noopener">&#x5B98;&#x7F51;</a></p>
+<p>&#x81EA;&#x7528;&#x73AF;&#x5883;:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x7535;&#x8111;: Mircrosoft Windows10 &#x7248;&#x672C;1909 (OS&#x5185;&#x90E8;&#x7248;&#x672C; 18353.778)</span><br><span class="line">&gt; &#x7EC8;&#x7AEF;: &#x96F7;&#x7535;&#x6A21;&#x62DF;&#x5668;4 android 7.1.2 x86&#x67B6;&#x6784;(&#x865A;&#x62DF;&#x673A;&#x5B9E;&#x9645;&#x4E0A;&#x662F;&#x7535;&#x8111;cpu)</span><br><span class="line">&gt; frida&#x7248;&#x672C;: 12.8.20</span><br><span class="line">&gt; Python&#x7248;&#x672C;: Python 3.7.7</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="1-&#x5B89;&#x88C5;"><a href="#1-&#x5B89;&#x88C5;" class="headerlink" title="1 &#x5B89;&#x88C5;"></a>1 &#x5B89;&#x88C5;</h2><h3 id="1-1-&#x7535;&#x8111;&#x5B89;&#x88C5;frida"><a href="#1-1-&#x7535;&#x8111;&#x5B89;&#x88C5;frida" class="headerlink" title="1.1 &#x7535;&#x8111;&#x5B89;&#x88C5;frida"></a>1.1 &#x7535;&#x8111;&#x5B89;&#x88C5;frida</h3><blockquote>
+<p>&#x56E0;&#x4E3A;&#x535A;&#x5BA2;&#x662F;&#x7528;&#x7684;hexo&#xFF0C;&#x6240;&#x4EE5;&#x7535;&#x8111;&#x91CC;&#x4E4B;&#x524D;&#x662F;&#x6709;node.js&#x548C;npm&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x5F88;&#x5947;&#x602A;&#xFF0C;&#x4F7F;&#x7528;npm&#x5B89;&#x88C5;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x540E;&#x9762;&#x8FD8;&#x662F;&#x9009;&#x62E9;&#x7684;python</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ py -3 -m pip install frida</span><br><span class="line">$ py -3 -m pip install frida-tools</span><br></pre></td></tr></table></figure>
+
+<p>&#x56E0;&#x4E3A;&#x7535;&#x8111;&#x91CC;&#x6709;&#x4E24;&#x4E2A;&#x7248;&#x672C;&#x7684;python&#xFF0C;&#x4E14;&#x65B0;&#x7684;PowerShell&#x652F;&#x6301;&#x9009;&#x62E9;python&#x7248;&#x672C;&#xFF0C;&#x6240;&#x4EE5;&#x6709;&#x4E00;&#x70B9;&#x5FAE;&#x5C0F;&#x7684;&#x533A;&#x522B;&#x3002;</p>
+<h3 id="1-2-&#x624B;&#x673A;&#x5B89;&#x88C5;frida-server"><a href="#1-2-&#x624B;&#x673A;&#x5B89;&#x88C5;frida-server" class="headerlink" title="1.2 &#x624B;&#x673A;&#x5B89;&#x88C5;frida server"></a>1.2 &#x624B;&#x673A;&#x5B89;&#x88C5;frida server</h3><p><a href="https://github.com/frida/frida/releases" target="_blank" rel="noopener">&#x4ED3;&#x5E93;&#x5730;&#x5740;</a></p>
+<p>&#x9009;&#x62E9;&#x5BF9;&#x5E94;frida&#x7248;&#x672C;&#x548C;&#x7EC8;&#x7AEF;&#x578B;&#x53F7;&#x7684;frida-server,&#x4E0B;&#x8F7D;</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> adb push frida-server /data/<span class="built_in">local</span>/tmp</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> adb shell</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> /data/<span class="built_in">local</span>/tmp</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> chmod 755 frida-server</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./frida-server[&amp;]		<span class="comment"># &#x540E;&#x9762;&#x52A0;&#x4E00;&#x4E2A;&amp;&#x4E4B;&#x540E; &#x8868;&#x793A;&#x4F7F;&#x7528;&#x540E;&#x53F0;&#x8FDB;&#x7A0B;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> adb forward tcp:27042 tcp:27042</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> adb forward tcp:27043 tcp:27043</span></span><br></pre></td></tr></table></figure>
+
+<p>&#x4E4B;&#x540E;&#x5C31;&#x53EF;&#x4EE5;&#x6109;&#x5FEB;&#x7684;&#x73A9;&#x800D;&#x4E86;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ frida-ps -U</span><br></pre></td></tr></table></figure>
+
+<p>&#x5982;&#x679C;&#x80FD;&#x770B;&#x89C1;PID&#x548C;&#x5BF9;&#x5E94;&#x7684;name&#xFF0C;&#x5219;&#x8BF4;&#x660E;&#x6210;&#x529F;&#x5B89;&#x88C5;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ frida-trace -U -i open com.android.chrome</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Tools"><a href="#2-Tools" class="headerlink" title="2 Tools"></a>2 Tools</h2><h3 id="2-1-frida-CLI"><a href="#2-1-frida-CLI" class="headerlink" title="2.1 frida CLI"></a>2.1 frida CLI</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Connect Frida to an Android over USB and start debugging APP</span></span><br><span class="line">$ frida -U com.example.yaphetshan.tencentgreat</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... and load helloWorld.js</span></span><br><span class="line">$ frida -U com.example.yaphetshan.tencentgreat -l helloworld.ls</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... and load calc.js with the debugger enabled</span></span><br><span class="line">$ frida -U com.example.yaphetshan.tencentgreat -l helloworld.ls --debug</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-frida-ps"><a href="#2-2-frida-ps" class="headerlink" title="2.2 frida-ps"></a>2.2 frida-ps</h3><blockquote>
+<p>&#x5217;&#x51FA;&#x8FDB;&#x7A0B;&#x7684;&#x547D;&#x4EE4;&#x884C;&#x5DE5;&#x5177;&#xFF0C;&#x5728;&#x4E0E;&#x8FDC;&#x7A0B;&#x7CFB;&#x7EDF;&#x4EA4;&#x4E92;&#x65F6;&#x5F88;&#x6709;&#x7528;</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Connect Frida to an Android over USB and list running processes</span></span><br><span class="line">$ frida-ps -U</span><br><span class="line"></span><br><span class="line"><span class="comment"># List running applications</span></span><br><span class="line">$ frida-ps -Ua</span><br><span class="line"></span><br><span class="line"><span class="comment"># List installed applications</span></span><br><span class="line">$ frida-ps -Uai</span><br><span class="line"></span><br><span class="line"><span class="comment"># Connect Frida to the specific device</span></span><br><span class="line">$ frida-ps -D 0216027d1d6d3a03</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-frida-trace"><a href="#2-3-frida-trace" class="headerlink" title="2.3 frida-trace"></a>2.3 frida-trace</h3><blockquote>
+<p>&#x7528;&#x4E8E;&#x52A8;&#x6001;&#x8DDF;&#x8E2A;&#x51FD;&#x6570;&#x8C03;&#x7528;</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x5177;&#x4F53;&#x4FE1;&#x606F;&#x4F7F;&#x7528;frida-trace -h&#x6765;&#x67E5;&#x770B;&#xFF0C;&#x4E00;&#x4E0B;&#x5217;&#x4E3E;&#x5E38;&#x7528;&#x7684;&#x53C2;&#x6570;</span></span><br><span class="line">-U <span class="comment"># connect to USB device</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># frida &#x4E2D;&#x6709; {module:function} &#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x4E00;&#x4E2A;module&#x4E2D;&#x6709;&#x591A;&#x4E2A;function</span></span><br><span class="line">-I/-X <span class="comment"># include/exclude module</span></span><br><span class="line">-i/-x <span class="comment"># include/exclude function</span></span><br><span class="line"><span class="comment"># eg: &#x5047;&#x5B9A;&#x60F3;&#x5339;&#x914D;&#x6240;&#x6709;`str*` &#x548C;`mem*` &#x65B9;&#x6CD5;</span></span><br><span class="line"><span class="comment"># &#x800C;&#x5728;&#x8FDB;&#x7A0B;&#x4E2D;&#xFF0C;ucrtbase.dll, ntdll.dll, and msvcrt.dll.&#x4E09;&#x4E2A;&#x6A21;&#x5757;&#x6709;&#x4EE5;&#x4E0A;&#x7684;&#x65B9;&#x6CD5;</span></span><br><span class="line"><span class="comment"># &#x4E0D;&#x60F3;&#x8981;msvcet.dll&#x4E2D;&#x7684;&#x4FE1;&#x606F;, &#x6CE8;&#x610F;&#x987A;&#x5E8F;</span></span><br><span class="line">-i <span class="string">&quot;str*&quot;</span> -i <span class="string">&quot;mem*&quot;</span> -X <span class="string">&quot;msvcrt.dll&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-a <span class="comment"># include function (offset-based)</span></span><br><span class="line">-a <span class="string">&quot;libjpeg.so!0x4793c&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-d <span class="comment"># add module name to log tracing</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-frida-discover"><a href="#2-4-frida-discover" class="headerlink" title="2.4 frida-discover"></a>2.4 frida-discover</h3><blockquote>
+<p>&#x5728;&#x6A21;&#x62DF;&#x5668;&#x4E0A;&#x8FD0;&#x884C;&#xFF0C;&#x53D1;&#x73B0;<code>Abort message: &apos;Failed to resolve labels&apos;</code>&#x5F85;&#x89E3;&#x51B3;</p>
+</blockquote>
+<h3 id="2-5-frida-ls-devices"><a href="#2-5-frida-ls-devices" class="headerlink" title="2.5 frida-ls-devices"></a>2.5 frida-ls-devices</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x901A;&#x8FC7;USB&#x5C06;Frida&#x8FDE;&#x63A5;&#x5230;&#x8FDC;&#x7A0B;&#x7EC8;&#x7AEF;&#x5E76;&#x5217;&#x51FA;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x7684;&#x8FDB;&#x7A0B;</span></span><br><span class="line">$ frida-ls-devices</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-frida-kill"><a href="#2-6-frida-kill" class="headerlink" title="2.6 frida-kill"></a>2.6 frida-kill</h3><blockquote>
+<p> This is a command-line tool for killing processes. </p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ frida-kill -D &lt;DEVICE-ID&gt; &lt;PID&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-JavaScript-API"><a href="#3-JavaScript-API" class="headerlink" title="3 JavaScript API"></a>3 JavaScript API</h2><p><a href="https://frida.re/docs/javascript-api/" target="_blank" rel="noopener">&#x5B8C;&#x6574;&#x6587;&#x6863;</a></p>
+<p>&#x4E0D;&#x4E00;&#x4E00;&#x5217;&#x4E3E;&#x4E86;&#xFF0C;&#x9700;&#x8981;&#x7684;&#x65F6;&#x5019;&#x518D;&#x6765;&#x67E5;&#xFF0C;&#x719F;&#x80FD;&#x751F;&#x5DE7;</p>
+<p>&#x91CD;&#x70B9;&#x5173;&#x6CE8;<code>Java&#xFF1A;</code></p>
+<ul>
+<li><code>java.available</code> : &#x4E00;&#x4E2A;&#x5224;&#x65AD;&#x5F53;&#x524D;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x662F;&#x5426;&#x5DF2;&#x52A0;&#x8F7D;Java VM(dvm,art)&#x7684;bool&#x503C;</li>
+<li><code>Java.androidVersion</code> :  &#x83B7;&#x53D6;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x7684;android &#x7248;&#x672C;</li>
+<li><code>Java.enumerateLoadedClasses(callbacks)</code> :  &#x679A;&#x4E3E;&#x7ACB;&#x5373;&#x52A0;&#x8F7D;&#x7684;&#x7C7B;&#xFF0C;&#x5176;&#x4E2D;<code>callbacks</code>&#x662F;&#x4E00;&#x4E2A;&#x6307;&#x5B9A;&#x4EE5;&#x4E0B;&#x5185;&#x5BB9;&#x7684;&#x5BF9;&#x8C61;:<ul>
+<li><code>onMatch : function (name, handle):</code>  &#x4E3A;&#x6BCF;&#x4E2A;&#x5DF2;&#x52A0;&#x8F7D;&#x7684;&#x7C7B;&#x8C03;&#x7528;&#xFF0C;&#x5176;&#x540D;&#x79F0;&#x53EF;&#x4EE5;&#x4F20;&#x9012;&#x7ED9;<code>use()</code>&#x4EE5;&#x83B7;&#x53D6;JavaScript&#x5305;&#x88C5;&#x5668;&#x3002; &#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;<code>Java.cast()</code>&#x5904;&#x7406;<code>java.lang.Class</code>&#x7684;<code>handle</code></li>
+<li><code>onComplete :function()</code>&#x5F53;&#x6240;&#x6709;&#x7684;&#x7C7B;&#x90FD;&#x88AB;&#x679A;&#x4E3E;&#x540E;&#x8C03;&#x7528;</li>
+</ul>
+</li>
+<li><code>Java.enumerateLoadedClassesSync()</code>:  <code>enumerateLoadedClasses()</code>&#x7684;&#x540C;&#x6B65;&#x7248;&#x672C;&#xFF0C;&#x8BE5;&#x7248;&#x672C;&#x5728;&#x6570;&#x7EC4;&#x4E2D;&#x8FD4;&#x56DE;&#x7C7B;&#x540D;&#x79F0;&#x3002; </li>
+<li><code>Java.enumerateClassLoaders(callbacks)</code> : &#x679A;&#x4E3E;Java VM&#x4E2D;&#x5B58;&#x5728;&#x7684;&#x7C7B;&#x52A0;&#x8F7D;&#x5668;&#xFF0C;<code>callbacks</code>&#x662F;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x5B83;&#x6307;&#x5B9A;&#x4E86;&#x4EE5;&#x4E0B;&#x5185;&#x5BB9;:<ul>
+<li><code>onMatch</code></li>
+<li><code>omComplete</code></li>
+</ul>
+</li>
+</ul>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x5C06;&#x8FD9;&#x6837;&#x7684;&#x52A0;&#x8F7D;&#x5668;&#x4F20;&#x9012;&#x7ED9;<code>Java.ClassFactory.get()</code>&#x4EE5;&#x4FBF;&#x80FD;&#x591F;&#x5728;&#x6307;&#x5B9A;&#x7684;&#x7C7B;&#x52A0;&#x8F7D;&#x5668;&#x4E0A;&#x4F7F;&#x7528;<code>.use()</code>&#x7C7B;&#x3002;</p>
+<ul>
+<li><code>Java.enumerateClassLoadersSync()</code>:  <code>enumerateClassLoaders()</code>&#x7684;&#x540C;&#x6B65;&#x7248;&#x672C;&#xFF0C;&#x8BE5;&#x7248;&#x672C;&#x5728;&#x6570;&#x7EC4;&#x4E2D;&#x8FD4;&#x56DE;&#x7C7B;&#x52A0;&#x8F7D;&#x5668;&#x3002; </li>
+<li><code>Java.scheduleOnMainThread(fn)</code> :  &#x5728;VM&#x7684;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E0A;&#x8FD0;&#x884C;<code>fn</code>&#x3002; </li>
+<li><code>Java.perform(fn)</code> :  &#x786E;&#x4FDD;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x5DF2;&#x8FDE;&#x63A5;&#x5230;VM&#xFF0C;&#x5E76;&#x8C03;&#x7528;<code>fn</code>. (&#x5728;Java&#x7684;&#x56DE;&#x8C03;&#x4E2D;&#x8FD9;&#x4E0D;&#x662F;&#x5FC5;&#x9700;&#x7684;&#x3002;) &#x5982;&#x679C;&#x8BE5;&#x5E94;&#x7528;&#x7684;&#x7C7B;&#x52A0;&#x8F7D;&#x5668;&#x5C1A;&#x4E0D;&#x53EF;&#x7528;&#xFF0C;&#x5219;&#x5C06;&#x5EF6;&#x8FDF;&#x8C03;&#x7528;<code>fn</code>&#x3002;  &#x5982;&#x679C;&#x4E0D;&#x9700;&#x8981;&#x8BBF;&#x95EE;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x7684;&#x7C7B;&#xFF0C;&#x8BF7;&#x4F7F;&#x7528;<code>Java.performNow()</code>&#x3002; </li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">var</span> Activity = Java.use(<span class="string">&apos;android.app.Activity&apos;</span>);</span><br><span class="line">  Activity.onResume.implementation = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    send(<span class="string">&apos;onResume() got called! Let\&apos;s call the original implementation&apos;</span>);</span><br><span class="line">    <span class="keyword">this</span>.onResume();</span><br><span class="line">  };</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>Java.use(className)</code> :  &#x52A8;&#x6001;&#x83B7;&#x53D6;<code>className</code>&#x7684;<code>JavaScript</code>&#x5305;&#x88C5;&#x5668;&#xFF0C;&#x60A8;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5728;&#x5176;&#x4E0A;&#x8C03;&#x7528;<code>$new()</code>&#x6765;&#x8C03;&#x7528;&#x6784;&#x9020;&#x51FD;&#x6570;&#x6765;&#x5B9E;&#x4F8B;&#x5316;&#x5BF9;&#x8C61;&#x3002;  &#x5728;&#x5B9E;&#x4F8B;&#x4E0A;&#x8C03;&#x7528;<code>$dispose()</code>&#x4EE5;&#x5BF9;&#x5176;&#x8FDB;&#x884C;&#x663E;&#x5F0F;&#x6E05;&#x7406;(&#x6216;&#x7B49;&#x5F85;JavaScript&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x5783;&#x573E;&#x56DE;&#x6536;&#xFF0C;&#x6216;&#x7B49;&#x5F85;&#x811A;&#x672C;&#x5378;&#x8F7D;). &#x9759;&#x6001;&#x548C;&#x975E;&#x9759;&#x6001;&#x65B9;&#x6CD5;&#x90FD;&#x53EF;&#x7528;&#xFF0C;&#x751A;&#x81F3;&#x53EF;&#x4EE5;&#x66FF;&#x6362;&#x65B9;&#x6CD5;&#x5B9E;&#x73B0;&#x5E76;&#x4ECE;&#x4E2D;&#x5F15;&#x53D1;&#x5F02;&#x5E38;&#xFF1A; </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">   <span class="keyword">var</span> Activity = Java.use(<span class="string">&apos;android.app.Activity&apos;</span>);</span><br><span class="line">   <span class="keyword">var</span> Exception = Java.use(<span class="string">&apos;java.lang.Exception&apos;</span>);</span><br><span class="line">   Activity.onResume.implementation = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">       <span class="keyword">throw</span> Exception.$<span class="keyword">new</span>(<span class="string">&apos;Oh noes!&apos;</span>);</span><br><span class="line">   }</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Java.openClassFile(filePath)</code> : &#x5728;<code>filepath</code>&#x4E2D;&#x6253;&#x5F00;&#x4E00;&#x4E2A;<code>.dex</code>&#x6587;&#x4EF6;&#xFF0C; &#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x5BF9;&#x8C61;:</p>
+<ul>
+<li><code>load()</code> &#x5C06;&#x5305;&#x542B;&#x7684;&#x7C7B;&#x52A0;&#x8F7D;&#x5230;VM&#x4E2D;&#x3002; </li>
+<li><code>getClassNames()</code> &#x83B7;&#x53D6;&#x53EF;&#x7528;&#x7C7B;&#x540D;&#x7684;&#x6570;&#x7EC4; </li>
+</ul>
+</li>
+<li><p><code>Java.choose(className, callbacks)</code> &#x901A;&#x8FC7;&#x626B;&#x63CF;Java&#x5806;&#x6765;&#x679A;&#x4E3E;<code>className</code>&#x7C7B;&#x7684;&#x6D3B;&#x52A8;&#x5B9E;&#x4F8B;&#xFF0C;&#x5176;&#x4E2D;<code>callbacks</code>&#x662F;&#x4E00;&#x4E2A;&#x6307;&#x5B9A;&#x4EE5;&#x4E0B;&#x5185;&#x5BB9;&#x7684;&#x5BF9;&#x8C61;&#xFF1A; </p>
+<ul>
+<li><code>onMatch:function (instance)</code>: &#x5728;&#x6BCF;&#x4E2A;&#x5177;&#x6709;&#x53EF;&#x7528;<code>intance</code>&#x7684;&#x6D3B;&#x52A8;&#x5B9E;&#x4F8B;&#x4E2D;&#x8C03;&#x7528; , &#x5C31;&#x50CF;&#x4F7F;&#x7528;&#x6B64;&#x7279;&#x5B9A;&#x5B9E;&#x4F8B;&#x7684;&#x539F;&#x59CB;&#x53E5;&#x67C4;&#x8C03;&#x7528;<code>Java.cast()</code>&#x4E00;&#x6837; </li>
+<li><code>onComplete: function ()</code> </li>
+</ul>
+</li>
+<li><p><code>Java.retain(obj)</code> &#x590D;&#x5236;JavaScript&#x5305;&#x88C5;&#x5668;<code>obj</code>&#xFF0C;&#x4EE5;&#x4F9B;&#x4EE5;&#x540E;&#x5728;&#x5916;&#x90E8;&#x66FF;&#x6362;&#x65B9;&#x6CD5;&#x4E2D;&#x4F7F;&#x7528;&#x3002; </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">var</span> Activity = Java.use(<span class="string">&apos;android.app.Activity&apos;</span>);</span><br><span class="line">  <span class="keyword">var</span> lastActivity = <span class="literal">null</span>;</span><br><span class="line">  Activity.onResume.implementation = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    lastActivity = Java.retain(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.onResume();</span><br><span class="line">  };</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Java.cast(handle, klass)</code> : &#x6839;&#x636E;<code>Java.use()</code>&#x8FD4;&#x56DE;&#x7684;&#x7ED9;&#x5B9A;&#x7C7B;<code>klass</code>&#x7684;<code>handle</code>&#xFF0C;&#x5728;&#x7ED9;&#x5B9A;&#x73B0;&#x6709;&#x5B9E;&#x4F8B;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;JavaScript&#x5305;&#x88C5;&#x5668;&#x3002;  &#x8FD9;&#x6837;&#x7684;&#x5305;&#x88C5;&#x5668;&#x8FD8;&#x5177;&#x6709;&#x7528;&#x4E8E;&#x4E3A;&#x5176;&#x7C7B;&#x83B7;&#x53D6;&#x5305;&#x88C5;&#x5668;&#x7684;<code>class</code>&#x5C5E;&#x6027;&#xFF0C;&#x4EE5;&#x53CA;&#x7528;&#x4E8E;&#x83B7;&#x53D6;&#x5176;&#x7C7B;&#x540D;&#x79F0;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x8868;&#x793A;&#x5F62;&#x5F0F;&#x7684;<code>$className</code>&#x5C5E;&#x6027;&#x3002;</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Activity = Java.use(<span class="string">&apos;android.app.Activity&apos;</span>);</span><br><span class="line"><span class="keyword">var</span> activity = Java.cast(ptr(<span class="string">&apos;0x1234&apos;</span>), Activity);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Java.array(type, elements)</code>  &#x4ECE;JavaScript&#x6570;&#x7EC4;&#x5143;&#x7D20;&#x521B;&#x5EFA;&#x5177;&#x6709;&#x6307;&#x5B9A;&#x7C7B;&#x578B;&#x7684;&#x5143;&#x7D20;&#x7684;Java&#x6570;&#x7EC4;&#x3002;  &#x751F;&#x6210;&#x7684;Java&#x6570;&#x7EC4;&#x7684;&#x884C;&#x4E3A;&#x7C7B;&#x4F3C;&#x4E8E;JS&#x6570;&#x7EC4;&#xFF0C;&#x4F46;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5F15;&#x7528;&#x4F20;&#x9012;&#x7ED9;Java API&#xFF0C;&#x4EE5;&#x5141;&#x8BB8;&#x5B83;&#x4EEC;&#x4FEE;&#x6539;&#x5176;&#x5185;&#x5BB9;&#x3002; </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> values = Java.array(<span class="string">&apos;int&apos;</span>, [ <span class="number">1003</span>, <span class="number">1005</span>, <span class="number">1007</span> ]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> JString = Java.use(<span class="string">&apos;java.lang.String&apos;</span>);</span><br><span class="line"><span class="keyword">var</span> str = JString.$<span class="keyword">new</span>(Java.array(<span class="string">&apos;byte&apos;</span>, [ <span class="number">0x48</span>, <span class="number">0x65</span>, <span class="number">0x69</span> ]));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Java.isMainThread()</code>  &#x786E;&#x5B9A;&#x8C03;&#x7528;&#x8005;&#x662F;&#x5426;&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E0A;&#x8FD0;&#x884C;&#x3002; </p>
+</li>
+<li><p><code>Java.registerClass(spec)</code>  &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;Java&#x7C7B;&#x5E76;&#x4E3A;&#x5176;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x5305;&#x88C5;&#x5668;&#xFF0C;&#x5176;&#x4E2D;spec&#x662F;&#x4E00;&#x4E2A;&#x5305;&#x542B;&#x4EE5;&#x4E0B;&#x5185;&#x5BB9;&#x7684;&#x5BF9;&#x8C61;&#xFF1A; </p>
+<ul>
+<li><code>name</code></li>
+<li><code>superclass</code></li>
+<li><code>implements</code></li>
+<li><code>fields</code></li>
+<li><code>methods</code></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> SomeBaseClass = Java.use(<span class="string">&apos;com.example.SomeBaseClass&apos;</span>);</span><br><span class="line"><span class="keyword">var</span> X509TrustManager = Java.use(<span class="string">&apos;javax.net.ssl.X509TrustManager&apos;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MyTrustManager = Java.registerClass({</span><br><span class="line">  name: <span class="string">&apos;com.example.MyTrustManager&apos;</span>,</span><br><span class="line">  implements: [X509TrustManager],</span><br><span class="line">  methods: {</span><br><span class="line">    checkClientTrusted: <span class="function"><span class="keyword">function</span> (<span class="params">chain, authType</span>) </span>{</span><br><span class="line">    },</span><br><span class="line">    checkServerTrusted: <span class="function"><span class="keyword">function</span> (<span class="params">chain, authType</span>) </span>{</span><br><span class="line">    },</span><br><span class="line">    getAcceptedIssuers: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">      <span class="keyword">return</span> [];</span><br><span class="line">    },</span><br><span class="line">  }</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MyWeirdTrustManager = Java.registerClass({</span><br><span class="line">  name: <span class="string">&apos;com.example.MyWeirdTrustManager&apos;</span>,</span><br><span class="line">  superClass: SomeBaseClass,</span><br><span class="line">  implements: [X509TrustManager],</span><br><span class="line">  fields: {</span><br><span class="line">    description: <span class="string">&apos;java.lang.String&apos;</span>,</span><br><span class="line">    limit: <span class="string">&apos;int&apos;</span>,</span><br><span class="line">  },</span><br><span class="line">  methods: {</span><br><span class="line">    $init: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&apos;Constructor called&apos;</span>);</span><br><span class="line">    },</span><br><span class="line">    checkClientTrusted: <span class="function"><span class="keyword">function</span> (<span class="params">chain, authType</span>) </span>{</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&apos;checkClientTrusted&apos;</span>);</span><br><span class="line">    },</span><br><span class="line">    checkServerTrusted: [{</span><br><span class="line">      returnType: <span class="string">&apos;void&apos;</span>,</span><br><span class="line">      argumentTypes: [<span class="string">&apos;[Ljava.security.cert.X509Certificate;&apos;</span>, <span class="string">&apos;java.lang.String&apos;</span>],</span><br><span class="line">      implementation: <span class="function"><span class="keyword">function</span> (<span class="params">chain, authType</span>) </span>{</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&apos;checkServerTrusted A&apos;</span>);</span><br><span class="line">      }</span><br><span class="line">    }, {</span><br><span class="line">      returnType: <span class="string">&apos;java.util.List&apos;</span>,</span><br><span class="line">      argumentTypes: [<span class="string">&apos;[Ljava.security.cert.X509Certificate;&apos;</span>, <span class="string">&apos;java.lang.String&apos;</span>, <span class="string">&apos;java.lang.String&apos;</span>],</span><br><span class="line">      implementation: <span class="function"><span class="keyword">function</span> (<span class="params">chain, authType, host</span>) </span>{</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&apos;checkServerTrusted B&apos;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">      }</span><br><span class="line">    }],</span><br><span class="line">    getAcceptedIssuers: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&apos;getAcceptedIssuers&apos;</span>);</span><br><span class="line">      <span class="keyword">return</span> [];</span><br><span class="line">    },</span><br><span class="line">  }</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Java.deoptimizeEverything()</code>  &#x5F3A;&#x5236;VM&#x4F7F;&#x7528;&#x5176;&#x89E3;&#x91CA;&#x5668;&#x6267;&#x884C;&#x6240;&#x6709;&#x64CD;&#x4F5C;&#x3002;  &#x5728;&#x67D0;&#x4E9B;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x6709;&#x5FC5;&#x8981;&#x9632;&#x6B62;&#x4F18;&#x5316;&#x7ED5;&#x8FC7;&#x65B9;&#x6CD5;&#x6302;&#x94A9;&#xFF0C;&#x5E76;&#x5141;&#x8BB8;ART&#x7684;Instrumentation API&#x7528;&#x4E8E;&#x8DDF;&#x8E2A;&#x8FD0;&#x884C;&#x65F6;&#x3002; </p>
+</li>
+<li><p><code>java.vm</code>  &#x5BF9;&#x8C61;&#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x65B9;&#x6CD5;&#xFF1A; </p>
+<ul>
+<li><code>perform(fn)</code></li>
+<li><code>getEnv()</code></li>
+<li><code>tryGetEnv()</code></li>
+</ul>
+</li>
+<li><p><code>Java.classFactory</code>  &#x7528;&#x4E8E;&#x5B9E;&#x73B0;&#x9ED8;&#x8BA4;&#x7C7B;&#x5DE5;&#x5382;<code>eg: Java.use()</code>&#x3002;&#x4F7F;&#x7528;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x7684;&#x4E3B;&#x7C7B;&#x52A0;&#x8F7D;&#x5668;&#x3002; </p>
+</li>
+<li><p><code>Java.ClassFactory</code>  &#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x5C5E;&#x6027;&#x7684;&#x7C7B;&#xFF1A;</p>
+<ul>
+<li><code>get(classLoader)</code></li>
+<li><code>loader</code></li>
+<li><code>cacheDir</code></li>
+<li><code>tempFileNaming</code></li>
+<li><code>use(className)</code></li>
+<li><code>openClassFile(filePath)</code></li>
+<li><code>choose(className, callbacks)</code></li>
+<li><code>retain(obj)</code></li>
+<li><code>cast(handle, klass)</code></li>
+<li><code>array(type, elements)</code></li>
+<li><code>registerClass(spec)</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="4-Example"><a href="#4-Example" class="headerlink" title="4  Example"></a>4  Example</h2><p><a href="https://github.com/ctfs/write-ups-2015/tree/master/seccon-quals-ctf-2015/binary/reverse-engineering-android-apk-1" target="_blank" rel="noopener">&#x5B98;&#x7F51;&#x4F8B;&#x5B50;</a></p>
+<h3 id="4-1-&#x4E0B;&#x8F7D;&#x5B89;&#x88C5;&#xFF0C;&#x67E5;&#x770B;&#x4FE1;&#x606F;"><a href="#4-1-&#x4E0B;&#x8F7D;&#x5B89;&#x88C5;&#xFF0C;&#x67E5;&#x770B;&#x4FE1;&#x606F;" class="headerlink" title="4.1 &#x4E0B;&#x8F7D;&#x5B89;&#x88C5;&#xFF0C;&#x67E5;&#x770B;&#x4FE1;&#x606F;"></a>4.1 &#x4E0B;&#x8F7D;&#x5B89;&#x88C5;&#xFF0C;&#x67E5;&#x770B;&#x4FE1;&#x606F;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ frida-ps -Ua</span><br><span class="line">4602  rock_paper_scissors       com.example.seccon2015.rock_paper_scissors</span><br></pre></td></tr></table></figure>
+
+<p>&#x67E5;&#x8BE2;&#x5F97;&#x5230; &#x5BF9;&#x5E94;&#x7684;&#x5E94;&#x7528;&#x5B8C;&#x6574;Identifier <code>com.example.seccon2015.rock_paper_scissors</code></p>
+<h3 id="4-2-frida-&#x811A;&#x672C;&#x5B9E;&#x4F8B;"><a href="#4-2-frida-&#x811A;&#x672C;&#x5B9E;&#x4F8B;" class="headerlink" title="4.2 frida &#x811A;&#x672C;&#x5B9E;&#x4F8B;"></a>4.2 frida &#x811A;&#x672C;&#x5B9E;&#x4F8B;</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ctf.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> frida, sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_message</span><span class="params">(message, data)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> message[<span class="string">&apos;type&apos;</span>] == <span class="string">&apos;send&apos;</span>:</span><br><span class="line">        print(<span class="string">&quot;[*] {0}&quot;</span>.format(message[<span class="string">&apos;payload&apos;</span>]))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(message)</span><br><span class="line"></span><br><span class="line">jscode = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Java.perform(function () {</span></span><br><span class="line"><span class="string">  // Function to hook is defined here</span></span><br><span class="line"><span class="string">  var MainActivity = Java.use(&apos;com.example.seccon2015.rock_paper_scissors.MainActivity&apos;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  // Whenever button is clicked</span></span><br><span class="line"><span class="string">  var onClick = MainActivity.onClick;</span></span><br><span class="line"><span class="string">  onClick.implementation = function (v) {</span></span><br><span class="line"><span class="string">    // Show a message to know that the function got called</span></span><br><span class="line"><span class="string">    send(&apos;onClick&apos;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    // Call the original onClick handler</span></span><br><span class="line"><span class="string">    onClick.call(this, v);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    // Set our values after running the original onClick handler</span></span><br><span class="line"><span class="string">    this.m.value = 0;</span></span><br><span class="line"><span class="string">    this.n.value = 1;</span></span><br><span class="line"><span class="string">    this.cnt.value = 999;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    // Log to the console that it&apos;s done, and we should have the flag!</span></span><br><span class="line"><span class="string">    console.log(&apos;Done:&apos; + JSON.stringify(this.cnt));</span></span><br><span class="line"><span class="string">  };</span></span><br><span class="line"><span class="string">});</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># step1: &#x9644;&#x52A0;&#x8C03;&#x8BD5;&#x8FDB;&#x7A0B;</span></span><br><span class="line">process = frida.get_usb_device().attach(<span class="string">&apos;com.example.seccon2015.rock_paper_scissors&apos;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># step2: &#x6CE8;&#x5165;js&#x811A;&#x672C;</span></span><br><span class="line">script = process.create_script(jscode)</span><br><span class="line"></span><br><span class="line"><span class="comment"># step3: &#x83B7;&#x5F97;&#x5185;&#x5BB9;</span></span><br><span class="line">script.on(<span class="string">&apos;message&apos;</span>, on_message)</span><br><span class="line">print(<span class="string">&apos;[*] Running CTF&apos;</span>)</span><br><span class="line">script.load()</span><br><span class="line">sys.stdin.read()</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-&#x4F7F;&#x7528;JS&#x811A;&#x672C;&#x7684;&#x4F8B;&#x5B50;"><a href="#4-3-&#x4F7F;&#x7528;JS&#x811A;&#x672C;&#x7684;&#x4F8B;&#x5B50;" class="headerlink" title="4.3 &#x4F7F;&#x7528;JS&#x811A;&#x672C;&#x7684;&#x4F8B;&#x5B50;"></a>4.3 &#x4F7F;&#x7528;JS&#x811A;&#x672C;&#x7684;&#x4F8B;&#x5B50;</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="comment">// &#x521B;&#x5EFA;java.lang.String&#x7684;&#x5B9E;&#x4F8B;&#xFF0C;&#x5E76;&#x4F7F;&#x7528;&#x5B57;&#x7B26;&#x4E32;&#x5BF9;&#x5176;&#x8FDB;&#x884C;&#x521D;&#x59CB;&#x5316;</span></span><br><span class="line">  <span class="keyword">var</span> JavaString = Java.use(<span class="string">&apos;java.lang.String&apos;</span>);</span><br><span class="line">  <span class="keyword">var</span> exampleString1 = JavaString.$<span class="keyword">new</span>(<span class="string">&apos;Hello World, this is an example string in Java.&apos;</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&apos;[+] exampleString1: &apos;</span> + exampleString1);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&apos;[+] exampleString1.length(): &apos;</span> + exampleString1.length());</span><br><span class="line"></span><br><span class="line">  <span class="comment">// &#x521B;&#x5EFA;java.nio.charset.Charset&#x7684;&#x5B9E;&#x4F8B;&#xFF0C;&#x5E76;&#x521D;&#x59CB;&#x5316;&#x9ED8;&#x8BA4;&#x5B57;&#x7B26;&#x96C6;</span></span><br><span class="line">  <span class="keyword">var</span> Charset = Java.use(<span class="string">&apos;java.nio.charset.Charset&apos;</span>);</span><br><span class="line">  <span class="keyword">var</span> charset = Charset.defaultCharset();</span><br><span class="line">  <span class="comment">// &#x521B;&#x5EFA;&#x4E00;&#x4E2A;Javascript&#x5B57;&#x7B26;&#x4E32;&#x7684;&#x5B57;&#x8282;&#x6570;&#x7EC4;</span></span><br><span class="line">  <span class="keyword">var</span> charArray = <span class="string">&apos;This is a Javascript string converted to a byte array.&apos;</span>.split(<span class="string">&apos;&apos;</span>).map(<span class="function"><span class="keyword">function</span>(<span class="params">c</span>) </span>{</span><br><span class="line">    <span class="keyword">return</span> c.charCodeAt(<span class="number">0</span>);</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="comment">// &#x521B;&#x5EFA;java.lang.String&#x7684;&#x5B9E;&#x4F8B;&#xFF0C;&#x5E76;&#x901A;&#x8FC7;&#x91CD;&#x8F7D;$ new&#x5BF9;&#x5176;&#x8FDB;&#x884C;&#x521D;&#x59CB;&#x5316;&#xFF0C;</span></span><br><span class="line">  <span class="comment">// &#x4F7F;&#x7528; &#x5E26;&#x6709;&#x5B57;&#x8282;&#x6570;&#x7EC4;&#x548C;java.nio.charset.Charset&#x7684;&#x5B9E;&#x4F8B;</span></span><br><span class="line">  <span class="keyword">var</span> exampleString2 = JavaString.$<span class="keyword">new</span>.overload(<span class="string">&apos;[B&apos;</span>, <span class="string">&apos;java.nio.charset.Charset&apos;</span>).call(JavaString, charArray, charset)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&apos;[+] exampleString2: &apos;</span> + exampleString2);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&apos;[+] exampleString2.length(): &apos;</span> + exampleString2.length());</span><br><span class="line"></span><br><span class="line">  <span class="comment">// &#x62E6;&#x622A;java.lang.Stringbuilder&#x7684;&#x91CD;&#x8F7D;&#x6784;&#x9020;&#x51FD;&#x6570;&#x7684;&#x521D;&#x59CB;&#x5316;,</span></span><br><span class="line">  <span class="comment">// &#x5E76;&#x5C06;&#x90E8;&#x5206;&#x53C2;&#x6570;&#x5199;&#x5165;&#x63A7;&#x5236;&#x53F0;</span></span><br><span class="line">  <span class="keyword">var</span> StringBuilder = Java.use(<span class="string">&apos;java.lang.StringBuilder&apos;</span>);</span><br><span class="line">  <span class="comment">// We need to replace .$init() instead of .$new(), since .$new() = .alloc() + .init()</span></span><br><span class="line">  <span class="keyword">var</span> ctor = StringBuilder.$init.overload(<span class="string">&apos;java.lang.String&apos;</span>);</span><br><span class="line">  ctor.implementation = <span class="function"><span class="keyword">function</span> (<span class="params">arg</span>) </span>{</span><br><span class="line">    <span class="keyword">var</span> partial = <span class="string">&apos;&apos;</span>;</span><br><span class="line">    <span class="keyword">var</span> result = ctor.call(<span class="keyword">this</span>, arg);</span><br><span class="line">    <span class="keyword">if</span> (arg !== <span class="literal">null</span>) {</span><br><span class="line">      partial = arg.toString().replace(<span class="string">&apos;\n&apos;</span>, <span class="string">&apos;&apos;</span>).slice(<span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// console.log(&apos;new StringBuilder(java.lang.String); =&gt; &apos; + result);</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&apos;new StringBuilder(&quot;&apos;</span> + partial + <span class="string">&apos;&quot;);&apos;</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  };</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&apos;[+] new StringBuilder(java.lang.String) hooked&apos;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Intercept the toString() method of java.lang.StringBuilder and write its partial contents to the console.</span></span><br><span class="line">  <span class="keyword">var</span> toString = StringBuilder.toString;</span><br><span class="line">  toString.implementation = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    <span class="keyword">var</span> result = toString.call(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">var</span> partial = <span class="string">&apos;&apos;</span>;</span><br><span class="line">    <span class="keyword">if</span> (result !== <span class="literal">null</span>) {</span><br><span class="line">      partial = result.toString().replace(<span class="string">&apos;\n&apos;</span>, <span class="string">&apos;&apos;</span>).slice(<span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&apos;StringBuilder.toString(); =&gt; &apos;</span> + partial);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  };</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&apos;[+] StringBuilder.toString() hooked&apos;</span>);</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-&#x539F;&#x7406;"><a href="#5-&#x539F;&#x7406;" class="headerlink" title="5 &#x539F;&#x7406;"></a>5 &#x539F;&#x7406;</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> frida, sys</span><br><span class="line"> </span><br><span class="line">//hook&#x4EE3;&#x7801;&#xFF0C;&#x91C7;&#x7528;javascript&#x7F16;&#x5199;</span><br><span class="line">jscode = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">//javascript&#x4EE3;&#x7801;&#xFF0C;&#x91CD;&#x70B9;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"> </span><br><span class="line">//&#x81EA;&#x5B9A;&#x4E49;&#x56DE;&#x8C03;&#x51FD;&#x6570;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_message</span><span class="params">(message, data)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> message[<span class="string">&apos;type&apos;</span>] == <span class="string">&apos;send&apos;</span>:</span><br><span class="line">        print(<span class="string">&quot;[*] {0}&quot;</span>.format(message[<span class="string">&apos;payload&apos;</span>]))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(message)</span><br><span class="line"> </span><br><span class="line"><span class="comment">#&#x91CD;&#x70B9;&#x7684;4&#x884C;&#x4EE3;&#x7801;</span></span><br><span class="line">process = frida.get_usb_device().attach(<span class="string">&apos;&#x5E94;&#x7528;&#x5B8C;&#x6574;&#x5305;&#x540D;&apos;</span>)</span><br><span class="line">script = process.create_script(jscode)</span><br><span class="line">script.on(<span class="string">&apos;message&apos;</span>, on_message)</span><br><span class="line">script.load()</span><br><span class="line">sys.stdin.read()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">process = frida.get_usb_device().attach(<span class="string">&apos;&#x5E94;&#x7528;&#x5B8C;&#x6574;&#x5305;&#x540D;&apos;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_usb_device</span><span class="params">(timeout = <span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> _get_device(<span class="keyword">lambda</span> device: device.type == <span class="string">&apos;tether&apos;</span>, timeout)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_device</span><span class="params">(predicate, timeout)</span>:</span></span><br><span class="line">    mgr = get_device_manager()                //&#x83B7;&#x53D6;&#x8BBE;&#x5907;&#x7BA1;&#x7406;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_matching_device</span><span class="params">()</span>:</span>               //&#x5BFB;&#x627E;&#x5339;&#x914D;&#x8BBE;&#x5907;</span><br><span class="line">        usb_devices = [device <span class="keyword">for</span> device <span class="keyword">in</span> mgr.enumerate_devices() <span class="keyword">if</span> predicate(device)]</span><br><span class="line">        <span class="keyword">if</span> len(usb_devices) &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> usb_devices[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    device = find_matching_device()</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_device_manager</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> _device_manager</span><br><span class="line">    <span class="keyword">if</span> _device_manager <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">from</span> . <span class="keyword">import</span> core</span><br><span class="line">        _device_manager = core.DeviceManager(_frida.DeviceManager())</span><br><span class="line">    <span class="keyword">return</span> _device_manager</span><br></pre></td></tr></table></figure>
+
+<p>&#x8DDF;&#x8FDB;&#x627E;&#x5230;<code>DeviceManager</code>&#xFF0C;<code>enumerate_devices()</code>&#x8FD4;&#x56DE;&#x7684;&#x662F;&#x4E00;&#x4E2A;<code>Device()</code>&#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#x5316;&#x5BF9;&#x8C61;&#x7684;List,&#x8DDF;&#x8FDB;<code>Device()</code>&#x80FD;&#x627E;&#x5230;<code>attach()</code>&#x65B9;&#x6CD5;&#xFF0C;&#x63D0;&#x4F9B;&#x5B8C;&#x6574;&#x7684;&#x5E94;&#x7528;&#x540D;&#x79F0;&#xFF0C;&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x7684;pid&#xFF0C;&#x7136;&#x540E;&#x901A;&#x8FC7;pid&#x53BB;attach &#x76F8;&#x5E94;&#x7684;&#x65B9;&#x6CD5;&#xFF0C; &#x6700;&#x7EC8;&#x5F97;&#x5230;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x5BF9;&#x5E94;&#x8FDB;&#x7A0B;&#x53F7;pid&#x7684;Session&#x5B9E;&#x4F8B;&#x5316;&#x5BF9;&#x8C61;process&#x3002; </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">script = process.create_script(jscode)</span><br><span class="line"></span><br><span class="line"><span class="comment"># @return &#x4E00;&#x4E2A;Script&#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#x5316;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_script</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Script(self._impl.create_script(*args, **kwargs))</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">script.on(<span class="string">&apos;message&apos;</span>, on_message)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on</span><span class="params">(self, signal, callback)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> signal == <span class="string">&apos;message&apos;</span>:</span><br><span class="line">            self._on_message_callbacks.append(callback)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self._impl.on(signal, callback)</span><br></pre></td></tr></table></figure>
+
+<p> &#x63A5;&#x4E0B;&#x6765;&#x8C03;&#x7528;load()&#x65B9;&#x6CD5;&#xFF0C;&#x5728;&#x670D;&#x52A1;&#x7AEF;&#x5C31;&#x542F;&#x52A8;javascript&#x811A;&#x672C;&#x4E86; </p>
+<h2 id="6-&#x4F7F;&#x7528;&#x79EF;&#x7D2F;"><a href="#6-&#x4F7F;&#x7528;&#x79EF;&#x7D2F;" class="headerlink" title="6 &#x4F7F;&#x7528;&#x79EF;&#x7D2F;"></a>6 &#x4F7F;&#x7528;&#x79EF;&#x7D2F;</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    <span class="comment">// &#x83B7;&#x5F97;&#x4E00;&#x4E2A;&#x7C7B;&#x7684;&#x5305;&#x88C5;</span></span><br><span class="line">    <span class="keyword">var</span> classInstance = Java.use(<span class="string">&quot;de.fraunhofer.sit.premiumapp.LauncherActivity&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// hook &#x7C7B;&#x5B9E;&#x4F8B;&#x7684;&#x67D0;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;</span></span><br><span class="line">    classInstance.functionName.implementation = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// &#x6267;&#x884C;&#x539F;&#x6765;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5728;&#x83B7;&#x53D6;&#x67D0;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x7684;&#x8FD4;&#x56DE;&#x503C;&#x7684;&#x65F6;&#x5019;&#x5341;&#x5206;&#x6709;&#x6548;</span></span><br><span class="line">        <span class="keyword">this</span>.functionName();</span><br><span class="line">    };</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// &#x8C03;&#x7528;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x5B9E;&#x4F8B;&#x5316;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;</span></span><br><span class="line">    classInstance.$<span class="keyword">new</span>();</span><br><span class="line">    <span class="comment">// &#x8C03;&#x7528;(&#x6790;&#x6784;)&#x65B9;&#x6CD5;&#x56DE;&#x6536;&#x5BF9;&#x8C61;</span></span><br><span class="line">    classInstance.$dispose();</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    <span class="comment">// &#x679A;&#x4E3E;&#x4E00;&#x4E2A;&#x7C7B;&#x7684;&#x6240;&#x6709;&#x5B9E;&#x4F8B;&#x5BF9;&#x8C61;</span></span><br><span class="line">    Java.choose(<span class="string">&quot;de.fraunhofer.sit.premiumapp.LauncherActivity&quot;</span>, {</span><br><span class="line">        <span class="string">&quot;onMatch&quot;</span>: <span class="function"><span class="keyword">function</span>(<span class="params">instance</span>) </span>{</span><br><span class="line">          send(instance)</span><br><span class="line">        },</span><br><span class="line">        <span class="string">&quot;onComplete&quot;</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{</span><br><span class="line">          send(<span class="string">&quot;finished&quot;</span>)</span><br><span class="line">        }</span><br><span class="line">    });</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="comment">// &#x52A0;&#x8F7D;&#x6240;&#x6709;&#x7ACB;&#x5373;&#x52A0;&#x8F7D;&#x7684;&#x7C7B;</span></span><br><span class="line">  Java.enumerateLoadedClasses(</span><br><span class="line">      {</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @param className &#x7C7B;&#x7684;&#x5B8C;&#x6574;&#x540D;&#x79F0;</span></span><br><span class="line"><span class="comment">         * @param handle    &#x7C7B;&#x7684;&#x53E5;&#x67C4;&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;Java.cast()&#x64CD;&#x4F5C;</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// &#x6BCF;&#x4E2A;&#x7C7B;&#x90FD;&#x4F1A;&#x6267;&#x884C;</span></span><br><span class="line">        <span class="string">&quot;onMatch&quot;</span>: <span class="function"><span class="keyword">function</span>(<span class="params">className, handle</span>)</span>{</span><br><span class="line">          <span class="keyword">if</span>(className.includes(<span class="string">&quot;fraunhofer&quot;</span>)){</span><br><span class="line">                send(<span class="string">&quot;className: &quot;</span> + className);</span><br><span class="line">                send(<span class="string">&quot;handle: &quot;</span> + handle)</span><br><span class="line">          }</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// &#x5728;&#x6240;&#x6709;&#x7C7B;&#x90FD;&#x679A;&#x4E3E;&#x5B8C;&#x6210;&#x4E4B;&#x540E;&#x6267;&#x884C;</span></span><br><span class="line">        <span class="string">&quot;onComplete&quot;</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{</span><br><span class="line">          send(<span class="string">&quot;finish&quot;</span>)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    );</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="comment">// &#x679A;&#x4E3E;&#x6240;&#x6709;&#x7684;&#x7C7B;&#x52A0;&#x8F7D;&#x5668;</span></span><br><span class="line">  Java.enumerateClassLoaders(</span><br><span class="line">      {</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * @param loader &#x4E00;&#x4E2A;java.lang.ClassLoader&#x7C7B;&#x5B9E;&#x4F8B;</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="string">&quot;onMatch&quot;</span>: <span class="function"><span class="keyword">function</span> (<span class="params">loader</span>) </span>{</span><br><span class="line">          send(loader);</span><br><span class="line">        },</span><br><span class="line">        <span class="string">&quot;onComplete&quot;</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">          send(<span class="string">&quot;finish it&quot;</span>)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">  )</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">var</span> Activity = Java.use(<span class="string">&apos;de.fraunhofer.sit.premiumapp.LauncherActivity&apos;</span>);</span><br><span class="line">  <span class="keyword">var</span> lastActivity = <span class="literal">null</span>;</span><br><span class="line">  Activity.onResume.implementation = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">      <span class="comment">// duplicates the JavaScript wrapper obj for later use outside replacement method.</span></span><br><span class="line">    lastActivity = Java.retain(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.onResume();</span><br><span class="line">  };</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Activity = Java.use(<span class="string">&apos;android.app.Activity&apos;</span>);</span><br><span class="line"><span class="comment">// &#x7C7B;&#x578B;&#x8F6C;&#x6362;</span></span><br><span class="line"><span class="keyword">var</span> activity = Java.cast(handle, Activity);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x521B;&#x5EFA;&#x6570;&#x7EC4;</span></span><br><span class="line"><span class="keyword">var</span> values = Java.array(<span class="string">&apos;int&apos;</span>, [ <span class="number">1003</span>, <span class="number">1005</span>, <span class="number">1007</span> ]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> JString = Java.use(<span class="string">&apos;java.lang.String&apos;</span>);</span><br><span class="line"><span class="keyword">var</span> str = JString.$<span class="keyword">new</span>(Java.array(<span class="string">&apos;byte&apos;</span>, [ <span class="number">0x48</span>, <span class="number">0x65</span>, <span class="number">0x69</span> ]));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">var</span> libc = Module.findBaseAddress(<span class="string">&apos;libnative-lib.so&apos;</span>);</span><br><span class="line">  <span class="comment">// &#x67E5;&#x770B;dump&#x51FA;&#x6765;&#x4E4B;&#x540E;&#x7684;&#x6570;&#x636E;</span></span><br><span class="line">  <span class="built_in">console</span>.log(hexdump(libc, {</span><br><span class="line">  offset: <span class="number">0</span>,</span><br><span class="line">  length: <span class="number">64</span>,</span><br><span class="line">  header: <span class="literal">true</span>,</span><br><span class="line">  ansi: <span class="literal">true</span></span><br><span class="line">}));</span><br><span class="line">});</span><br></pre></td></tr></table></figure>
+
+<h2 id="&#x53C2;&#x8003;&#x8D44;&#x6599;"><a href="#&#x53C2;&#x8003;&#x8D44;&#x6599;" class="headerlink" title="&#x53C2;&#x8003;&#x8D44;&#x6599;"></a>&#x53C2;&#x8003;&#x8D44;&#x6599;</h2><p>[1] <a href="https://frida.re/docs/home/" target="_blank" rel="noopener">&#x5B98;&#x65B9;&#x6587;&#x6863;</a></p>
+<p>[2] <a href="https://la0s.github.io/2018/06/21/frida/" target="_blank" rel="noopener">&#x4F7F;&#x7528;Frida&#x6846;&#x67B6;&#x8FDB;&#x884C;hook</a></p>
+<p>[3] <a href="https://www.anquanke.com/post/id/168152" target="_blank" rel="noopener">FRIDA&#x811A;&#x672C;&#x7CFB;&#x5217;&#xFF08;&#x4E00;&#xFF09;&#x5165;&#x95E8;&#x7BC7;&#xFF1A;&#x5728;&#x5B89;&#x5353;8.1&#x4E0A;dump&#x84DD;&#x7259;&#x63A5;&#x53E3;&#x548C;&#x5B9E;&#x4F8B;</a></p>
+<p>[4] <a href="https://www.anquanke.com/post/id/169315#h2-0" target="_blank" rel="noopener">FRIDA&#x811A;&#x672C;&#x7CFB;&#x5217;&#xFF08;&#x4E8C;&#xFF09;&#x6210;&#x957F;&#x7BC7;&#xFF1A;&#x52A8;&#x9759;&#x6001;&#x7ED3;&#x5408;&#x9006;&#x5411;WhatsApp</a></p>
+<p>[5] <a href="https://www.anquanke.com/post/id/85758/" target="_blank" rel="noopener">&#x3010;&#x6280;&#x672F;&#x5206;&#x4EAB;&#x3011;&#x5229;&#x7528;FRIDA&#x653B;&#x51FB;Android&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#xFF08;&#x4E00;&#xFF09;</a></p>
+<p>[6] <a href="https://www.anquanke.com/post/id/85759/" target="_blank" rel="noopener">&#x3010;&#x6280;&#x672F;&#x5206;&#x4EAB;&#x3011;&#x5229;&#x7528;FRIDA&#x653B;&#x51FB;Android&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#xFF08;&#x4E8C;&#xFF09;</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/frida-hook/" rel="tag"># frida, hook</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/22/Linux-Rootkit-回顾/" rel="next" title="Linux Rootkit 回顾">
+                <i class="fa fa-chevron-left"></i> Linux Rootkit 回顾
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/26/frida-writeup-rps/" rel="prev" title="frida-writeup-rps">
+                frida-writeup-rps <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">安河桥南丶</p>
+              <p class="site-description motion-element" itemprop="description">言念君子，温其如玉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#frida-学习笔记"><span class="nav-number">1.</span> <span class="nav-text">frida 学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-安装"><span class="nav-number">1.1.</span> <span class="nav-text">1 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-电脑安装frida"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 电脑安装frida</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-手机安装frida-server"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 手机安装frida server</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Tools"><span class="nav-number">1.2.</span> <span class="nav-text">2 Tools</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-frida-CLI"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 frida CLI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-frida-ps"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 frida-ps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-frida-trace"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 frida-trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-frida-discover"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 frida-discover</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-frida-ls-devices"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 frida-ls-devices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-frida-kill"><span class="nav-number">1.2.6.</span> <span class="nav-text">2.6 frida-kill</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-JavaScript-API"><span class="nav-number">1.3.</span> <span class="nav-text">3 JavaScript API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Example"><span class="nav-number">1.4.</span> <span class="nav-text">4  Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-下载安装，查看信息"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 下载安装，查看信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-frida-脚本实例"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 frida 脚本实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-使用JS脚本的例子"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 使用JS脚本的例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-原理"><span class="nav-number">1.5.</span> <span class="nav-text">5 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-使用积累"><span class="nav-number">1.6.</span> <span class="nav-text">6 使用积累</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.7.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">安河桥南丶</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/26/frida学习笔记/';
+          this.page.identifier = '2020/04/26/frida学习笔记/';
+          this.page.title = 'frida学习笔记';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kKXp7FWzG4cWQTX0TRzR699g-gzGzoHsz", "wdNxNGHoAluFv0xXYnXhQwTm");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
